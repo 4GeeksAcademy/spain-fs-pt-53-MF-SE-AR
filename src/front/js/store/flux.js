@@ -167,7 +167,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			register: async (email, password, randomProfileImage) => {
 				try {
-					const res = await fetch("https://obscure-spoon-97q4grjxx6vhx74p-3001.app.github.dev/api/user", {
+					const res = await fetch(`${process.env.BACKEND_URL}/api/user`, {
 						method: 'POST',
 						body: JSON.stringify({
 							name: "",
@@ -225,7 +225,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getMessage: async () => {
 				const store = getStore();
 				try {
-					const resp = await fetch("https://obscure-spoon-97q4grjxx6vhx74p-3001.app.github.dev/api/hello", {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/hello`, {
 						headers: {
 							'Authorization': 'Bearer ' + store.token
 						}
@@ -241,7 +241,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getUser: async () => {
 				const store = getStore();
 				try {
-					const resp = await fetch("https://ideal-lamp-6jqxwjwqpjq2xvrp-3001.app.github.dev/api/privateuser", {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': 'Bearer ' + store.token
@@ -255,7 +255,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							name: data.name,
 							email: data.email,
 							img: data.img,
-							message: data.message // Aquí se incluye el mensaje
+							message: data.message
 						}
 					});
 					console.log(store.currentUser);
