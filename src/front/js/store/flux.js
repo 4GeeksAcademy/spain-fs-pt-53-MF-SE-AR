@@ -3,6 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			token: null,
 			message: null,
+			currentUser: [],
 			gift: [{
 				id: "1",
 				user_id: "1",
@@ -240,16 +241,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getUser: async () => {
 				const store = getStore();
 				try {
-					const resp = await fetch("https://obscure-spoon-97q4grjxx6vhx74p-3001.app.github.dev/api/privateuser", {
+					const resp = await fetch("https://ideal-lamp-6jqxwjwqpjq2xvrp-3001.app.github.dev/api/privateuser", {
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': 'Bearer ' + store.token
 						}
 					});
 					const data = await resp.json()
-					console.log(data)
-					setStore({ message: data.message })
+					setStore({
+						...store,
+						currentUser: {
+							id: data.id,
+							name: data.name,
+							email: data.email,
+							img: data.img,
+							message: data.message // Aquí se incluye el mensaje
+						}
+					});
+					console.log(store.currentUser);
 					return data;
+
 				} catch (error) {
 					console.log("Error loading message from backend", error)
 				}

@@ -12,7 +12,7 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Signup } from "./pages/signup";
 // import { Profile } from "./pages/profile";
-// import { GiftList } from "./pages/giftList";
+import { GiftList } from "./pages/giftList";
 // import { GiftListEdit } from "./pages/giftListEdit";
 // import { Private } from "./pages/private";
 
@@ -32,9 +32,9 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
+                        <Route element={<GiftList />} path="/giftlist/:uid" />
                         {/* <Route element={<Private />} path="/private" />
                         <Route element={<Profile />} path="/profile" />
-                        <Route element={<GiftList />} path="/giftlist/:uid" />
                         <Route element={<GiftListEdit />} path="/giftlist/new-gift" />
                         <Route element={<GiftListEdit isEditing />} path="/giftlist/:uid/edit/:gid" /> */}
                         <Route element={<NotFound />} path="*" />

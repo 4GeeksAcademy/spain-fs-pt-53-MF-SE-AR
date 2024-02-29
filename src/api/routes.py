@@ -43,9 +43,17 @@ def get_user():
     email = get_jwt_identity()
     user = User.query.filter_by(email=email).first()
     if user:
+        if user.name:
+            message = "Welcome " + user.name
+        else:
+            message = "Welcome " + user.email
+
         user_data = {
-            "message": "hello User " + email,
-            "id": user.id
+            "message": message,
+            "name": user.name,
+            "id": user.id,
+            "email": user.email,
+            "img": user.img
         }
         return jsonify(user_data), 200
     else:
