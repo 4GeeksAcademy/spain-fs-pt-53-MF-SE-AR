@@ -3,6 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			token: null,
 			message: null,
+			currentUser: [],
 			gift: [{
 				id: "1",
 				user_id: "1",
@@ -166,7 +167,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			register: async (email, password, randomProfileImage) => {
 				try {
-					const res = await fetch("https://obscure-spoon-97q4grjxx6vhx74p-3001.app.github.dev/api/user", {
+					const res = await fetch(`${process.env.BACKEND_URL}/api/user`, {
 						method: 'POST',
 						body: JSON.stringify({
 							name: "",
@@ -224,7 +225,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getMessage: async () => {
 				const store = getStore();
 				try {
-					const resp = await fetch("https://obscure-spoon-97q4grjxx6vhx74p-3001.app.github.dev/api/hello", {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/hello`, {
 						headers: {
 							'Authorization': 'Bearer ' + store.token
 						}
@@ -240,16 +241,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getUser: async () => {
 				const store = getStore();
 				try {
-					const resp = await fetch("https://obscure-spoon-97q4grjxx6vhx74p-3001.app.github.dev/api/privateuser", {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': 'Bearer ' + store.token
 						}
 					});
 					const data = await resp.json()
-					console.log(data)
-					setStore({ message: data.message })
+					setStore({
+						...store,
+						currentUser: {
+							id: data.id,
+							name: data.name,
+							email: data.email,
+							img: data.img,
+							message: data.message
+						}
+					});
+					console.log(store.currentUser);
 					return data;
+
 				} catch (error) {
 					console.log("Error loading message from backend", error)
 				}
