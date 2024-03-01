@@ -128,7 +128,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`https://api.pexels.com/v1/search?query=animal&per_page=5&locale=es-ES`, {
 						method: "GET",
 						headers: {
-							"Authorization": `Bearer ${process.env.API_PEXELS_TOKEN}`
+							"Authorization": `${process.env.API_PEXELS_TOKEN}`
 						},
 					});
 

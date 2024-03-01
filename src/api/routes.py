@@ -12,8 +12,8 @@ from flask_jwt_extended import create_access_token , get_jwt_identity , jwt_requ
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
-CORS(api)
-#CORS(api, resources={"*": {"origins": "*"}})
+# CORS(api)
+CORS(api, resources={"*": {"origins": "*"}})
 
 @api.route("/token", methods=["POST"])
 def create_token():
