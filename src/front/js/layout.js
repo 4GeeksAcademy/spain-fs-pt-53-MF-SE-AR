@@ -15,6 +15,7 @@ import { Profile } from "./pages/profile";
 // import { GiftList } from "./pages/giftList";
 // import { Profile } from "./pages/profile";
 import { GiftList } from "./pages/giftList";
+import { SideBar } from "./component/sidebar";
 // import { GiftListEdit } from "./pages/giftListEdit";
 // import { Private } from "./pages/private";
 
@@ -30,20 +31,24 @@ const Layout = () => {
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Navbar />
-                    <Routes>
-                        <Route element={<Home />} path="/" />
-                        <Route element={<Login />} path="/login" />
-                        <Route element={<Signup />} path="/signup" />
-                        <Route element={<GiftList />} path="/giftlist/:uid" />
-                        {/* <Route element={<Private />} path="/private" /> */}
-                        <Route element={<Profile />} path="/profile" />
-                        {/* <Route element={<GiftList />} path="/giftlist/:uid" /> */}
-                        {/* <Route element={<GiftListEdit />} path="/giftlist/new-gift" /> */}
-                        {/* <Route element={<GiftListEdit isEditing />} path="/giftlist/:uid/edit/:gid" /> */}
-                        <Route element={<GiftListEdit />} path="/giftlist/new-gift" />
-                        <Route element={<GiftListEdit isEditing />} path="/giftlist/:uid/edit/:gid" /> */}
-                        <Route element={<NotFound />} path="*" />
-                    </Routes>
+                    <div className="row">
+                        {!window.location.pathname === "/" && (
+                            <div className="col-sm-3 bg-light">
+                                <SideBar />
+                            </div>
+                        )}
+                        <div className={`col-sm-${window.location.pathname === "/" ? "12" : "9"} p-5`}>
+                            <Routes>
+                                <Route element={<Home />} path="/" />
+                                <Route element={<Login />} path="/login" />
+                                <Route element={<Signup />} path="/signup" />
+                                <Route element={<GiftList />} path="/giftlist/:uid" />
+                                <Route element={<GiftList />} path="/giftlist/:uid/disponible" />
+                                <Route element={<GiftList />} path="/giftlist/:uid/comprados" />
+                                <Route element={<NotFound />} path="*" />
+                            </Routes>
+                        </div>
+                    </div>
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>
