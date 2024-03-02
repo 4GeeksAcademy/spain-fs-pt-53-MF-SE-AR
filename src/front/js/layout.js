@@ -32,11 +32,11 @@ const Layout = () => {
                 <ScrollToTop>
                     <Navbar />
                     <div className="row">
-                        {!window.location.pathname === "/" && (
+                        {window.location.pathname === "/giftlist" ? (
                             <div className="col-sm-3 bg-light">
                                 <SideBar />
                             </div>
-                        )}
+                        ) : null}
                         <div className={`col-sm-${window.location.pathname === "/" ? "12" : "9"} p-5`}>
                             <Routes>
                                 <Route element={<Home />} path="/" />
