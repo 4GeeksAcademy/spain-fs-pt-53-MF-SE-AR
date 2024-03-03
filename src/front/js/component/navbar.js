@@ -1,12 +1,16 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
 	const { store, actions } = useContext(Context);
+	const navigate = useNavigate()
+
 
 	const handleClick = () => {
 		actions.logout()
+		navigate('/')
+
 	}
 
 	return (

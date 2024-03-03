@@ -11,7 +11,7 @@ import { ListHeader } from "../component/listHeader";
 export const GiftList = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
-    const location = useLocation();
+    // const location = useLocation();
     const [activeTab, setActiveTab] = useState('home');
 
     const title = location.pathname === "/giftlist/5/disponible" ? "Disponible" : location.pathname === "/giftlist/5/comprados" ? "Comprados" : "Todos los regalos"
@@ -21,6 +21,7 @@ export const GiftList = () => {
             navigate("/");
         } else {
             actions.getUser();
+            // actions.getAllList();
         }
     }, []);
 
@@ -30,13 +31,14 @@ export const GiftList = () => {
             navigate("/");
         } else {
             actions.getUser();
+            // actions.getAllList();
         }
     }, [store.token]);
 
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
     };
-    console.log(location)
+    // console.log(location)
     return (
         <div className="container-giftlist">
             <ListHeader />
