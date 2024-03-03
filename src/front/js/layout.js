@@ -37,7 +37,7 @@ const Layout = () => {
                                 <SideBar />
                             </div>
                         ) : null}
-                        <div className={`col-sm-${window.location.pathname === "/" ? "12" : "9"} p-5`}>
+                        <div className={`col-sm-${window.location.pathname === "/giftlist" ? "12" : "9"} p-5`}>
                             <Routes>
                                 <Route element={<Home />} path="/" />
                                 <Route element={<Login />} path="/login" />
