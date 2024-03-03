@@ -88,7 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getGiftPhoto: async () => {
 				try {
-					const response = await fetch(`https://api.pexels.com/v1/search?query=caja&per_page=5&locale=es-ES`, {
+					const response = await fetch(`https://api.pexels.com/v1/search?query=caja&per_page=3&locale=es-ES`, {
 						method: "GET",
 						headers: {
 							"Authorization": "jdQFRDD6vmPXuYRrqbppN0YPiTww0jTWHtDOKMR7PuH7ES1k9MGh5z5i"
@@ -125,7 +125,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getProfilePhoto: async () => {
 				try {
-					const response = await fetch(`https://api.pexels.com/v1/search?query=animal&per_page=5&locale=es-ES`, {
+					const response = await fetch(`https://api.pexels.com/v1/search?query=animal&per_page=3&locale=es-ES`, {
 						method: "GET",
 						headers: {
 							"Authorization": `${process.env.API_PEXELS_TOKEN}`
