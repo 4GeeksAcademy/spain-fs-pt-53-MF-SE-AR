@@ -1,9 +1,12 @@
+import { ListHeader } from "../component/listHeader";
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			token: null,
 			message: null,
 			currentUser: [],
+			currentList: [],
 			gift: [{
 				id: "1",
 				user_id: "1",
@@ -40,7 +43,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			//regalos
+			//ACTIONS REGALOS SOLO STORE
 			getGift: () => {
 				const store = getStore();
 				return store.gift;
@@ -86,43 +89,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getGiftPhoto: async () => {
-				try {
-					const response = await fetch(`https://api.pexels.com/v1/search?query=caja&per_page=3&locale=es-ES`, {
-						method: "GET",
-						headers: {
-							"Authorization": "jdQFRDD6vmPXuYRrqbppN0YPiTww0jTWHtDOKMR7PuH7ES1k9MGh5z5i"
-						},
-					});
 
-					if (response.ok) {
-						const store = getStore();
-						const responseData = await response.json();
-						const photoUrls = responseData.photos.map(photo => photo.src.original);
-						// Almacena las URLs de las fotos en el store
-						store.images = photoUrls;
-						return photoUrls;
-					} else {
-						console.error("Error al buscar la foto:", response.status, response.statusText);
-						return null;
-					}
-				} catch (error) {
-					console.error("Error en el fetch de la foto:", error);
-					return null;
-				}
-			},
 
 			deleteGift: (id) => {
-				const store = getStore(); // Obtener el estado actual del store
-				const updatedGifts = store.gift.filter(g => g.id !== id); // Filtrar los regalos para excluir el que tenga el ID proporcionado
+				const store = getStore();
+				const updatedGifts = store.gift.filter(g => g.id !== id);
 
-				setStore({ ...store, gift: updatedGifts }); // Actualizar el store con la lista de regalos actualizada
+				setStore({ ...store, gift: updatedGifts });
 
 				alert("¡Regalo eliminado correctamente!");
 			},
 
 			// fin de regalos
-
+			// ACTIONS FOTOS
 			getProfilePhoto: async () => {
 				try {
 					const response = await fetch(`https://api.pexels.com/v1/search?query=animal&per_page=3&locale=es-ES`, {
@@ -150,9 +129,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+			getGiftPhoto: async () => {
+				try {
+					const response = await fetch(`https://api.pexels.com/v1/search?query=caja&per_page=3&locale=es-ES`, {
+						method: "GET",
+						headers: {
+							"Authorization": "jdQFRDD6vmPXuYRrqbppN0YPiTww0jTWHtDOKMR7PuH7ES1k9MGh5z5i"
+						},
+					});
+
+					if (response.ok) {
+						const store = getStore();
+						const responseData = await response.json();
+						const photoUrls = responseData.photos.map(photo => photo.src.original);
+						// Almacena las URLs de las fotos en el store
+						store.images = photoUrls;
+						return photoUrls;
+					} else {
+						console.error("Error al buscar la foto:", response.status, response.statusText);
+						return null;
+					}
+				} catch (error) {
+					console.error("Error en el fetch de la foto:", error);
+					return null;
+				}
 			},
+			// ACTIONS TOKEN
 
 			syncToken: () => {
 				const token = sessionStorage.getItem("token");
@@ -160,11 +162,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (token && token != "" && token != undefined && token != null) setStore({ token: token })
 			},
 
-			logout: () => {
-				sessionStorage.removeItem("token");
-				console.log("session ends")
-				setStore({ token: null })
+			// ACTIONS MENSAJES
+			getMessage: async () => {
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/hello`, {
+						headers: {
+							'Authorization': 'Bearer ' + store.token
+						}
+					});
+					const data = await resp.json()
+					setStore({ message: data.message })
+					console.log(data.message)
+					return data;
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
 			},
+			// ACTIONS USER
 			register: async (email, password, randomProfileImage) => {
 				try {
 					const res = await fetch(`${process.env.BACKEND_URL}/api/user`, {
@@ -221,24 +236,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
-
-			getMessage: async () => {
+			getUser: async () => {
 				const store = getStore();
 				try {
-					const resp = await fetch(`${process.env.BACKEND_URL}/api/hello`, {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
 						headers: {
+							'Content-Type': 'application/json',
 							'Authorization': 'Bearer ' + store.token
 						}
 					});
 					const data = await resp.json()
-					setStore({ message: data.message })
-					console.log(data.message)
 					return data;
+
 				} catch (error) {
 					console.log("Error loading message from backend", error)
 				}
 			},
-			getUser: async () => {
+			getUserToStore: async () => {
 				const store = getStore();
 				try {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
@@ -265,6 +279,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+			logout: () => {
+				sessionStorage.removeItem("token");
+				console.log("session ends")
+				setStore({ token: null })
+			},
+			// ACTIONS EXAMPLE
 			changeColor: (index, color) => {
 				//get the store
 				const store = getStore();
@@ -276,9 +296,65 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return elm;
 				});
 
+				// exampleFunction: () => {
+				// 	getActions().changeColor(0, "green");
+				// },	
+
 				//reset the global store
 				setStore({ demo: demo });
-			}
+			},
+			// ACTIONS LIST
+			newList: async (id) => {
+				try {
+					const res = await fetch(`${process.env.BACKEND_URL}/api/list`, {
+						method: 'POST',
+						body: JSON.stringify({
+							name: "Lista general",
+							id: id,
+						}),
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+					if (res.status === 200) {
+						console.log("Lista creada")
+						return true;
+					} else if (res.status === 401) {
+						const errorData = await res.json();
+						alert(errorData.msg)
+						return false
+					};
+				} catch (error) {
+					console.error("There has been an error:", error);
+					return false;
+				}
+			},
+			// POR REVISAR
+			// getAllList: async (id) => {
+			// 	console.log(id)
+			// 	const store = getStore();
+			// 	try {
+			// 		const resp = await fetch(`${process.env.BACKEND_URL}/api/list?id=${id}`, {
+			// 			headers: {
+			// 				'Content-Type': 'application/json',
+			// 			}
+			// 		});
+			// 		const data = await resp.json()
+			// 		setStore({
+			// 			...store,
+			// 			currentList: {
+			// 				id: data.id,
+			// 				user_id: data.user_id,
+			// 				name: data.name,
+			// 			}
+			// 		});
+			// 		console.log(store.currentList);
+			// 		return data;
+
+			// 	} catch (error) {
+			// 		console.log("Error loading message from backend", error)
+			// 	}
+			// },
 		}
 	};
 };
