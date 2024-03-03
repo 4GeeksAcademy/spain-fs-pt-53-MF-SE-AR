@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, User, List, Gift
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token , get_jwt_identity , jwt_required
@@ -14,7 +14,7 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 #CORS(api, resources={"*": {"origins": "*"}})
-
+# RUTAS DE TOKEN 
 @api.route("/token", methods=["POST"])
 def create_token():
     email = request.json.get("email", None)
@@ -30,6 +30,7 @@ def create_token():
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
 
+# RUTAS DE MENSAJES (hello es ejemplo)
 @api.route("/hello", methods=["GET"])
 @jwt_required()
 def get_hello():
@@ -37,6 +38,7 @@ def get_hello():
     dictionary = {"message": "hello User " + email}
     return jsonify(dictionary)
 
+# RUTAS DE TABLA USER 
 @api.route("/privateuser", methods=["GET"])
 @jwt_required()
 def get_user():
@@ -88,6 +90,54 @@ def add_user():
         db.session.add(new_user)
         db.session.commit()
         return jsonify({'response': 'User added successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+    
+# RUTAS DE TABLA LIST    
+@api.route("/list", methods=["GET"])
+def get_all_list():
+    id = request.args.get("id")
+    
+    if id is None:
+         return jsonify({"message": "ID parameter missing"}), 400
+    
+    user = User.query.get(id)
+
+    if not user:
+        return jsonify({"msg": "User not found"}), 401
+    
+    user_list = List.query.filter_by(user=user).all()
+
+    if not user_list:
+        return jsonify({"msg": "No lists found for this user"}), 404
+    
+    user_list = list(map(lambda x: x.serialize(), user_list))
+
+    return jsonify(user_list), 200
+
+@api.route("/list", methods=["POST"])
+def add_list():
+    # ESTE ID LO TIENE QUE MANDAR EL FLUX
+    user_id = request.json.get("id") 
+    # EL PRIMER NAME SI ESTA VACIO EJ AL CREAR EL USUARIO Y SE RELLENARA CON "LISTA GENERAL"
+    name = request.json.get("name")  
+
+    required_fields = [user_id]
+
+    if any(field is None for field in required_fields):
+        return jsonify({'error': 'You must provide a name for the list and a user'}), 400
+    
+    user = User.query.filter_by(id=user_id).first()
+
+    if not user:
+        return jsonify({"msg": "This user need an account"}), 401
+    
+    try:
+        new_list = List(user_id=user_id,name=name)
+        db.session.add(new_list)
+        db.session.commit()
+        return jsonify({'response': 'List added successfully'}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400

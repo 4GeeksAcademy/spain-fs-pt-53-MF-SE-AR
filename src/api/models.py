@@ -30,7 +30,7 @@ class List(db.Model):
     name = db.Column(db.String(80), unique=False, nullable=True)
 
     def __repr__(self):
-        return f'<List {self.nombre}>'
+        return f'<List {self.name}>'
 
     def serialize(self):
         return {
