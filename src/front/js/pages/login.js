@@ -23,7 +23,7 @@ export const Login = () => {
             }
         }
     };
-    // POR REVISAR getAllList
+    // TODO: POR REVISAR getAllList
     // const handleClick = async () => {
     //     try {
     //         const success = await actions.login(email, password);
