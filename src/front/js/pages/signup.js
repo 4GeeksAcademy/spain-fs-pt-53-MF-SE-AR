@@ -23,33 +23,31 @@ export const Signup = () => {
 
     const handleSubmit = async () => {
         try {
+            // TODO: OPTIMIZAR ESTE CODIGO EN FLUX
             const successRegister = await actions.register(email, password, randomProfileImage);
             if (successRegister) {
                 const successLogin = await actions.login(email, password);
                 if (successLogin) {
                     console.log("Inicio de sesión exitoso");
-                    const user = await actions.getUser(email);
+                    const user = await actions.getUserToStore(email);
                     if (user && user.id) {
                         console.log("Usuario obtenido:", user.id);
                         const newListSuccess = await actions.newList(user.id.toString());
                         if (newListSuccess) {
                             console.log("Lista creada exitosamente");
-                            navigate(`/login`);
+                            navigate(`/giftlist/${user.id}`);
                         } else {
                             console.error("Error al crear la lista");
-                            // Manejar el error aquí
                         }
                     } else {
                         console.error("No se pudo obtener el ID del usuario");
                     }
                 } else {
                     console.error("Inicio de sesión fallido");
-                    // Manejar el error aquí
                 }
             }
         } catch (error) {
             console.error("Error:", error);
-            // Manejar el error aquí
         }
     };
 

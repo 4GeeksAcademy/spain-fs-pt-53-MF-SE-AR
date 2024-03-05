@@ -242,7 +242,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
 						headers: {
 							'Content-Type': 'application/json',
-							'Authorization': 'Bearer ' + store.token
+							'Authorization': `Bearer ${store.token}`
 						}
 					});
 					const data = await resp.json()
@@ -258,10 +258,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
 						headers: {
 							'Content-Type': 'application/json',
-							'Authorization': 'Bearer ' + store.token
+							'Authorization': `Bearer ${store.token}`
 						}
 					});
-					const data = await resp.json()
+
+					const data = await resp.json();
+						if (!data || typeof data.id === 'undefined') {
+    					throw new Error('Invalid response format: missing user ID');
+}
 					setStore({
 						...store,
 						currentUser: {
@@ -329,6 +333,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
+
+			updateProfile: async (profileData) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/update-profile`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						},
+						body: JSON.stringify(profileData)
+					});
+		
+					if (response.ok) {
+						console.log('Update SUCCESS')
+						return true;
+					} else {
+						throw new Error('Failed to update profile');
+					}
+				} catch (error) {
+					console.error('Error updating profile:', error);
+					return false;
+				}
+			},
+
 			// POR REVISAR
 			// getAllList: async (id) => {
 			// 	console.log(id)

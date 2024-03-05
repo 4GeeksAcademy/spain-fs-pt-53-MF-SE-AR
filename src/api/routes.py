@@ -7,6 +7,7 @@ from api.models import db, User, List, Gift
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token , get_jwt_identity , jwt_required
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 
 api = Blueprint('api', __name__)
@@ -14,6 +15,7 @@ api = Blueprint('api', __name__)
 # Allow CORS requests to this API
 CORS(api)
 #CORS(api, resources={"*": {"origins": "*"}})
+
 # RUTAS DE TOKEN 
 @api.route("/token", methods=["POST"])
 def create_token():
@@ -24,7 +26,8 @@ def create_token():
 
     if not user:
         return jsonify({"msg": "User not found"}), 401
-    if user.password != password:
+
+    if not check_password_hash(user.password, password):
         return jsonify({"msg": "Bad email or password"}), 401
 
     access_token = create_access_token(identity=email)
@@ -44,14 +47,43 @@ def get_hello():
 def get_user():
     email = get_jwt_identity()
     user = User.query.filter_by(email=email).first()
+
     if user:
         if user.name:
-            message = "Welcome " + user.name
+                message = "Welcome " + user.name
         else:
-            message = "Welcome " + user.email
+                message = "Welcome " + user.email
 
         user_data = {
-            "message": message,
+                "message": message,
+                "name": user.name,
+                "id": user.id,
+                "email": user.email,
+                "img": user.img
+            }
+        return jsonify(user_data), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
+
+
+@api.route("/update-profile", methods=["PUT"])
+@jwt_required()
+def update_profile():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+    if user:
+        data = request.get_json()
+        if 'name' in data:
+            user.name = data['name']
+        if 'email' in data:
+            user.email = data['email']
+        if 'password' in data:
+            user.password = generate_password_hash(data['password'])
+
+        db.session.commit()
+
+        user_data = {
+            "message": "Profile updated successfully",
             "name": user.name,
             "id": user.id,
             "email": user.email,
@@ -60,6 +92,7 @@ def get_user():
         return jsonify(user_data), 200
     else:
         return jsonify({"error": "User not found"}), 404
+
 
 @api.route('/user', methods=['GET'])
 def get_all_users():
@@ -75,18 +108,20 @@ def add_user():
     password = request.json.get("password")
     img = request.json.get("img")
 
-    required_fields = [email, password,img]
+    required_fields = [email, password, img]
 
     if any(field is None for field in required_fields):
-        return jsonify({'error': 'You must provide an email and a password'}), 400
-    
+        return jsonify({'error': 'You must provide an email, password, and img'}), 400
+
+    hashed_password = generate_password_hash(password).decode('utf-8')
+
     user = User.query.filter_by(email=email).first()
 
     if user:
         return jsonify({"msg": "This user already has an account"}), 401
-    
+
     try:
-        new_user = User(email=email, password=password, img=img, name="")
+        new_user = User(email=email, password=hashed_password, img=img, name="")
         db.session.add(new_user)
         db.session.commit()
         return jsonify({'response': 'User added successfully'}), 200
