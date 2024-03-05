@@ -23,7 +23,6 @@ export const Login = () => {
             }
         }
     };
-    
     // TODO: POR REVISAR getAllList
     // const handleClick = async () => {
     //     try {
