@@ -13,7 +13,6 @@ import { Footer } from "./component/footer";
 import { Signup } from "./pages/signup";
 import { Profile } from "./pages/profile";
 // import { GiftList } from "./pages/giftList";
-// import { Profile } from "./pages/profile";
 import { GiftList } from "./pages/giftList";
 import { SideBar } from "./component/sidebar";
 // import { GiftListEdit } from "./pages/giftListEdit";
@@ -42,7 +41,7 @@ const Layout = () => {
                                 <Route element={<Home />} path="/" />
                                 <Route element={<Login />} path="/login" />
                                 <Route element={<Signup />} path="/signup" />
-                                <Route element={<Profile />} path="/profile" />
+                                <Route element={<Profile />} path="/profile/:uid" />
                                 <Route element={<GiftList />} path="/giftlist/:uid" />
                                 <Route element={<GiftList />} path="/giftlist/:uid/disponible" />
                                 <Route element={<GiftList />} path="/giftlist/:uid/comprados" />
