@@ -134,7 +134,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(`https://api.pexels.com/v1/search?query=caja&per_page=3&locale=es-ES`, {
 						method: "GET",
 						headers: {
-							"Authorization": "jdQFRDD6vmPXuYRrqbppN0YPiTww0jTWHtDOKMR7PuH7ES1k9MGh5z5i"
+							"Authorization": `${process.env.API_PEXELS_TOKEN}`
 						},
 					});
 
@@ -242,7 +242,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
 						headers: {
 							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${store.token}`
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 						}
 					});
 					const data = await resp.json()
@@ -258,14 +258,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
 						headers: {
 							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${store.token}`
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 						}
 					});
 
 					const data = await resp.json();
-						if (!data || typeof data.id === 'undefined') {
-    					throw new Error('Invalid response format: missing user ID');
-}
+					if (!data || typeof data.id === 'undefined') {
+						throw new Error('Invalid response format: missing user ID');
+					}
 					setStore({
 						...store,
 						currentUser: {
@@ -285,8 +285,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			logout: () => {
 				sessionStorage.removeItem("token");
-				console.log("session ends")
-				setStore({ token: null })
+				console.log("session ends");
+				setStore({
+					token: null,
+					currentList: [],
+					currentUser: []
+				});
 			},
 			// ACTIONS EXAMPLE
 			changeColor: (index, color) => {
@@ -306,6 +310,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			updateProfile: async (profileData) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/update-profile`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						},
+						body: JSON.stringify(profileData)
+					});
+
+					if (response.ok) {
+						console.log('Update SUCCESS')
+						return true;
+					} else {
+						throw new Error('Failed to update profile');
+					}
+				} catch (error) {
+					console.error('Error updating profile:', error);
+					return false;
+				}
 			},
 			// ACTIONS LIST
 			newList: async (id) => {
@@ -334,55 +360,42 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			updateProfile: async (profileData) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/update-profile`, {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-						},
-						body: JSON.stringify(profileData)
-					});
-		
-					if (response.ok) {
-						console.log('Update SUCCESS')
-						return true;
-					} else {
-						throw new Error('Failed to update profile');
-					}
-				} catch (error) {
-					console.error('Error updating profile:', error);
-					return false;
-				}
-			},
+
 
 			// POR REVISAR
-			// getAllList: async (id) => {
-			// 	console.log(id)
-			// 	const store = getStore();
-			// 	try {
-			// 		const resp = await fetch(`${process.env.BACKEND_URL}/api/list?id=${id}`, {
-			// 			headers: {
-			// 				'Content-Type': 'application/json',
-			// 			}
-			// 		});
-			// 		const data = await resp.json()
-			// 		setStore({
-			// 			...store,
-			// 			currentList: {
-			// 				id: data.id,
-			// 				user_id: data.user_id,
-			// 				name: data.name,
-			// 			}
-			// 		});
-			// 		console.log(store.currentList);
-			// 		return data;
+			getAllList: async (id) => {
+				console.log(id)
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/list?id=${id}`, {
+						headers: {
+							'Content-Type': 'application/json',
+						}
+					});
+					const data = await resp.json()
+					console.log(data)
+					// Mapear cada objeto de data y agregarlo a currentList
+					const updatedList = data.map(item => ({
+						id: item.id,
+						user_id: item.user_id,
+						name: item.name,
+					}));
 
-			// 	} catch (error) {
-			// 		console.log("Error loading message from backend", error)
-			// 	}
-			// },
+					// Combinar la lista actual con la nueva lista mapeada
+					const mergedList = [...store.currentList, ...updatedList];
+
+					// Actualizar el store con la nueva lista combinada
+					setStore({
+						...store,
+						currentList: mergedList
+					});
+					console.log(store.currentList);
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
 		}
 	};
 };
