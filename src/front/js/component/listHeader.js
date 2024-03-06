@@ -2,11 +2,11 @@ import React, { Component, useState, useEffect, useContext } from "react";
 // import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 
-export const ListHeader = ({ uid }) => {
+export const ListHeader = () => {
     const { store, actions } = useContext(Context);
 
     useEffect(() => {
-        actions.getAllList(uid);
+        actions.getAllList();
     }
         , [store.token]);
     const listName = store.currentList.length > 0 ? store.currentList[0].name : "";

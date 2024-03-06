@@ -360,10 +360,40 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			getAllList: async () => {
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/list`, {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						}
+					});
+					const data = await resp.json()
+					console.log(data)
+					// Mapear cada objeto de data y agregarlo a currentList
+					const updatedList = data.map(item => ({
+						id: item.id,
+						user_id: item.user_id,
+						name: item.name,
+					}));
 
+					// Combinar la lista actual con la nueva lista mapeada
+					const mergedList = [...updatedList];
 
-			// POR REVISAR
-			getAllList: async (id) => {
+					// Actualizar el store con la nueva lista combinada
+					setStore({
+						...store,
+						currentList: mergedList
+					});
+					console.log(store.currentList);
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
+			getAllListPublic: async (id) => {
 				console.log(id)
 				const store = getStore();
 				try {
@@ -382,7 +412,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}));
 
 					// Combinar la lista actual con la nueva lista mapeada
-					const mergedList = [...store.currentList, ...updatedList];
+					const mergedList = [...updatedList];
 
 					// Actualizar el store con la nueva lista combinada
 					setStore({
