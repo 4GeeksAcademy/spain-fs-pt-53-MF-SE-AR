@@ -16,8 +16,8 @@ export const Login = () => {
         if (success) {
             const user = await actions.getUserToStore(email);
             if (user && user.id) {
-
-                navigate(`/giftlist/${user.id}`);
+                const uid = user.id
+                navigate(`/giftlist/${uid}`);
             } else {
                 console.error("No se pudo obtener el ID del usuario");
             }

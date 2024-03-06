@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useLocation, useParams } from "react-router-dom"
 import { Link } from "react-router-dom";
 import "../../styles/giftList.css";
 
@@ -10,6 +10,7 @@ import { ListHeader } from "../component/listHeader";
 
 export const GiftList = () => {
     const { store, actions } = useContext(Context);
+    const { uid } = useParams();
     const navigate = useNavigate();
     // const location = useLocation();
     const [activeTab, setActiveTab] = useState('home');
@@ -21,7 +22,6 @@ export const GiftList = () => {
             navigate("/");
         } else {
             actions.getUser();
-            // actions.getAllList();
         }
     }, []);
 
@@ -31,7 +31,6 @@ export const GiftList = () => {
             navigate("/");
         } else {
             actions.getUser();
-            // actions.getAllList();
         }
     }, [store.token]);
 
@@ -41,10 +40,10 @@ export const GiftList = () => {
     // console.log(location)
     return (
         <div className="container-giftlist">
-            <ListHeader />
-            <div className="tab-content" id="v-pills-tabContent">
+            <div>
                 <div>
                     <div className="row row-cols-1 row-cols-md-2 g-4">
+                        <ListHeader lid={uid} />
                         AQUI SE VA A PONER EL COMPONENTE {title}
                         AQUÍ AGREGAR EL COMPONENTE renderGift y pasar la uid={store.currentUser.id}
                         {/* <RenderGifts uid={store.currentUser.id} /> */}
