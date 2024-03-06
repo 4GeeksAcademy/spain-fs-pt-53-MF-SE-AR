@@ -42,7 +42,15 @@ def get_hello():
     return jsonify(dictionary)
 
 # RUTAS DE TABLA USER 
-@api.route("/privateuser", methods=["GET"])
+@api.route('/alluser', methods=['GET'])
+def get_all_users():
+
+    all_users = User.query.all()
+    all_users = list(map(lambda x: x.serialize(), all_users))
+
+    return jsonify(all_users), 200
+
+@api.route("/user", methods=["GET"])
 @jwt_required()
 def get_user():
     email = get_jwt_identity()
@@ -93,15 +101,6 @@ def update_profile():
     else:
         return jsonify({"error": "User not found"}), 404
 
-
-@api.route('/user', methods=['GET'])
-def get_all_users():
-
-    all_users = User.query.all()
-    all_users = list(map(lambda x: x.serialize(), all_users))
-
-    return jsonify(all_users), 200
-
 @api.route("/user", methods=["POST"])
 def add_user():
     email = request.json.get("email")
@@ -129,9 +128,17 @@ def add_user():
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
     
-# RUTAS DE TABLA LIST    
-@api.route("/list", methods=["GET"])
+# RUTAS DE TABLA LIST   
+@api.route('/alllist', methods=['GET'])
 def get_all_list():
+
+    all_list = List.query.all()
+    all_list = list(map(lambda x: x.serialize(), all_list))
+
+    return jsonify(all_list), 200
+     
+@api.route("/list", methods=["GET"])
+def get_all_list_user():
     id = request.args.get("id")
     
     if id is None:
@@ -173,6 +180,110 @@ def add_list():
         db.session.add(new_list)
         db.session.commit()
         return jsonify({'response': 'List added successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+    
+    # RUTAS TABLA GIFT
+@api.route('/allgifts', methods=['GET'])
+def get_all_gifts():
+
+    all_gift = Gift.query.all()
+    all_gift = list(map(lambda x: x.serialize(), all_gift))
+
+    return jsonify(all_gift), 200
+
+@api.route("/gift", methods=["GET"])
+def get_gift():
+# TODO: comentar con Sabri -> ID de la lista como una cadena de texto esto debe pasarlo el flux o como params?
+    lid = 1   
+    
+    if lid is None:
+        return jsonify({"message": "List ID parameter missing"}), 400
+    
+    list_obj = List.query.filter_by(id=lid).first()
+
+    if not list_obj:
+        return jsonify({"msg": "List not found"}), 404
+    
+    user_gifts = Gift.query.filter_by(list_id=list_obj.id).all()
+
+    if not user_gifts:
+        return jsonify({"msg": "No gifts found for this list"}), 404
+    
+    user_gift = list(map(lambda x: x.serialize(), user_gifts))
+    return jsonify(user_gift), 200
+
+@api.route("/gift", methods=["POST"])
+def add_gift():
+    title = request.json.get("title")
+    link = request.json.get("link")
+    status = request.json.get("status")
+    img = request.json.get("img")
+    list_id = request.json.get("list_id")
+
+    required_fields = [title, link, status, img, list_id]
+
+    if any(field is None for field in required_fields):
+        return jsonify({'error': 'You must complete all the items'}), 400
+
+    gift = Gift.query.filter_by(link=link).first()
+
+    if gift:
+        return jsonify({"msg": "This gift already exist"}), 401
+
+    try:
+        new_gift = Gift(title=title,link=link, status=status, img=img, list_id=list_id)
+        db.session.add(new_gift)
+        db.session.commit()
+        return jsonify({'response': 'Gift added successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+    
+@api.route('/gift/<int:gift_id>', methods=['DELETE'])
+# TODO: comentar con Sabri -> ID de la gift y la list_id como una cadena de texto esto debe pasarlo el flux ?
+def delete_gift(gift_id):
+    list_id = 1
+    requested_gift = Gift.query.filter_by(list_id=list_id, id=gift_id).first()
+    
+    if requested_gift is None:
+        return jsonify({'error': 'You must provide a gift_id'}), 400
+    
+    try:
+        db.session.delete(requested_gift)
+        db.session.commit()
+        return jsonify({'response': 'Gift deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400 
+
+@api.route('/gift/<int:gift_id>', methods=['PUT'])
+# TODO: comentar con Sabri -> ID de la gift y la list_id como una cadena de texto esto debe pasarlo el flux ?
+def update_gift(gift_id):
+    title = request.json.get("title")
+    link = request.json.get("link")
+    status = request.json.get("status")
+    img = request.json.get("img")
+    list_id = request.json.get("list_id")
+
+    required_fields = [title, link, status, img, list_id]
+    if any(field is None for field in required_fields):
+        return jsonify({'error': 'You must provide all the items'}), 400
+
+    gift = Gift.query.filter_by(list_id=list_id, id=gift_id).first()
+    if not gift:
+        return jsonify({'error': 'Gift not found'}), 404
+
+    try:
+        gift.title = title
+        gift.link = link
+        gift.status = status
+        gift.img = img
+        gift.list_id = list_id
+
+        db.session.commit()
+        return jsonify({'response': 'Gift updated successfully'}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400

@@ -239,7 +239,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getUser: async () => {
 				const store = getStore();
 				try {
-					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user`, {
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
@@ -255,7 +255,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getUserToStore: async () => {
 				const store = getStore();
 				try {
-					const resp = await fetch(`${process.env.BACKEND_URL}/api/privateuser`, {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user`, {
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
@@ -339,7 +339,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const res = await fetch(`${process.env.BACKEND_URL}/api/list`, {
 						method: 'POST',
 						body: JSON.stringify({
-							name: "Lista general",
+							name: "Lista General",
 							id: id,
 						}),
 						headers: {

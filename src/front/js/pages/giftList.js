@@ -43,7 +43,7 @@ export const GiftList = () => {
             <div>
                 <div>
                     <div className="row row-cols-1 row-cols-md-2 g-4">
-                        <ListHeader lid={uid} />
+                        <ListHeader uid={uid} />
                         AQUI SE VA A PONER EL COMPONENTE {title}
                         AQUÍ AGREGAR EL COMPONENTE renderGift y pasar la uid={store.currentUser.id}
                         {/* <RenderGifts uid={store.currentUser.id} /> */}

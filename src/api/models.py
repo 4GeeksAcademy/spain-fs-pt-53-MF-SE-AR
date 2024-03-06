@@ -29,7 +29,7 @@ class List(db.Model):
     name = db.Column(db.String(80), unique=False, nullable=True)
 
     def __repr__(self):
-        return f'<List {self.name}>'
+        return f'<List {self.id}>'
 
     def serialize(self):
         return {
@@ -45,7 +45,7 @@ class Gift(db.Model):
     link = db.Column(db.String(120), unique=True, nullable=False)
     status = db.Column(db.String(80), unique=False, nullable=False)
     img = db.Column(db.String(80), unique=False, nullable=False)
-    list_id = db.Column(db.Integer,db.ForeignKey("list.id"), unique=True, nullable=False)
+    list_id = db.Column(db.Integer,db.ForeignKey("list.id"), unique=False, nullable=False)
     list = db.relationship(List)
     
     def __repr__(self):
@@ -58,5 +58,6 @@ class Gift(db.Model):
             "link": self.link,
             "status": self.status,
             "list_id": self.list_id,
+            "img": self.img
             # do not serialize the password, its a security breach
         }
