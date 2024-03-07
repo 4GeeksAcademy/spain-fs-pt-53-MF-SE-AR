@@ -298,12 +298,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 			},
 
-			deleteUser: (id) => {
-				const store = getStore();
-				const updatedUsers = store.user.filter(g => g.id !== id);
-				setStore({ ...store, user: updatedUsers });
-				alert("¡Regalo eliminado correctamente!");
+			deleteUser: async (id, password) => {
+				try {
+					const res = await fetch(`/api/user/${id}`, {
+						method: 'DELETE',
+						headers: {
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ password: password })
+					});
+			
+					if (res.ok) {
+						return true;
+					} else {
+						throw new Error('Failed to delete user');
+					}
+				} catch (error) {
+					console.error('Error deleting user:', error);
+					return false;
+				}
 			},
+			
 
 			updateUser: async (name, email, password) => {
 				try {
