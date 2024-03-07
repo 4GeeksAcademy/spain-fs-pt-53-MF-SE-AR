@@ -40,23 +40,23 @@ export const Profile = () => {
                 <h1 className="text-center">Profile</h1>
 
                 {isAuthenticated ?
-                    <div className="alert alert-info">
+                    <div className="alert alert-bg">
                         Hello {store.currentUser.email}
                         <div className="mb-3">
                             <div className="mb-3">
-                                <label className="form-label">Name</label>
+                                <label className="form-label">Name:</label>
                                 <input type="text" className="form-control" />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Email</label>
+                                <label className="form-label">Email:</label>
                                 <input type="text" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Password</label>
+                                <label className="form-label">Password:</label>
                                 <input type="text" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Invitation to your gift list</label>
+                                <label className="form-label">Link to your gift list:</label>
                                 <div className="d-grid gap-2 d-md-flex">
                                     <input className="form-control" type="text" value="Readonly input here..." aria-label="readonly input example" readonly />
                                     <button className="btn btn-outline-info"><i className="fa-regular fa-copy"></i></button>
