@@ -35,7 +35,8 @@ export const Signup = () => {
                         const newListSuccess = await actions.newList(user.id.toString());
                         if (newListSuccess) {
                             console.log("Lista creada exitosamente");
-                            navigate(`/giftlist/${user.id}`);
+                            navigate(`/user/${user.id}/giftlist`);
+                            // TODO:ADD lid TU URL
                         } else {
                             console.error("Error al crear la lista");
                         }

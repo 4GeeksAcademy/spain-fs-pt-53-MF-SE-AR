@@ -4,9 +4,10 @@ import { Context } from "../store/appContext";
 
 export const ListHeader = () => {
     const { store, actions } = useContext(Context);
+    // TODO: AGREGAR PARAMS AL ACTUALIZAR LA URL, MIENTRAS SE AGREGA MANUAL
 
     useEffect(() => {
-        actions.getAllList();
+        actions.getAllList(1);
     }
         , [store.token]);
     const listName = store.currentList.length > 0 ? store.currentList[0].name : "";
