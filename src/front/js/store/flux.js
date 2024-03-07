@@ -360,10 +360,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getAllList: async () => {
+			getAllList: async (id) => {
 				const store = getStore();
 				try {
-					const resp = await fetch(`${process.env.BACKEND_URL}/api/list`, {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user/${id}/giftlist`, {
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
@@ -393,11 +393,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
-			getAllListPublic: async (id) => {
-				console.log(id)
+			getAllListPublic: async (uid, lid) => {
+				// TODO:REVISAR CUANDO SE TENGA LA ENTRADA PUBLICA
+				console.log(uid, lid)
 				const store = getStore();
 				try {
-					const resp = await fetch(`${process.env.BACKEND_URL}/api/list?id=${id}`, {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/guest/${uid}/giftlist/${lid}`, {
 						headers: {
 							'Content-Type': 'application/json',
 						}
