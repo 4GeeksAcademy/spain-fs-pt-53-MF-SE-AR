@@ -74,9 +74,9 @@ def get_user():
         return jsonify({"error": "User not found"}), 404
 
 
-@api.route("/update-profile", methods=["PUT"])
+@api.route("/user", methods=["PUT"])
 @jwt_required()
-def update_profile():
+def update_user():
     email = get_jwt_identity()
     user = User.query.filter_by(email=email).first()
     if user:
@@ -85,7 +85,7 @@ def update_profile():
             user.name = data['name']
         if 'email' in data:
             user.email = data['email']
-        if 'password' in data:
+        if 'password' in data and data['password']:  
             user.password = generate_password_hash(data['password'])
 
         db.session.commit()
@@ -100,6 +100,29 @@ def update_profile():
         return jsonify(user_data), 200
     else:
         return jsonify({"error": "User not found"}), 404
+
+@api.route('/user/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id, email):
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email, id=user_id).first()
+
+    if not user:
+         return jsonify({"msg": "Incorrect user"}), 401
+
+    requested_user = User.query.filter_by(email=email, id=user_id).first()
+    
+    if requested_user is None:
+        return jsonify({'error': 'You must provide a user ID'}), 400
+    
+    try:
+        db.session.delete(requested_user)
+        db.session.commit()
+        return jsonify({'response': 'User deleted successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+    
 
 @api.route("/user", methods=["POST"])
 def add_user():

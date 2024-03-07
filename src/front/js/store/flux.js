@@ -179,6 +179,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+
 			// ACTIONS USER
 			register: async (email, password, randomProfileImage) => {
 				try {
@@ -208,6 +209,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
+
 			login: async (email, password) => {
 				try {
 					const res = await fetch(`${process.env.BACKEND_URL}/api/token`, {
@@ -236,6 +238,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
+
 			getUser: async () => {
 				const store = getStore();
 				try {
@@ -252,6 +255,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+
 			getUserToStore: async () => {
 				const store = getStore();
 				try {
@@ -283,6 +287,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+
 			logout: () => {
 				sessionStorage.removeItem("token");
 				console.log("session ends");
@@ -292,6 +297,42 @@ const getState = ({ getStore, getActions, setStore }) => {
 					currentUser: []
 				});
 			},
+
+			deleteUser: (id) => {
+				const store = getStore();
+				const updatedUsers = store.user.filter(g => g.id !== id);
+				setStore({ ...store, user: updatedUsers });
+				alert("¡Regalo eliminado correctamente!");
+			},
+
+			updateUser: async (name, email, password) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/user`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						},
+						body: JSON.stringify({
+							name: name,
+							email: email,
+							password: password,
+						}),
+					});
+
+					if (response.ok) {
+						console.log('Update SUCCESS')
+						return true;
+					} else {
+						throw new Error('Failed to update profile');
+					}
+				} catch (error) {
+					console.error('Error updating profile:', error);
+					return false;
+				}
+			},
+
+
 			// ACTIONS EXAMPLE
 			changeColor: (index, color) => {
 				//get the store
@@ -311,28 +352,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//reset the global store
 				setStore({ demo: demo });
 			},
-			updateProfile: async (profileData) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/update-profile`, {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-						},
-						body: JSON.stringify(profileData)
-					});
 
-					if (response.ok) {
-						console.log('Update SUCCESS')
-						return true;
-					} else {
-						throw new Error('Failed to update profile');
-					}
-				} catch (error) {
-					console.error('Error updating profile:', error);
-					return false;
-				}
-			},
 			// ACTIONS LIST
 			newList: async (id) => {
 				try {
