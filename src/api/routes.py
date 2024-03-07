@@ -138,23 +138,33 @@ def get_all_list():
     return jsonify(all_list), 200
      
 @api.route("/list", methods=["GET"])
+@jwt_required()
 def get_all_list_user():
-    id = request.args.get("id")
-    
-    if id is None:
-         return jsonify({"message": "ID parameter missing"}), 400
-    
-    user = User.query.get(id)
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+    user_new = user.serialize()
 
     if not user:
         return jsonify({"msg": "User not found"}), 401
     
-    user_list = List.query.filter_by(user=user).all()
+    user_list = List.query.filter_by(user_id=user_new["id"]).all()
 
     if not user_list:
         return jsonify({"msg": "No lists found for this user"}), 404
     
     user_list = list(map(lambda x: x.serialize(), user_list))
+
+    return jsonify(user_list), 200
+
+@api.route("/guest/<int:user_id>/giftlist/<int:list_id>", methods=["GET"])
+def get_all_list_user_public(user_id, list_id):
+    # TODO: probar tener 2 en el filter para cargar la lista. ejemplo ver gift delete.
+    requested_lists = List.query.filter_by(user_id=user_id, id=list_id).all()
+    
+    if not requested_lists:
+        return jsonify({'error': 'List not found'}), 404
+    
+    user_list = list(map(lambda x: x.serialize(), requested_lists))
 
     return jsonify(user_list), 200
 
@@ -193,83 +203,160 @@ def get_all_gifts():
 
     return jsonify(all_gift), 200
 
-@api.route("/gift", methods=["GET"])
-def get_gift():
-# TODO: comentar con Sabri -> ID de la lista como una cadena de texto esto debe pasarlo el flux o como params?
-    lid = 1   
-    
-    if lid is None:
-        return jsonify({"message": "List ID parameter missing"}), 400
-    
-    list_obj = List.query.filter_by(id=lid).first()
+@api.route("/gifts", methods=["GET"])
+@jwt_required()
+def get_gifts():
+     email = get_jwt_identity()
+     user = User.query.filter_by(email=email).first()
+     user_new = user.serialize()
 
-    if not list_obj:
-        return jsonify({"msg": "List not found"}), 404
+     if not user:
+         return jsonify({"msg": "User not found"}), 401
     
-    user_gifts = Gift.query.filter_by(list_id=list_obj.id).all()
+     list_obj = List.query.filter_by(user_id=user_new["id"]).first()
+     list_new = list_obj.serialize()
 
-    if not user_gifts:
+     if not list_obj:
+         return jsonify({"msg": "No lists found for this user"}), 404
+    
+     user_gifts = Gift.query.filter_by(list_id=list_new["id"]).all()
+
+     if not user_gifts:
         return jsonify({"msg": "No gifts found for this list"}), 404
     
-    user_gift = list(map(lambda x: x.serialize(), user_gifts))
+     user_gift = list(map(lambda x: x.serialize(), user_gifts))
+     return jsonify(user_gift), 200
+
+@api.route("/gifts/<int:gift_id>", methods=["GET"])
+@jwt_required()
+def get_one_gifts(gift_id):
+     email = get_jwt_identity()
+     user = User.query.filter_by(email=email).first()
+     user_new = user.serialize()
+
+     if not user:
+         return jsonify({"msg": "User not found"}), 401
+    
+     list_obj = List.query.filter_by(user_id=user_new["id"]).first()
+     list_new = list_obj.serialize()
+
+     if not list_obj:
+         return jsonify({"msg": "No lists found for this user"}), 404
+    
+     user_gifts = Gift.query.filter_by(list_id=list_new["id"],id=gift_id).first()
+
+     if not user_gifts:
+        return jsonify({"msg": "No gifts found for this list"}), 404
+    
+     one_gift = user_gifts.serialize()
+     return jsonify(one_gift), 200
+
+# @api.route("/gift", methods=["POST"])
+# # TODO: hacer privado
+# def add_gift():
+#     title = request.json.get("title")
+#     link = request.json.get("link")
+#     status = request.json.get("status")
+#     img = request.json.get("img")
+#     list_id = request.json.get("list_id")
+
+#     required_fields = [title, link, status, img, list_id]
+
+#     if any(field is None for field in required_fields):
+#         return jsonify({'error': 'You must complete all the items'}), 400
+
+#     gift = Gift.query.filter_by(link=link).first()
+
+#     if gift:
+#         return jsonify({"msg": "This gift already exist"}), 401
+
+#     try:
+#         new_gift = Gift(title=title,link=link, status=status, img=img, list_id=list_id)
+#         db.session.add(new_gift)
+#         db.session.commit()
+#         return jsonify({'response': 'Gift added successfully'}), 200
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({'error': str(e)}), 400
+    
+# @api.route('/gift/<int:gift_id>', methods=['PUT'])
+# # TODO: hacer privado
+# def update_gift(gift_id):
+#     title = request.json.get("title")
+#     link = request.json.get("link")
+#     status = request.json.get("status")
+#     img = request.json.get("img")
+#     list_id = request.json.get("list_id")
+
+#     required_fields = [title, link, status, img, list_id]
+#     if any(field is None for field in required_fields):
+#         return jsonify({'error': 'You must provide all the items'}), 400
+
+#     gift = Gift.query.filter_by(list_id=list_id, id=gift_id).first()
+#     if not gift:
+#         return jsonify({'error': 'Gift not found'}), 404
+
+#     try:
+#         gift.title = title
+#         gift.link = link
+#         gift.status = status
+#         gift.img = img
+#         gift.list_id = list_id
+
+#         db.session.commit()
+#         return jsonify({'response': 'Gift updated successfully'}), 200
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({'error': str(e)}), 400    
+    
+# @api.route('/gift/<int:gift_id>', methods=['DELETE'])
+# # TODO: hacer privado
+# def delete_gift(gift_id):
+#     list_id = 1
+#     requested_gift = Gift.query.filter_by(list_id=list_id, id=gift_id).first()
+    
+#     if requested_gift is None:
+#         return jsonify({'error': 'You must provide a gift_id'}), 400
+    
+#     try:
+#         db.session.delete(requested_gift)
+#         db.session.commit()
+#         return jsonify({'response': 'Gift deleted successfully'}), 200
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({'error': str(e)}), 400
+
+@api.route("/guest/<int:user_id>/giftlist/<int:list_id>/gifts", methods=["GET"])
+def get_all_gifts_public(list_id,user_id):
+    requested_gifts = Gift.query.filter_by(list_id=list_id).all()
+    
+    if not requested_gifts:
+        return jsonify({'error': 'No gifts found for this list'}), 404
+    
+    user_gift = list(map(lambda x: x.serialize(), requested_gifts))
     return jsonify(user_gift), 200
 
-@api.route("/gift", methods=["POST"])
-def add_gift():
+@api.route("/guest/<int:user_id>/giftlist/<int:list_id>/gifts/<int:gift_id>", methods=["GET"])
+def get_one_gift_public(list_id,user_id,gift_id):
+    requested_gifts = Gift.query.filter_by(list_id=list_id, id=gift_id).first()
+    
+    if not requested_gifts:
+        return jsonify({'error': 'That gift is not found in this list'}), 404
+    
+    user_gift = requested_gifts.serialize()
+    return jsonify(user_gift), 200     
+
+@api.route('/guest/<int:user_id>/giftlist/<int:list_id>/gifts/<int:gift_id>', methods=['PUT'])
+def update_gift_public(user_id,list_id,gift_id):
     title = request.json.get("title")
     link = request.json.get("link")
     status = request.json.get("status")
     img = request.json.get("img")
-    list_id = request.json.get("list_id")
-
-    required_fields = [title, link, status, img, list_id]
-
-    if any(field is None for field in required_fields):
-        return jsonify({'error': 'You must complete all the items'}), 400
-
-    gift = Gift.query.filter_by(link=link).first()
-
-    if gift:
-        return jsonify({"msg": "This gift already exist"}), 401
-
-    try:
-        new_gift = Gift(title=title,link=link, status=status, img=img, list_id=list_id)
-        db.session.add(new_gift)
-        db.session.commit()
-        return jsonify({'response': 'Gift added successfully'}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 400
-    
-@api.route('/gift/<int:gift_id>', methods=['DELETE'])
-# TODO: comentar con Sabri -> ID de la gift y la list_id como una cadena de texto esto debe pasarlo el flux ?
-def delete_gift(gift_id):
-    list_id = 1
-    requested_gift = Gift.query.filter_by(list_id=list_id, id=gift_id).first()
-    
-    if requested_gift is None:
-        return jsonify({'error': 'You must provide a gift_id'}), 400
-    
-    try:
-        db.session.delete(requested_gift)
-        db.session.commit()
-        return jsonify({'response': 'Gift deleted successfully'}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 400 
-
-@api.route('/gift/<int:gift_id>', methods=['PUT'])
-# TODO: comentar con Sabri -> ID de la gift y la list_id como una cadena de texto esto debe pasarlo el flux ?
-def update_gift(gift_id):
-    title = request.json.get("title")
-    link = request.json.get("link")
-    status = request.json.get("status")
-    img = request.json.get("img")
-    list_id = request.json.get("list_id")
+    list_id = list_id
 
     required_fields = [title, link, status, img, list_id]
     if any(field is None for field in required_fields):
-        return jsonify({'error': 'You must provide all the items'}), 400
+        return jsonify({'error': 'You must fill in all the items'}), 400
 
     gift = Gift.query.filter_by(list_id=list_id, id=gift_id).first()
     if not gift:
