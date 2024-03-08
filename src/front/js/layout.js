@@ -15,6 +15,9 @@ import { Profile } from "./pages/profile";
 // import { GiftList } from "./pages/giftList";
 import { GiftList } from "./pages/giftList";
 import { SideBar } from "./component/sidebar";
+import { RenderGifts } from "./component/renderGifts";
+import { RenderGiftsAvailable } from "./component/renderGiftsAvailable";
+import { RenderGiftsPurchased } from "./component/renderGiftsPurchased";
 // import { GiftListEdit } from "./pages/giftListEdit";
 // import { Private } from "./pages/private";
 
@@ -30,23 +33,19 @@ const Layout = () => {
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
                     <Navbar />
-                    <div className="row">
-                        <div className="col-sm-3 bg-light">
-                            <SideBar />
-                        </div>
-                        <div className="col-sm-9 p-5">
-                            <Routes>
-                                <Route element={<Home />} path="/" />
-                                <Route element={<Login />} path="/login" />
-                                <Route element={<Signup />} path="/signup" />
-                                <Route element={<Profile />} path="/user/:uid/profile" />
-                                <Route element={<GiftList />} path="/user/:uid/giftlist" />
-                                <Route element={<GiftList />} path="/giftlist/:uid/disponible" />
-                                <Route element={<GiftList />} path="/giftlist/:uid/comprados" />
-                                <Route element={<NotFound />} path="*" />
-                            </Routes>
-                        </div>
-                    </div>
+                    <Routes>
+                        <Route element={<Home />} path="/" />
+                        <Route element={<Login />} path="/login" />
+                        <Route element={<Signup />} path="/signup" />
+                        {/* TODO:AGREGAR A LA URL DE GIFTLIST EL :LID Y EL GIFTS */}
+                        <Route element={<GiftList />} path="/user/:uid/giftlist" >
+                            <Route element={<RenderGifts />} path=":lid/allGifts" />
+                            <Route element={<RenderGiftsAvailable />} path=":lid/available" />
+                            <Route element={<RenderGiftsPurchased />} path=":lid/purchased" />
+                        </Route>
+                        <Route element={<Profile />} path="/user/:uid/profile" />
+                        <Route element={<NotFound />} path="*" />
+                    </Routes>
                     <Footer />
                 </ScrollToTop>
             </BrowserRouter>
