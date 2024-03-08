@@ -321,7 +321,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 
-			updateUser: async (name, email) => {
+			updateUser: async (name, email, password) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/user`, {
 						method: 'PUT',
@@ -332,9 +332,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify({
 							name: name,
 							email: email,
+							password: password,
 						}),
 					});
-
+					// TODO: AGREGAR LA ACTUALIZACION DEL CURRENTUSER STORE
 					if (response.ok) {
 						console.log('Update SUCCESS')
 						return true;
@@ -348,29 +349,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 
-			changePassword: async (newPassword) => {
-				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/user/password`, {
-						method: 'PUT',
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-						},
-						body: JSON.stringify({
-							password: newPassword,
-						}),
-					});
+			// changePassword: async (newPassword) => {
+			// 	try {
+			// 		const response = await fetch(`${process.env.BACKEND_URL}/api/user/password`, {
+			// 			method: 'PUT',
+			// 			headers: {
+			// 				'Content-Type': 'application/json',
+			// 				'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+			// 			},
+			// 			body: JSON.stringify({
+			// 				password: newPassword,
+			// 			}),
+			// 		});
 
-					if (response.ok) {
-						return true;
-					} else {
-						return false;
-					}
-				} catch (error) {
-					console.error('Error changing password:', error);
-					return false;
-				}
-			},
+			// 		if (response.ok) {
+			// 			return true;
+			// 		} else {
+			// 			return false;
+			// 		}
+			// 	} catch (error) {
+			// 		console.error('Error changing password:', error);
+			// 		return false;
+			// 	}
+			// },
 
 
 

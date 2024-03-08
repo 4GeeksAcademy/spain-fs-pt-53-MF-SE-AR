@@ -50,6 +50,41 @@ def get_all_users():
 
     return jsonify(all_users), 200
 
+# @api.route('/user/<int:user_id>/giftlist/<int:list_id>/gifts/<int:gift_id>', methods=['PUT'])
+# @jwt_required()
+# def update_gift(user_id, list_id,gift_id):
+#     email = get_jwt_identity()
+#     user = User.query.filter_by(email=email, id=user_id).first()
+
+#     if not user:
+#          return jsonify({"msg": "Incorrect user"}), 401
+    
+#     title = request.json.get("title")
+#     link = request.json.get("link")
+#     status = request.json.get("status")
+#     img = request.json.get("img")
+#     list_id = list_id
+
+#     required_fields = [title, link, status, img, list_id]
+#     if any(field is None for field in required_fields):
+#         return jsonify({'error': 'You must fill in all the items'}), 400
+
+#     gift = Gift.query.filter_by(list_id=list_id, id=gift_id).first()
+#     if not gift:
+#         return jsonify({'error': 'Gift not found'}), 404
+
+#     try:
+#         gift.title = title
+#         gift.link = link
+#         gift.status = status
+#         gift.img = img
+#         gift.list_id = list_id
+
+#         db.session.commit()
+#         return jsonify({'response': 'Gift updated successfully'}), 200
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({'error': str(e)}), 400  
 
 @api.route("/user", methods=["POST"])
 def add_user():
@@ -101,58 +136,84 @@ def get_user():
         return jsonify(user_data), 200
     else:
         return jsonify({"error": "User not found"}), 404
-
-
+    
 @api.route("/user", methods=["PUT"])
 @jwt_required()
 def update_user():
     email = get_jwt_identity()
     user = User.query.filter_by(email=email).first()
-    if user:
-        data = request.get_json()
-        if 'name' in data:
-            user.name = data['name']
-        if 'email' in data:
-            user.email = data['email']
+
+    if not user:
+        return jsonify({"msg": "Incorrect user"}), 401
+    
+    email = request.json.get("email")
+    password = request.json.get("password")
+    name = request.json.get("name")
+
+    hashed_password = generate_password_hash(password).decode('utf-8')
+
+    try:
+        user.email = email
+        user.name = name
+        user.password = hashed_password
 
         db.session.commit()
+        return jsonify({'response': 'User updated successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+      
+# TODO: AQUI ESTAN LOS PUT DE SABRI
+# @api.route("/user", methods=["PUT"])
+# @jwt_required()
+# def update_user():
+#     email = get_jwt_identity()
+#     user = User.query.filter_by(email=email).first()
+#     if user:
+#         data = request.get_json()
+#         if 'name' in data:
+#             user.name = data['name']
+#         if 'email' in data:
+#             user.email = data['email']
 
-        user_data = {
-            "message": "Profile updated successfully",
-            "name": user.name,
-            "id": user.id,
-            "email": user.email,
-            "img": user.img
-        }
-        return jsonify(user_data), 200
-    else:
-        return jsonify({"error": "User not found"}), 404
+#         db.session.commit()
+
+#         user_data = {
+#             "message": "Profile updated successfully",
+#             "name": user.name,
+#             "id": user.id,
+#             "email": user.email,
+#             "img": user.img
+#         }
+#         return jsonify(user_data), 200
+#     else:
+#         return jsonify({"error": "User not found"}), 404
     
 
-@api.route("/user/password", methods=["PUT"])
-@jwt_required()
-def change_password():
-    email = get_jwt_identity()
-    password = request.json.get("password", None)
-    user = User.query.filter_by(email=email).first()
+# @api.route("/user/password", methods=["PUT"])
+# @jwt_required()
+# def change_password():
+#     email = get_jwt_identity()
+#     password = request.json.get("password", None)
+#     user = User.query.filter_by(email=email).first()
 
-    if not check_password_hash(user.password, password):
-        return jsonify({"msg": "Bad email or password"}), 401
+#     if not check_password_hash(user.password, password):
+#         return jsonify({"msg": "Bad email or password"}), 401
     
-    if user:
-        data = request.get_json()
-        if 'password' in data:
-            hashed_password = generate_password_hash(password).decode('utf-8')
+#     if user:
+#         data = request.get_json()
+#         if 'password' in data:
+#             hashed_password = generate_password_hash(password).decode('utf-8')
 
-        db.session.commit()
+#         db.session.commit()
 
-        user_data = {
-            "message": "Profile updated successfully",
-            "password": hashed_password,
-        }
-        return jsonify(user_data), 200
-    else:
-        return jsonify({"error": "User not found"}), 404
+#         user_data = {
+#             "message": "Profile updated successfully",
+#             "password": hashed_password,
+#         }
+#         return jsonify(user_data), 200
+#     else:
+#         return jsonify({"error": "User not found"}), 404
     
     
 # @api.route("/user/password", methods=["PUT"])
