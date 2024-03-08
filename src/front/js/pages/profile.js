@@ -32,7 +32,6 @@ export const Profile = () => {
             setUserData(user);
             setName(user.name);
             setEmail(user.email);
-            // Password field is optional, you can decide how to handle it
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -40,17 +39,9 @@ export const Profile = () => {
 
     const handleUpdateProfile = async () => {
         try {
-            const success = await actions.updateUser(name, email, newPassword);
+            const success = await actions.updateUser(name, email);
             if (success) {
-                console.log('User profile updated successfully');
-                if (newPassword) {
-                    const passwordChangeSuccess = await changePassword(newPassword); // Call the changePassword function
-                    if (passwordChangeSuccess) {
-                        console.log('Password changed successfully');
-                    } else {
-                        console.error('Failed to change password');
-                    }
-                }
+                console.log('User profile updated successfully');      
                 fetchUserData();
                 setIsEditable(false);
             } else {
@@ -60,7 +51,21 @@ export const Profile = () => {
             console.error('Error updating user profile:', error);
         }
     };
-    
+
+    const handleUpdatePassword = async () => {
+        try {
+            const newPassword = await actions.changePassword(password);
+            if (newPassword) {
+                    console.log('Password changed successfully');
+                    fetchUserData();
+                    setIsEditable(false);
+                } else {
+                    console.error('Failed to change password');
+            }
+        } catch (error) {
+            console.error('Error updating user profile:', error);
+        }
+    };
 
     const handleOpenDelete = () => {
         setShowModal(true);
@@ -112,6 +117,9 @@ export const Profile = () => {
                             <button type="button" className="btn mt-3" onClick={handleOpenDelete}>Delete Account</button>
                             {!isEditable && <button type="button" className="btn mt-3" onClick={() => setIsEditable(true)}>Edit</button>}
                             {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdateProfile}>Save</button>}
+                            {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdatePassword}>Save Password</button>}
+
+
                         </div>
                     </div>
                 )}
