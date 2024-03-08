@@ -50,56 +50,6 @@ def get_all_users():
 
     return jsonify(all_users), 200
 
-@api.route("/user", methods=["GET"])
-@jwt_required()
-def get_user():
-    email = get_jwt_identity()
-    user = User.query.filter_by(email=email).first()
-
-    if user:
-        if user.name:
-                message = "Welcome " + user.name
-        else:
-                message = "Welcome " + user.email
-
-        user_data = {
-                "message": message,
-                "name": user.name,
-                "id": user.id,
-                "email": user.email,
-                "img": user.img
-            }
-        return jsonify(user_data), 200
-    else:
-        return jsonify({"error": "User not found"}), 404
-
-
-@api.route("/update-profile", methods=["PUT"])
-@jwt_required()
-def update_profile():
-    email = get_jwt_identity()
-    user = User.query.filter_by(email=email).first()
-    if user:
-        data = request.get_json()
-        if 'name' in data:
-            user.name = data['name']
-        if 'email' in data:
-            user.email = data['email']
-        if 'password' in data:
-            user.password = generate_password_hash(data['password'])
-
-        db.session.commit()
-
-        user_data = {
-            "message": "Profile updated successfully",
-            "name": user.name,
-            "id": user.id,
-            "email": user.email,
-            "img": user.img
-        }
-        return jsonify(user_data), 200
-    else:
-        return jsonify({"error": "User not found"}), 404
 
 @api.route("/user", methods=["POST"])
 def add_user():
@@ -127,6 +77,95 @@ def add_user():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
+
+
+@api.route("/user", methods=["GET"])
+@jwt_required()
+def get_user():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        if user.name:
+                message = "Welcome " + user.name
+        else:
+                message = "Welcome " + user.email
+
+        user_data = {
+                "message": message,
+                "name": user.name,
+                "id": user.id,
+                "email": user.email,
+                "img": user.img
+            }
+        return jsonify(user_data), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
+
+
+@api.route("/user", methods=["PUT"])
+@jwt_required()
+def update_user():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+    if user:
+        data = request.get_json()
+        if 'name' in data:
+            user.name = data['name']
+        if 'email' in data:
+            user.email = data['email']
+
+        db.session.commit()
+
+        user_data = {
+            "message": "Profile updated successfully",
+            "name": user.name,
+            "id": user.id,
+            "email": user.email,
+            "img": user.img
+        }
+        return jsonify(user_data), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
+    
+@api.route("/user/password", methods=["PUT"])
+@jwt_required()
+def change_password():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        data = request.get_json()
+        new_password = data.get('new_password')
+
+        if new_password:
+            hashed_password = generate_password_hash(new_password).decode('utf-8')
+            user.password = hashed_password
+            db.session.commit()
+            return jsonify({"message": "Password changed successfully"}), 200
+        else:
+            return jsonify({"error": "New password not provided"}), 400
+    else:
+        return jsonify({"error": "User not found"}), 404
+
+
+@api.route('/user/<user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    email = get_jwt_identity()
+    user = User.query.filter_by(id=user_id).first()
+
+    if not user:
+         return jsonify({"msg": "User not found"}), 404
+
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        return '', 204
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
     
 # RUTAS DE TABLA LIST   
 @api.route('/alllist', methods=['GET'])
