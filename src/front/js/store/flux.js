@@ -356,8 +356,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							'Content-Type': 'application/json',
 							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 						},
-						body: JSON.stringify({ new_password: newPassword })
+						body: JSON.stringify({
+							password: newPassword,
+						}),
 					});
+
 					if (response.ok) {
 						return true;
 					} else {
