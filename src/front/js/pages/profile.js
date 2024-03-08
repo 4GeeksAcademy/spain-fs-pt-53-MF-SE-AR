@@ -11,7 +11,6 @@ export const Profile = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [newPassword, setNewPassword] = useState(""); // Add this state
     const [showModal, setShowModal] = useState(false);
     const [enteredPassword, setEnteredPassword] = useState('');
     const [userData, setUserData] = useState(null);
@@ -32,6 +31,7 @@ export const Profile = () => {
             setUserData(user);
             setName(user.name);
             setEmail(user.email);
+            setPassword("");
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -39,28 +39,12 @@ export const Profile = () => {
 
     const handleUpdateProfile = async () => {
         try {
-            const success = await actions.updateUser(name, email);
+            const success = await actions.updateUser(name, email, password);
             if (success) {
-                console.log('User profile updated successfully');      
-                fetchUserData();
+                console.log('User profile updated successfully');
                 setIsEditable(false);
             } else {
                 console.error('Failed to update user profile');
-            }
-        } catch (error) {
-            console.error('Error updating user profile:', error);
-        }
-    };
-
-    const handleUpdatePassword = async () => {
-        try {
-            const newPassword = await actions.changePassword(password);
-            if (newPassword) {
-                    console.log('Password changed successfully');
-                    fetchUserData();
-                    setIsEditable(false);
-                } else {
-                    console.error('Failed to change password');
             }
         } catch (error) {
             console.error('Error updating user profile:', error);
@@ -97,7 +81,9 @@ export const Profile = () => {
                 <h1 className="text-center">Profile</h1>
                 {userData && (
                     <div className="alert alert-bg">
-                        Hello {userData.email}
+                        <h5 className="text">
+                            Hello {userData.name}
+                        </h5>
                         <div className="mb-3">
                             <div className="mb-3">
                                 <label className="form-label">Name:</label>
@@ -109,17 +95,13 @@ export const Profile = () => {
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Password:</label>
-                                <input type="password" className="form-control" placeholder="***" value={newPassword} readOnly={!isEditable} onChange={(e) => setNewPassword(e.target.value)} />
+                                <input type="password" className="form-control" placeholder={"******"} value={password} readOnly={!isEditable} onChange={(e) => setPassword(e.target.value)} />
                             </div>
-
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" className="btn mt-3" onClick={handleOpenDelete}>Delete Account</button>
                             {!isEditable && <button type="button" className="btn mt-3" onClick={() => setIsEditable(true)}>Edit</button>}
                             {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdateProfile}>Save</button>}
-                            {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdatePassword}>Save Password</button>}
-
-
                         </div>
                     </div>
                 )}
