@@ -300,16 +300,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			deleteUser: async (id, password) => {
 				try {
-					const res = await fetch(`/api/user/${id}`, {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/user`, {
 						method: 'DELETE',
 						headers: {
 							'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
 							'Content-Type': 'application/json'
 						},
-						body: JSON.stringify({ password: password })
+						body: JSON.stringify({ 
+							password: password,
+							id: id,
+						})
 					});
 
-					if (res.ok) {
+					if (response.ok) {
+						console.log('User deleted')
 						return true;
 					} else {
 						throw new Error('Failed to delete user');
@@ -319,7 +323,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
-
 
 			updateUser: async (name, email, password) => {
 				try {

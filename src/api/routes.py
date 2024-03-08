@@ -164,6 +164,7 @@ def update_user():
         return jsonify({'error': str(e)}), 400
       
 # TODO: AQUI ESTAN LOS PUT DE SABRI
+    
 # @api.route("/user", methods=["PUT"])
 # @jwt_required()
 # def update_user():
@@ -189,53 +190,6 @@ def update_user():
 #     else:
 #         return jsonify({"error": "User not found"}), 404
     
-
-# @api.route("/user/password", methods=["PUT"])
-# @jwt_required()
-# def change_password():
-#     email = get_jwt_identity()
-#     password = request.json.get("password", None)
-#     user = User.query.filter_by(email=email).first()
-
-#     if not check_password_hash(user.password, password):
-#         return jsonify({"msg": "Bad email or password"}), 401
-    
-#     if user:
-#         data = request.get_json()
-#         if 'password' in data:
-#             hashed_password = generate_password_hash(password).decode('utf-8')
-
-#         db.session.commit()
-
-#         user_data = {
-#             "message": "Profile updated successfully",
-#             "password": hashed_password,
-#         }
-#         return jsonify(user_data), 200
-#     else:
-#         return jsonify({"error": "User not found"}), 404
-    
-    
-# @api.route("/user/password", methods=["PUT"])
-# @jwt_required()
-# def change_password():
-#     email = get_jwt_identity()
-#     user = User.query.filter_by(email=email).first()
-
-#     if user:
-#         data = request.get_json()
-#         new_password = data.get('new_password')
-
-#         if new_password:
-#             hashed_password = generate_password_hash(new_password).decode('utf-8')
-#             user.password = hashed_password
-#             db.session.commit()
-#             return jsonify({"message": "Password changed successfully"}), 200
-#         else:
-#             return jsonify({"error": "New password not provided"}), 400
-#     else:
-#         return jsonify({"error": "User not found"}), 404
-
 
 @api.route('/user/<user_id>', methods=['DELETE'])
 @jwt_required()
