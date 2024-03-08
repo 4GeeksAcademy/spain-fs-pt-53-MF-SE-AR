@@ -191,23 +191,30 @@ def update_user():
 #         return jsonify({"error": "User not found"}), 404
     
 
-@api.route('/user/<user_id>', methods=['DELETE'])
+@api.route('/user/<int:user_id>/giftlist/<int:list_id>', methods=['DELETE'])
 @jwt_required()
-def delete_user(user_id):
+def delete_user(user_id, list_id):
     email = get_jwt_identity()
-    user = User.query.filter_by(id=user_id).first()
+    user = User.query.filter_by(email=email, id=user_id).first()
 
     if not user:
          return jsonify({"msg": "User not found"}), 404
+    
+    list_objs = List.query.filter_by(id=list_id).all()
+    gift_objs = Gift.query.filter_by(list_id=list_id).all()
 
     try:
         db.session.delete(user)
+        for list_obj in list_objs:
+            db.session.delete(list_obj)
+        for gift_obj in gift_objs:
+            db.session.delete(gift_obj)
+
         db.session.commit()
-        return '', 204
+        return 'User successfully deleted', 204
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
-
     
 # RUTAS DE TABLA LIST   
 @api.route('/alllist', methods=['GET'])
