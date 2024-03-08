@@ -11,6 +11,7 @@ export const Profile = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [newPassword, setNewPassword] = useState(""); // Add this state
     const [showModal, setShowModal] = useState(false);
     const [enteredPassword, setEnteredPassword] = useState('');
     const [userData, setUserData] = useState(null);
@@ -39,9 +40,17 @@ export const Profile = () => {
 
     const handleUpdateProfile = async () => {
         try {
-            const success = await actions.updateUser(name, email, password);
+            const success = await actions.updateUser(name, email, newPassword);
             if (success) {
                 console.log('User profile updated successfully');
+                if (newPassword) {
+                    const passwordChangeSuccess = await changePassword(newPassword); // Call the changePassword function
+                    if (passwordChangeSuccess) {
+                        console.log('Password changed successfully');
+                    } else {
+                        console.error('Failed to change password');
+                    }
+                }
                 fetchUserData();
                 setIsEditable(false);
             } else {
@@ -51,6 +60,7 @@ export const Profile = () => {
             console.error('Error updating user profile:', error);
         }
     };
+    
 
     const handleOpenDelete = () => {
         setShowModal(true);
@@ -94,13 +104,14 @@ export const Profile = () => {
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Password:</label>
-                                <input type="password" className="form-control" value={password} placeholder="*******" readOnly={!isEditable} onChange={(e) => setPassword(e.target.value)} />
+                                <input type="password" className="form-control" placeholder="***" value={newPassword} readOnly={!isEditable} onChange={(e) => setNewPassword(e.target.value)} />
                             </div>
+
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="button" className="btn mt-3" onClick={handleOpenDelete}>Delete Account</button>
-                            {!isEditable && <button type="button" className="btn btn-primary mt-3" onClick={() => setIsEditable(true)}>Edit</button>}
-                            {isEditable && <button type="button" className="btn btn-primary mt-3" onClick={handleUpdateProfile}>Save</button>}
+                            {!isEditable && <button type="button" className="btn mt-3" onClick={() => setIsEditable(true)}>Edit</button>}
+                            {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdateProfile}>Save</button>}
                         </div>
                     </div>
                 )}
@@ -109,9 +120,9 @@ export const Profile = () => {
                 <div className="modal">
                     <div className="modal-content">
                         <span className="close" onClick={handleCloseModal}>&times;</span>
-                        <h2>Enter your password to delete your account</h2>
+                        <h2>Enter your password to delete your account:</h2>
                         <input type="password" value={enteredPassword} onChange={(e) => setEnteredPassword(e.target.value)} />
-                        <button onClick={handleDeleteAccount}>Delete</button>
+                        <button className="btn mt-3" onClick={handleDeleteAccount}>Delete</button>
                     </div>
                 </div>
             )}

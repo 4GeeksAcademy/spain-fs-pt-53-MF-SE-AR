@@ -50,6 +50,35 @@ def get_all_users():
 
     return jsonify(all_users), 200
 
+
+@api.route("/user", methods=["POST"])
+def add_user():
+    email = request.json.get("email")
+    password = request.json.get("password")
+    img = request.json.get("img")
+
+    required_fields = [email, password, img]
+
+    if any(field is None for field in required_fields):
+        return jsonify({'error': 'You must provide an email, password, and img'}), 400
+
+    hashed_password = generate_password_hash(password).decode('utf-8')
+
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        return jsonify({"msg": "This user already has an account"}), 401
+
+    try:
+        new_user = User(email=email, password=hashed_password, img=img, name="")
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({'response': 'User added successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+
+
 @api.route("/user", methods=["GET"])
 @jwt_required()
 def get_user():
@@ -98,6 +127,27 @@ def update_user():
         return jsonify(user_data), 200
     else:
         return jsonify({"error": "User not found"}), 404
+    
+@api.route("/user/password", methods=["PUT"])
+@jwt_required()
+def change_password():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        data = request.get_json()
+        new_password = data.get('new_password')
+
+        if new_password:
+            hashed_password = generate_password_hash(new_password).decode('utf-8')
+            user.password = hashed_password
+            db.session.commit()
+            return jsonify({"message": "Password changed successfully"}), 200
+        else:
+            return jsonify({"error": "New password not provided"}), 400
+    else:
+        return jsonify({"error": "User not found"}), 404
+
 
 @api.route('/user/<user_id>', methods=['DELETE'])
 @jwt_required()
@@ -115,34 +165,7 @@ def delete_user(user_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
-    
 
-@api.route("/user", methods=["POST"])
-def add_user():
-    email = request.json.get("email")
-    password = request.json.get("password")
-    img = request.json.get("img")
-
-    required_fields = [email, password, img]
-
-    if any(field is None for field in required_fields):
-        return jsonify({'error': 'You must provide an email, password, and img'}), 400
-
-    hashed_password = generate_password_hash(password).decode('utf-8')
-
-    user = User.query.filter_by(email=email).first()
-
-    if user:
-        return jsonify({"msg": "This user already has an account"}), 401
-
-    try:
-        new_user = User(email=email, password=hashed_password, img=img, name="")
-        db.session.add(new_user)
-        db.session.commit()
-        return jsonify({'response': 'User added successfully'}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 400
     
 # RUTAS DE TABLA LIST   
 @api.route('/alllist', methods=['GET'])

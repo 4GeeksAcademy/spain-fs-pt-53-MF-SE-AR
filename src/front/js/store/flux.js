@@ -308,7 +308,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 						body: JSON.stringify({ password: password })
 					});
-			
+
 					if (res.ok) {
 						return true;
 					} else {
@@ -319,9 +319,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
-			
 
-			updateUser: async (name, email, password) => {
+
+			updateUser: async (name, email) => {
 				try {
 					const response = await fetch(`${process.env.BACKEND_URL}/api/user`, {
 						method: 'PUT',
@@ -332,7 +332,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify({
 							name: name,
 							email: email,
-							password: password,
 						}),
 					});
 
@@ -347,6 +346,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
+
+
+			changePassword: async (newPassword) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/user/password`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						},
+						body: JSON.stringify({ new_password: newPassword })
+					});
+					if (response.ok) {
+						return true;
+					} else {
+						return false;
+					}
+				} catch (error) {
+					console.error('Error changing password:', error);
+					return false;
+				}
+			},
+
 
 
 			// ACTIONS EXAMPLE
