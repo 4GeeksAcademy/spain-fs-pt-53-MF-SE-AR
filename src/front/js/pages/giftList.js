@@ -45,10 +45,10 @@ export const GiftList = () => {
                 <div className="col-sm-3 bg-light">
                     <nav className="nav flex-column">
                         <h5>Hola User</h5>
-                        <Link to="/user/:uid/giftlist"> All Gifts </Link>
-                        <Link to="/user/:uid/giftlist/:lid/available"> Available </Link>
-                        <Link to="/user/:uid/giftlist/:lid/purchased"> Purchased </Link>
-                        <Link to="/user/:uid/profile"> Profile </Link>
+                        <Link to={`/user/${uid}/giftlist`}> All Gifts </Link>
+                        <Link to={`/user/${uid}/giftlist/:lid/available`}> Available </Link>
+                        <Link to={`/user/${uid}/giftlist/:lid/purchased`}> Purchased </Link>
+                        <Link to={`/user/${uid}/profile`}> Profile </Link>
                     </nav>
                 </div>
                 <div className="col-sm-9 p-5">
