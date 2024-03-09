@@ -23,34 +23,48 @@ export const Signup = () => {
 
     const handleSubmit = async () => {
         try {
-            // TODO: OPTIMIZAR ESTE CODIGO EN FLUX
             const successRegister = await actions.register(email, password, randomProfileImage);
-            if (successRegister) {
-                const successLogin = await actions.login(email, password);
-                if (successLogin) {
-                    console.log("Inicio de sesión exitoso");
-                    const user = await actions.getUserToStore(email);
-                    if (user && user.id) {
-                        console.log("Usuario obtenido:", user.id);
-                        const newListSuccess = await actions.newList(user.id.toString());
-                        if (newListSuccess) {
-                            console.log("Lista creada exitosamente");
-                            navigate(`/user/${user.id}/giftlist`);
-                            // TODO:ADD lid TU URL
-                        } else {
-                            console.error("Error al crear la lista");
-                        }
-                    } else {
-                        console.error("No se pudo obtener el ID del usuario");
-                    }
-                } else {
-                    console.error("Inicio de sesión fallido");
-                }
+            if (!successRegister) return console.error("Error en el registro");
+
+            const successLogin = await actions.login(email, password);
+            if (!successLogin) return console.error("Error en el inicio de sesión");
+
+            const user = await actions.getUserToStore(email);
+            if (!user || !user.id) return console.error("Error al obtener el usuario");
+
+            const uid = user.id;
+            console.log("Usuario obtenido:", uid);
+
+            const newListCreationSuccess = await actions.newList(uid);
+            if (!newListCreationSuccess) return console.error("Error al crear la lista");
+
+            const newListSuccess = await actions.getAllList(uid);
+            if (!newListSuccess || !newListSuccess[0]?.id) return console.error("Error al cargar la lista");
+
+            const lid = newListSuccess[0].id;
+
+            const newFirstGift = await actions.newFirstGift(uid, lid);
+            if (!newFirstGift) return console.error("Error al agregar el primer regalo");
+
+            const newGiftSuccess = await actions.getGiftToStore(uid, lid);
+            if (!newGiftSuccess || !newGiftSuccess[0]?.id) return console.error("Error al cargar los regalos");
+
+            const newGiftAvailableSuccess = await actions.getGiftToStoreAvailable(uid, lid);
+            if (!newGiftAvailableSuccess) return console.error("Error al cargar los regalos available");
+
+            const newGiftPurchasedSuccess = await actions.getGiftToStorePurchased(uid, lid);
+            if (newGiftPurchasedSuccess === null) {
+                console.warn("No purchased gift found");
             }
+
+            console.log("Regalo agregado exitosamente");
+            console.log("Lista cargada exitosamente");
+            navigate(`/user/${uid}/giftlist/${lid}/allGifts`);
         } catch (error) {
             console.error("Error:", error);
         }
     };
+
 
     return (
         <div className="container text-center mt-5 d-flex justify-content-center">
