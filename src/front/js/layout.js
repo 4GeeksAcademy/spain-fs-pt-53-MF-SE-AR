@@ -14,7 +14,6 @@ import { Signup } from "./pages/signup";
 import { Profile } from "./pages/profile";
 // import { GiftList } from "./pages/giftList";
 import { GiftList } from "./pages/giftList";
-import { SideBar } from "./component/sidebar";
 import { RenderGifts } from "./component/renderGifts";
 import { RenderGiftsAvailable } from "./component/renderGiftsAvailable";
 import { RenderGiftsPurchased } from "./component/renderGiftsPurchased";
@@ -40,8 +39,8 @@ const Layout = () => {
                         {/* TODO:AGREGAR A LA URL DE GIFTLIST EL :LID Y EL GIFTS */}
                         <Route element={<GiftList />} path="/user/:uid/giftlist" >
                             <Route element={<RenderGifts />} path=":lid/allGifts" />
-                            <Route element={<RenderGiftsAvailable />} path=":lid/available" />
-                            <Route element={<RenderGiftsPurchased />} path=":lid/purchased" />
+                            <Route element={<RenderGiftsAvailable />} path=":lid/availableGifts" />
+                            <Route element={<RenderGiftsPurchased />} path=":lid/purchasedGifts" />
                         </Route>
                         <Route element={<Profile />} path="/user/:uid/profile" />
                         <Route element={<NotFound />} path="*" />

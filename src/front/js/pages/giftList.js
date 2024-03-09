@@ -11,29 +11,36 @@ import { RenderGifts } from "../component/renderGifts";
 
 export const GiftList = () => {
     const { store, actions } = useContext(Context);
-    const { uid } = useParams();
+    const { uid, lid } = useParams();
     const navigate = useNavigate();
     // const location = useLocation();
-    const [activeTab, setActiveTab] = useState('home');
+    // const [activeTab, setActiveTab] = useState('home');
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
 
     // const title = location.pathname === "/giftlist/5/disponible" ? "Disponible" : location.pathname === "/giftlist/5/comprados" ? "Comprados" : "Todos los regalos"
     useEffect(() => {
         actions.syncToken()
-        if (store.token === "" || store.token === null) {
+        if (sessionStorage.token === "" || sessionStorage.token === null) {
             navigate("/");
+            // TODO:AGREGAR TODAS LAS FUNCIONES DE FLUX PUBLICAS
         } else {
             actions.getUser();
+            actions.getAllList(uid)
+            actions.getGiftToStore(uid, lid)
+            actions.getGiftToStoreAvailable(uid, lid)
+            actions.getGiftToStorePurchased(uid, lid)
+            setIsAuthenticated(true);
         }
     }, []);
 
 
-    useEffect(() => {
-        if (store.token === "" || store.token === null) {
-            navigate("/");
-        } else {
-            actions.getUser();
-        }
-    }, [store.token]);
+    // useEffect(() => {
+    //     if (store.token === "" || store.token === null) {
+    //         navigate("/");
+    //     } else {
+    //         actions.getUser();
+    //     }
+    // }, [store.token]);
 
     // const handleTabChange = (tabId) => {
     //     setActiveTab(tabId);
@@ -44,24 +51,24 @@ export const GiftList = () => {
             <div className="row">
                 <div className="col-sm-3 bg-light">
                     <nav className="nav flex-column">
-                        <h5>Hola User</h5>
-                        <Link to={`/user/${uid}/giftlist`}> All Gifts </Link>
-                        <Link to={`/user/${uid}/giftlist/:lid/available`}> Available </Link>
-                        <Link to={`/user/${uid}/giftlist/:lid/purchased`}> Purchased </Link>
+                        {isAuthenticated ? <h5>
+                            {store.currentUser.message}
+                        </h5> : <h5> Hello Guest</h5>}
+                        <Link to={`/user/${uid}/giftlist/${lid}/allGifts`}> All Gifts </Link>
+                        <Link to={`/user/${uid}/giftlist/${lid}/availableGifts`}> Available </Link>
+                        <Link to={`/user/${uid}/giftlist/${lid}/purchasedGifts`}> Purchased </Link>
                         <Link to={`/user/${uid}/profile`}> Profile </Link>
                     </nav>
                 </div>
                 <div className="col-sm-9 p-5">
                     <div className="row row-cols-1 row-cols-md-2 g-4" id="giftRow">
                         <ListHeader uid={uid} />
-                        {/* TODO: ENVIAR A RENDERGIFTS EL LID (VER ABAJO EN COMENTADOS)Y REVISAR SI FUNCIONA MEJOR COMO COMPONENTE APARTE
-                        <RenderGifts /> */}
                         <Outlet />
                     </div>
-                    <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {/* <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button className="btn btn-primary me-md-2" type="button">Compartir</button>
                         <Link to="/giftlist/new-gift"> <button className="btn btn-primary" type="button">Agregar +</button></Link>
-                    </div>
+                    </div> REVISAR LUEGO SI LO PREFERIMOS ABAJO O ARRIBA LOS BOTONES DE MOMENTO SE DEJA ARRIBA*/}
                 </div>
             </div>
         </div>

@@ -12,13 +12,13 @@ export const Home = () => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
 
 	useEffect(() => {
-		if (store.token && store.token !== null && store.token !== "") {
+		if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
 			setIsAuthenticated(true);
 			actions.getUser();
 		} else {
 			setIsAuthenticated(false);
 		}
-	}, [store.token]);
+	}, [sessionStorage.token]);
 
 	return (
 		<div className=" mt-5 ">

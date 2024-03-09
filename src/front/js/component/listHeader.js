@@ -1,15 +1,12 @@
 import React, { Component, useState, useEffect, useContext } from "react";
 // import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { Link, useParams } from "react-router-dom";
 
 export const ListHeader = () => {
+    const { uid, lid } = useParams();
     const { store, actions } = useContext(Context);
-    // TODO: AGREGAR PARAMS AL ACTUALIZAR LA URL, MIENTRAS SE AGREGA MANUAL
 
-    useEffect(() => {
-        actions.getAllList(1);
-    }
-        , [store.token]);
     const listName = store.currentList.length > 0 ? store.currentList[0].name : "";
     return (
         <div className="d-flex justify-content-between w-100">
@@ -20,8 +17,8 @@ export const ListHeader = () => {
                     </button>
                     <ul className="dropdown-menu">
                         {store.currentList.map((item, index) => (
-                            <li key={index}>
-                                <a className="dropdown-item" href="#">{item.name}</a>
+                            <li key={item.id}>
+                                <Link className="dropdown-item" to={`/user/${uid}/giftlist/${item.id}/allGifts`}>{item.name}</Link>
                             </li>
                         ))}
                     </ul>

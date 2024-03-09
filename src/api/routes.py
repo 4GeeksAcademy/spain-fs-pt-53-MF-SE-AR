@@ -230,12 +230,11 @@ def get_all_list():
 def get_all_list_user(user_id):
     email = get_jwt_identity()
     user = User.query.filter_by(email=email, id=user_id).first()
-    user_new = user.serialize()
 
     if not user:
         return jsonify({"msg": "User not found"}), 401
     
-    user_list = List.query.filter_by(user_id=user_new["id"]).all()
+    user_list = List.query.filter_by(user_id=user_id).all()
 
     if not user_list:
         return jsonify({"msg": "No lists found for this user"}), 404
@@ -309,7 +308,7 @@ def get_gifts(user_id,list_id):
      user_gifts = Gift.query.filter_by(list_id=list_new["id"]).all()
 
      if not user_gifts:
-        return jsonify({"msg": "No gifts found for this list"}), 404
+        return jsonify({"msg": "No gifts found for this list"}), 200
     
      user_gift = list(map(lambda x: x.serialize(), user_gifts))
      return jsonify(user_gift), 200
@@ -330,11 +329,11 @@ def get_available_gifts(user_id,list_id):
      if not list_obj:
          return jsonify({"msg": "No lists found for this user"}), 404
     
-     user_gifts = Gift.query.filter_by(list_id=list_new["id"],status="Disponible").all()
+     user_gifts = Gift.query.filter_by(list_id=list_new["id"],status="Available").all()
     #  TODO: REVISAR SI ESTA COMO AVAILABLE O DISPONIBLE
 
      if not user_gifts:
-        return jsonify({"msg": "No gifts found for this list"}), 404
+        return jsonify({"msg": "No gifts found for this list"}), 200
     
      user_gift = list(map(lambda x: x.serialize(), user_gifts))
      return jsonify(user_gift), 200
@@ -355,11 +354,11 @@ def get_purchased_gifts(user_id,list_id):
      if not list_obj:
          return jsonify({"msg": "No lists found for this user"}), 404
     
-     user_gifts = Gift.query.filter_by(list_id=list_new["id"],status="Reservado").all()
+     user_gifts = Gift.query.filter_by(list_id=list_new["id"],status="Purchased").all()
     #  TODO: REVISAR SI ESTA COMO PURCHASED O RESERVADO
 
      if not user_gifts:
-        return jsonify({"msg": "No gifts found for this list"}), 404
+        return jsonify({"msg": "No gifts found for this list"}), 200
     
      user_gift = list(map(lambda x: x.serialize(), user_gifts))
      return jsonify(user_gift), 200
@@ -389,28 +388,62 @@ def get_one_gifts(user_id,list_id,gift_id):
      return jsonify(one_gift), 200
 
 
+# TODO: NO SE USA DE MOMENTO, EN CASO DE USARSE CORREGIR CON EL PUBLICO
+# @api.route("/user/<int:user_id>/giftlist/<int:list_id>/gifts/", methods=["POST"])
+# @jwt_required()
+# def add_gift(user_id, list_id):
+#     email = get_jwt_identity()
+#     user = User.query.filter_by(email=email, id=user_id).first()
 
-@api.route("/user/<int:user_id>/giftlist/<int:list_id>/gifts/", methods=["POST"])
-@jwt_required()
-def add_gift(user_id, list_id):
-    email = get_jwt_identity()
-    user = User.query.filter_by(email=email, id=user_id).first()
-
-    if not user:
-         return jsonify({"msg": "Incorrect user"}), 401
+#     if not user:
+#          return jsonify({"msg": "Incorrect user"}), 401
     
+#     title = request.json.get("title")
+#     link = request.json.get("link")
+#     status = request.json.get("status")
+#     img = request.json.get("img")
+#     list_id = list_id
+
+#     required_fields = [title, link, status, img, list_id]
+
+#     if any(field is None for field in required_fields):
+#         return jsonify({'error': 'You must complete all the items'}), 400
+
+#     gift = Gift.query.filter_by(link=link).first()
+
+#     if gift:
+#         return jsonify({"msg": "This gift already exist"}), 401
+
+#     try:
+#         new_gift = Gift(title=title,link=link, status=status, img=img, list_id=list_id)
+#         db.session.add(new_gift)
+#         db.session.commit()
+#         return jsonify({'response': 'Gift added successfully'}), 200
+#     except Exception as e:
+#         db.session.rollback()
+#         return jsonify({'error': str(e)}), 400
+    
+@api.route("/gifts", methods=["POST"])
+def add_gift_public():
+# ESTE ID LO TIENE QUE MANDAR EL FLUX POR QUE ES EL REGISTRO
     title = request.json.get("title")
     link = request.json.get("link")
     status = request.json.get("status")
     img = request.json.get("img")
-    list_id = list_id
+    list_id = request.json.get("list_id")
+    user_id = request.json.get("user_id")
 
-    required_fields = [title, link, status, img, list_id]
+    required_fields = [link, status, img, list_id, user_id]
 
     if any(field is None for field in required_fields):
         return jsonify({'error': 'You must complete all the items'}), 400
+    
+    list_obj = List.query.filter_by(user_id=user_id,id=list_id).first()
 
-    gift = Gift.query.filter_by(link=link).first()
+    if not list_obj:
+         return jsonify({"msg": "No lists found for this user"}), 404
+
+    gift = Gift.query.filter_by(link=link,list_id=list_id).first()
 
     if gift:
         return jsonify({"msg": "This gift already exist"}), 401
@@ -422,7 +455,7 @@ def add_gift(user_id, list_id):
         return jsonify({'response': 'Gift added successfully'}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'error': str(e)}), 400    
     
 @api.route('/user/<int:user_id>/giftlist/<int:list_id>/gifts/<int:gift_id>', methods=['PUT'])
 @jwt_required()
@@ -492,7 +525,7 @@ def get_all_gifts_public(list_id,user_id):
     requested_gifts = Gift.query.filter_by(list_id=list_id).all()
     
     if not requested_gifts:
-        return jsonify({'error': 'No gifts found for this list'}), 404
+        return jsonify({'error': 'No gifts found for this list'}), 200
     
     user_gift = list(map(lambda x: x.serialize(), requested_gifts))
     return jsonify(user_gift), 200
@@ -503,11 +536,11 @@ def get_all_available_gifts_public(list_id,user_id):
 
     if not list_obj:
          return jsonify({"msg": "No lists found for this user"}), 404
-    requested_gifts = Gift.query.filter_by(list_id=list_id, status="Disponible").all()
+    requested_gifts = Gift.query.filter_by(list_id=list_id, status="Available").all()
     # TODO: REVISAR STATUS SI ESTA COMO DISPONIBLE O AVAILABLE
     
     if not requested_gifts:
-        return jsonify({'error': 'No gifts found for this list'}), 404
+        return jsonify({'error': 'No gifts found for this list'}), 200
     
     user_gift = list(map(lambda x: x.serialize(), requested_gifts))
     return jsonify(user_gift), 200

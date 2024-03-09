@@ -7,39 +7,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			currentUser: [],
 			currentList: [],
-			gift: [{
-				id: "1",
-				user_id: "1",
-				title: "Example",
-				link: "https://www.amazon.com/",
-				status: "Disponible",
-			}, {
-				id: "2",
-				user_id: "1",
-				title: "Example",
-				link: "https://www.amazon.com/",
-				status: "Disponible",
-			}, {
-				id: "3",
-				user_id: "1",
-				title: "Example",
-				link: "https://www.amazon.com/",
-				status: "Disponible",
-			}],
+			currentGift: [],
+			currentAvailable: [],
+			currentPurchased: [],
 			images: [],
 			profileImages: [],
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -294,7 +266,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({
 					token: null,
 					currentList: [],
-					currentUser: []
+					currentUser: [],
+					currentGift: [],
+					currentAvailable: [],
+					currentPurchased: [],
 				});
 			},
 
@@ -306,7 +281,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
 							'Content-Type': 'application/json'
 						},
-						body: JSON.stringify({ 
+						body: JSON.stringify({
 							password: password,
 							id: id,
 						})
@@ -351,7 +326,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-
+			// FUNCIONES DE SABRI
 			// changePassword: async (newPassword) => {
 			// 	try {
 			// 		const response = await fetch(`${process.env.BACKEND_URL}/api/user/password`, {
@@ -492,6 +467,220 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+			// ACTIONS GIFT
+			newFirstGift: async (uid, lid) => {
+				try {
+					const res = await fetch(`${process.env.BACKEND_URL}/api/gifts`, {
+						method: 'POST',
+						body: JSON.stringify({
+							title: "Default gift",
+							link: "https://www.defaultLink.com/",
+							status: "Available",
+							img: "https://images.pexels.com/photos/1573324/pexels-photo-1573324.jpeg",
+							list_id: lid,
+							user_id: uid
+						}),
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+					if (res.status === 200) {
+						console.log("Regalo creado")
+						return true;
+					} else if (res.status === 401) {
+						const errorData = await res.json();
+						alert(errorData.msg)
+						return false
+					};
+				} catch (error) {
+					console.error("There has been an error:", error);
+					return false;
+				}
+			},
+			getGiftToStore: async (uid, lid) => {
+				// TODO:REVISAR CUANDO SE TENGA LA ENTRADA PUBLICA
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user/${uid}/giftlist/${lid}/gifts`, {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						}
+					});
+					const data = await resp.json()
+					console.log("regalos conseguido", data)
+					// Mapear cada objeto de data y agregarlo a currentList
+					const updatedGiftList = data.map(item => ({
+						id: item.id,
+						title: item.title,
+						link: item.link,
+						status: item.status,
+						list_id: item.list_id,
+						img: item.img,
+					}));
+
+					// Combinar la lista actual con la nueva lista mapeada
+					const mergedGiftList = [...updatedGiftList];
+
+					// Actualizar el store con la nueva lista combinada
+					setStore({
+						...store,
+						currentGift: mergedGiftList
+					});
+					console.log("Regalos agregados al store", store.currentGift);
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
+			getGiftToStoreAvailable: async (uid, lid) => {
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user/${uid}/giftlist/${lid}/gifts/available`, {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						}
+					});
+					const data = await resp.json()
+					console.log("regalos available conseguido", data)
+
+					const updatedGiftAvailableList = data.map(item => ({
+						id: item.id,
+						title: item.title,
+						link: item.link,
+						status: item.status,
+						list_id: item.list_id,
+						img: item.img,
+					}));
+
+					// Combinar la lista actual con la nueva lista mapeada
+					const mergedGiftAvailableList = [...updatedGiftAvailableList];
+
+					// Actualizar el store con la nueva lista combinada
+					setStore({
+						...store,
+						currentAvailable: mergedGiftAvailableList
+					});
+					console.log("Regalos available agregados al store ", store.currentAvailable);
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
+			getGiftToStorePurchased: async (uid, lid) => {
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user/${uid}/giftlist/${lid}/gifts/purchased`, {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						}
+					});
+					const data = await resp.json()
+					console.log("regalos purchased conseguido", data)
+
+					const updatedGiftPurchasedList = data.map(item => ({
+						id: item.id,
+						title: item.title,
+						link: item.link,
+						status: item.status,
+						list_id: item.list_id,
+						img: item.img,
+					}));
+
+					// Combinar la lista actual con la nueva lista mapeada
+					const mergedGiftPurchasedList = [...updatedGiftPurchasedList];
+
+					// Actualizar el store con la nueva lista combinada
+					setStore({
+						...store,
+						currentPurchased: mergedGiftPurchasedList
+					});
+					console.log("Regalos purchased agregados al store ", store.currentPurchased);
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
+			getGiftToStorePublic: async (uid, lid) => {
+				// TODO: REVISAR CUANDO ESTE LA ENTRADA PUBLICA
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/guest/${uid}/giftlist/${lid}/gifts`, {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						}
+					});
+					const data = await resp.json()
+					console.log("regalos conseguido", data)
+					// Mapear cada objeto de data y agregarlo a currentList
+					const updatedGiftList = data.map(item => ({
+						id: item.id,
+						title: item.title,
+						link: item.link,
+						status: item.status,
+						list_id: item.list_id,
+						img: item.img,
+					}));
+
+					// Combinar la lista actual con la nueva lista mapeada
+					const mergedGiftList = [...updatedGiftList];
+
+					// Actualizar el store con la nueva lista combinada
+					setStore({
+						...store,
+						currentGift: mergedGiftList
+					});
+					console.log("Regalos agregados al store", store.currentGift);
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
+			getGiftToStoreAvailablePublic: async (uid, lid) => {
+				// TODO: REVISAR CUANDO ESTE LA ENTRADA PUBLICA
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/guest/${uid}/giftlist/${lid}/gifts/available`, {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						}
+					});
+					const data = await resp.json()
+					console.log("regalos available conseguido", data)
+
+					const updatedGiftAvailableList = data.map(item => ({
+						id: item.id,
+						title: item.title,
+						link: item.link,
+						status: item.status,
+						list_id: item.list_id,
+						img: item.img,
+					}));
+
+					// Combinar la lista actual con la nueva lista mapeada
+					const mergedGiftAvailableList = [...updatedGiftAvailableList];
+
+					// Actualizar el store con la nueva lista combinada
+					setStore({
+						...store,
+						currentAvailable: mergedGiftAvailableList
+					});
+					console.log("Regalos available agregados al store ", store.currentGift);
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
+
 		}
 	};
 };

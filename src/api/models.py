@@ -42,7 +42,7 @@ class List(db.Model):
 class Gift(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), unique=False, nullable=True)
-    link = db.Column(db.String(500), unique=True, nullable=False)
+    link = db.Column(db.String(500), unique=False, nullable=False)
     status = db.Column(db.String(80), unique=False, nullable=False)
     img = db.Column(db.String(80), unique=False, nullable=False)
     list_id = db.Column(db.Integer,db.ForeignKey("list.id"), unique=False, nullable=False)
