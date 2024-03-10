@@ -17,6 +17,8 @@ export const Home = () => {
 			actions.getUser();
 		} else {
 			setIsAuthenticated(false);
+			actions.cleanStore()
+			console.log(store.currentUser)
 		}
 	}, [sessionStorage.token]);
 

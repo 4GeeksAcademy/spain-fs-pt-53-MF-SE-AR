@@ -10,69 +10,70 @@ const getState = ({ getStore, getActions, setStore }) => {
 			currentGift: [],
 			currentAvailable: [],
 			currentPurchased: [],
-			images: [],
+			guestImages: [],
 			profileImages: [],
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			//ACTIONS REGALOS SOLO STORE
-			getGift: () => {
-				const store = getStore();
-				return store.gift;
-			},
+			// //ACTIONS REGALOS SOLO STORE MJ POR SI LAS NECESITO LUEGO PARA ACTUALIZAAR STORE
+			// getGift: () => {
+			// 	const store = getStore();
+			// 	return store.gift;
+			// },
 
-			getGiftData: async (id) => {
-				try {
-					const store = getStore();
-					const gift = store.gift.find(item => item.id === id);
+			// getGiftData: async (id) => {
+			// 	try {
+			// 		const store = getStore();
+			// 		const gift = store.gift.find(item => item.id === id);
 
-					if (!gift) {
-						console.error("El regalo no se encontró en la lista.");
-						return null;
-					}
+			// 		if (!gift) {
+			// 			console.error("El regalo no se encontró en la lista.");
+			// 			return null;
+			// 		}
 
-					return gift;
-				} catch (error) {
-					console.error("Error en la búsqueda del regalo:", error);
-					return null;
-				}
-			},
+			// 		return gift;
+			// 	} catch (error) {
+			// 		console.error("Error en la búsqueda del regalo:", error);
+			// 		return null;
+			// 	}
+			// },
 
-			saveGiftData: (formData, isEditing, gid) => {
-				const store = getStore(); // Obtener el estado actual del store
-				const gift = store.gift.slice(); // Copiar el array de regalos
+			// saveGiftData: (formData, isEditing, gid) => {
+			// 	const store = getStore(); // Obtener el estado actual del store
+			// 	const gift = store.gift.slice(); // Copiar el array de regalos
 
-				if (isEditing) {
-					// Actualizar el regalo existente
-					const updatedGiftIndex = gift.findIndex(g => g.id === gid);
-					if (updatedGiftIndex !== -1) {
-						gift[updatedGiftIndex] = { ...gift[updatedGiftIndex], ...formData };
-						setStore({ ...store, gift });
-						alert("¡Regalo actualizado correctamente!");
-					} else {
-						console.error("El regalo con el ID proporcionado no existe.");
-					}
-				} else {
-					// Crear un nuevo regalo con un ID aleatorio
-					const newId = Math.floor(Math.random() * 1000000); // Generar un número aleatorio
-					const newGift = { id: newId.toString(), ...formData };
-					setStore({ ...store, gift: [...gift, newGift] });
-					alert("¡Regalo creado correctamente!");
-				}
-			},
+			// 	if (isEditing) {
+			// 		// Actualizar el regalo existente
+			// 		const updatedGiftIndex = gift.findIndex(g => g.id === gid);
+			// 		if (updatedGiftIndex !== -1) {
+			// 			gift[updatedGiftIndex] = { ...gift[updatedGiftIndex], ...formData };
+			// 			setStore({ ...store, gift });
+			// 			alert("¡Regalo actualizado correctamente!");
+			// 		} else {
+			// 			console.error("El regalo con el ID proporcionado no existe.");
+			// 		}
+			// 	} else {
+			// 		// Crear un nuevo regalo con un ID aleatorio
+			// 		const newId = Math.floor(Math.random() * 1000000); // Generar un número aleatorio
+			// 		const newGift = { id: newId.toString(), ...formData };
+			// 		setStore({ ...store, gift: [...gift, newGift] });
+			// 		alert("¡Regalo creado correctamente!");
+			// 	}
+			// },
 
 
 
-			deleteGift: (id) => {
-				const store = getStore();
-				const updatedGifts = store.gift.filter(g => g.id !== id);
+			// deleteGift: (id) => {
+			// 	const store = getStore();
+			// 	const updatedGifts = store.gift.filter(g => g.id !== id);
 
-				setStore({ ...store, gift: updatedGifts });
+			// 	setStore({ ...store, gift: updatedGifts });
 
-				alert("¡Regalo eliminado correctamente!");
-			},
+			// 	alert("¡Regalo eliminado correctamente!");
+			// },
 
 			// fin de regalos
+
 			// ACTIONS FOTOS
 			getProfilePhoto: async () => {
 				try {
@@ -101,9 +102,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			getGiftPhoto: async () => {
+			getGuestPhoto: async () => {
 				try {
-					const response = await fetch(`https://api.pexels.com/v1/search?query=caja&per_page=3&locale=es-ES`, {
+					const response = await fetch(`https://api.pexels.com/v1/search?query=surprise&per_page=3&locale=es-ES`, {
 						method: "GET",
 						headers: {
 							"Authorization": `${process.env.API_PEXELS_TOKEN}`
@@ -115,7 +116,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						const responseData = await response.json();
 						const photoUrls = responseData.photos.map(photo => photo.src.original);
 						// Almacena las URLs de las fotos en el store
-						store.images = photoUrls;
+						store.guestImages = photoUrls;
+						console.log(store.guestImages)
 						return photoUrls;
 					} else {
 						console.error("Error al buscar la foto:", response.status, response.statusText);
@@ -260,6 +262,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			getPublicUserToStore: async (uid) => {
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/guest/${uid}`, {
+						headers: {
+							'Content-Type': 'application/json',
+						}
+					});
+
+					const data = await resp.json();
+					if (!data || typeof data.id === 'undefined') {
+						throw new Error('Invalid response format: missing user ID');
+					}
+					setStore({
+						...store,
+						currentUser: {
+							id: data.id,
+							name: data.name,
+							email: data.email,
+							img: data.img,
+							message: data.message
+						}
+					});
+					console.log(store.currentUser);
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
+
 			logout: () => {
 				sessionStorage.removeItem("token");
 				console.log("session ends");
@@ -270,6 +303,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					currentGift: [],
 					currentAvailable: [],
 					currentPurchased: [],
+				});
+			},
+
+			cleanStore: () => {
+				sessionStorage.removeItem("token");
+				console.log("store cleaned");
+				setStore({
+					token: null,
+					currentList: [],
+					currentUser: [],
+					currentGift: [],
+					currentAvailable: [],
+					currentPurchased: [],
+					profileImages: [],
 				});
 			},
 
@@ -433,7 +480,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
-			getAllListPublic: async (uid, lid) => {
+			getPublicAllList: async (uid, lid) => {
 				// TODO:REVISAR CUANDO SE TENGA LA ENTRADA PUBLICA
 				console.log(uid, lid)
 				const store = getStore();
@@ -467,6 +514,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
+
 			// ACTIONS GIFT
 			newFirstGift: async (uid, lid) => {
 				try {
@@ -498,7 +546,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			getGiftToStore: async (uid, lid) => {
-				// TODO:REVISAR CUANDO SE TENGA LA ENTRADA PUBLICA
 				const store = getStore();
 				try {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/user/${uid}/giftlist/${lid}/gifts`, {
@@ -510,14 +557,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 					console.log("regalos conseguido", data)
 					// Mapear cada objeto de data y agregarlo a currentList
-					const updatedGiftList = data.map(item => ({
-						id: item.id,
-						title: item.title,
-						link: item.link,
-						status: item.status,
-						list_id: item.list_id,
-						img: item.img,
-					}));
+					const updatedGiftList = Array.isArray(data) && data.length > 0 ?
+						data.map(item => ({
+							id: item.id,
+							title: item.title,
+							link: item.link,
+							status: item.status,
+							list_id: item.list_id,
+							img: item.img,
+						})) : [];
 
 					// Combinar la lista actual con la nueva lista mapeada
 					const mergedGiftList = [...updatedGiftList];
@@ -546,14 +594,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 					console.log("regalos available conseguido", data)
 
-					const updatedGiftAvailableList = data.map(item => ({
-						id: item.id,
-						title: item.title,
-						link: item.link,
-						status: item.status,
-						list_id: item.list_id,
-						img: item.img,
-					}));
+					const updatedGiftAvailableList = Array.isArray(data) && data.length > 0 ?
+						data.map(item => ({
+							id: item.id,
+							title: item.title,
+							link: item.link,
+							status: item.status,
+							list_id: item.list_id,
+							img: item.img,
+						})) : [];
+
 
 					// Combinar la lista actual con la nueva lista mapeada
 					const mergedGiftAvailableList = [...updatedGiftAvailableList];
@@ -579,17 +629,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 						}
 					});
-					const data = await resp.json()
-					console.log("regalos purchased conseguido", data)
+					const data = await resp.json();
+					console.log("regalos purchased conseguido", data);
 
-					const updatedGiftPurchasedList = data.map(item => ({
-						id: item.id,
-						title: item.title,
-						link: item.link,
-						status: item.status,
-						list_id: item.list_id,
-						img: item.img,
-					}));
+					// Verificar si data es un array y tiene al menos un elemento
+					const updatedGiftPurchasedList = Array.isArray(data) && data.length > 0 ?
+						data.map(item => ({
+							id: item.id,
+							title: item.title,
+							link: item.link,
+							status: item.status,
+							list_id: item.list_id,
+							img: item.img,
+						})) : [];
 
 					// Combinar la lista actual con la nueva lista mapeada
 					const mergedGiftPurchasedList = [...updatedGiftPurchasedList];
@@ -601,12 +653,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					console.log("Regalos purchased agregados al store ", store.currentPurchased);
 					return data;
-
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.log("Error loading message from backend", error);
 				}
 			},
-			getGiftToStorePublic: async (uid, lid) => {
+			getPublicGiftToStore: async (uid, lid) => {
 				// TODO: REVISAR CUANDO ESTE LA ENTRADA PUBLICA
 				const store = getStore();
 				try {
@@ -619,14 +670,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 					console.log("regalos conseguido", data)
 					// Mapear cada objeto de data y agregarlo a currentList
-					const updatedGiftList = data.map(item => ({
-						id: item.id,
-						title: item.title,
-						link: item.link,
-						status: item.status,
-						list_id: item.list_id,
-						img: item.img,
-					}));
+					const updatedGiftList = Array.isArray(data) && data.length > 0 ?
+						data.map(item => ({
+							id: item.id,
+							title: item.title,
+							link: item.link,
+							status: item.status,
+							list_id: item.list_id,
+							img: item.img,
+						})) : [];
 
 					// Combinar la lista actual con la nueva lista mapeada
 					const mergedGiftList = [...updatedGiftList];
@@ -643,7 +695,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
-			getGiftToStoreAvailablePublic: async (uid, lid) => {
+			getPublicGiftToStoreAvailable: async (uid, lid) => {
 				// TODO: REVISAR CUANDO ESTE LA ENTRADA PUBLICA
 				const store = getStore();
 				try {
@@ -656,14 +708,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await resp.json()
 					console.log("regalos available conseguido", data)
 
-					const updatedGiftAvailableList = data.map(item => ({
-						id: item.id,
-						title: item.title,
-						link: item.link,
-						status: item.status,
-						list_id: item.list_id,
-						img: item.img,
-					}));
+					const updatedGiftAvailableList = Array.isArray(data) && data.length > 0 ?
+						data.map(item => ({
+							id: item.id,
+							title: item.title,
+							link: item.link,
+							status: item.status,
+							list_id: item.list_id,
+							img: item.img,
+						})) : [];
 
 					// Combinar la lista actual con la nueva lista mapeada
 					const mergedGiftAvailableList = [...updatedGiftAvailableList];
@@ -673,7 +726,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentAvailable: mergedGiftAvailableList
 					});
-					console.log("Regalos available agregados al store ", store.currentGift);
+					console.log("Regalos available agregados al store ", store.currentAvailable);
 					return data;
 
 				} catch (error) {

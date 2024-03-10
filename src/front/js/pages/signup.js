@@ -18,7 +18,6 @@ export const Signup = () => {
             setRandomProfileImage(store.profileImages[randomIndex]);
         }
     }, [store.profileImages]);
-    console.log(randomProfileImage)
 
 
     const handleSubmit = async () => {
