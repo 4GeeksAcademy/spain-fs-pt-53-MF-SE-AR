@@ -57,13 +57,13 @@ export const Profile = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
-        setEnteredPassword('');
     };
 
     const handleDeleteAccount = async () => {
         try {
-            const success = await actions.deleteUser(userData.id, enteredPassword);
+            const success = await actions.deleteUser(userData.id);
             if (success) {
+                actions.logout()
                 navigate(`/`);
             } else {
                 console.error("Unable to delete the account");
@@ -72,7 +72,6 @@ export const Profile = () => {
             console.error("Error deleting account:", error);
         }
         setShowModal(false);
-        setEnteredPassword('');
     };
 
     return (
@@ -110,9 +109,9 @@ export const Profile = () => {
                 <div className="modal">
                     <div className="modal-content">
                         <span className="close" onClick={handleCloseModal}>&times;</span>
-                        <h2>Enter your password to delete your account:</h2>
-                        <input type="password" value={enteredPassword} onChange={(e) => setEnteredPassword(e.target.value)} />
-                        <button className="btn mt-3" onClick={handleDeleteAccount}>Delete</button>
+                        <h2>Are you sure you want to delete your account?</h2>
+                        <button className="btn mt-3" onClick={handleCloseModal}>No, go back.</button>
+                        <button className="btn mt-3" onClick={handleDeleteAccount}>Yes, delete.</button>
                     </div>
                 </div>
             )}
