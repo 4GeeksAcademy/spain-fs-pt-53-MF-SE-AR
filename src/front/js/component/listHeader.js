@@ -26,7 +26,7 @@ export const ListHeader = () => {
             </div>
             <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button className="btn btn-primary me-md-2" type="button">Share list</button>
-                <button className="btn btn-primary" type="button">Add item +</button>
+                <button className="btn btn-primary" type="button">Add Gift +</button>
             </div>
         </div>
     );

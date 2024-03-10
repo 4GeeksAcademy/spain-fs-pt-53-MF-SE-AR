@@ -216,6 +216,23 @@ def delete_user(user_id, list_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
     
+@api.route("/guest/<int:user_id>", methods=["GET"])
+def get_user_public(user_id):
+    requested_user = User.query.filter_by(id=user_id).first()
+
+    if requested_user:
+        message = "Welcome Guest"
+        user_data = {
+            "message": message,
+            "name": requested_user.name,
+            "id": requested_user.id,
+            "email": requested_user.email,
+            "img": requested_user.img
+        }
+        return jsonify(user_data), 200
+    else:
+        return jsonify({"error": "User not found"}), 404  
+    
 # RUTAS DE TABLA LIST   
 @api.route('/alllist', methods=['GET'])
 def get_all_list():
@@ -433,7 +450,7 @@ def add_gift_public():
     list_id = request.json.get("list_id")
     user_id = request.json.get("user_id")
 
-    required_fields = [link, status, img, list_id, user_id]
+    required_fields = [link, status, list_id, user_id]
 
     if any(field is None for field in required_fields):
         return jsonify({'error': 'You must complete all the items'}), 400
@@ -472,7 +489,7 @@ def update_gift(user_id, list_id,gift_id):
     img = request.json.get("img")
     list_id = list_id
 
-    required_fields = [title, link, status, img, list_id]
+    required_fields = [title, link, status, list_id]
     if any(field is None for field in required_fields):
         return jsonify({'error': 'You must fill in all the items'}), 400
 
@@ -572,7 +589,7 @@ def update_gift_public(user_id,list_id,gift_id):
     img = request.json.get("img")
     list_id = list_id
 
-    required_fields = [title, link, status, img, list_id]
+    required_fields = [title, link, status, list_id]
     if any(field is None for field in required_fields):
         return jsonify({'error': 'You must fill in all the items'}), 400
 

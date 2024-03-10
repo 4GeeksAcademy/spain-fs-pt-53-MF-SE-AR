@@ -37,10 +37,15 @@ const Layout = () => {
                         <Route element={<Login />} path="/login" />
                         <Route element={<Signup />} path="/signup" />
                         {/* TODO:AGREGAR A LA URL DE GIFTLIST EL :LID Y EL GIFTS */}
-                        <Route element={<GiftList />} path="/user/:uid/giftlist" >
-                            <Route element={<RenderGifts />} path=":lid/allGifts" />
-                            <Route element={<RenderGiftsAvailable />} path=":lid/availableGifts" />
-                            <Route element={<RenderGiftsPurchased />} path=":lid/purchasedGifts" />
+                        <Route element={<GiftList />} path="/user/:uid/giftlist/:lid" >
+                            <Route element={<RenderGifts />} path="allGifts" />
+                            <Route element={<RenderGiftsAvailable />} path="availableGifts" />
+                            <Route element={<RenderGiftsPurchased />} path="purchasedGifts" />
+                        </Route>
+                        <Route element={<GiftList />} path="/guest/:uid/giftlist/:lid" >
+                            <Route element={<RenderGifts />} path="gifts" />
+                            <Route element={<RenderGiftsAvailable />} path="availableGifts" />
+                            <Route element={<RenderGiftsPurchased />} path="purchasedGifts" />
                         </Route>
                         <Route element={<Profile />} path="/user/:uid/profile" />
                         <Route element={<NotFound />} path="*" />

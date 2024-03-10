@@ -6,7 +6,7 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 export const RenderGifts = () => {
     const { store, actions } = useContext(Context);
     // TODO: ACTIVAR PARAMS CUANDO TENGA LA RUTA SOLUCIONADA
-    const { uid, lid } = useParams();
+    const { uid, lid, gid } = useParams();
     // const navigate = useNavigate()
 
 
@@ -94,7 +94,7 @@ export const RenderGifts = () => {
                     </div>
                 ))
             ) : (
-                <h2>Maybe all the gifts have been purchased?! Time to add more because there are none available in the list.</h2>
+                <h2>Oops! It looks like your gift list is empty at the moment. Why not add some gifts to brighten it up? Click the 'Add Gift' button to start adding gifts to your list! 🎁✨</h2>
             )}
         </div>
     );
