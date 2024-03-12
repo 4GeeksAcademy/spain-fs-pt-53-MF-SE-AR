@@ -84,11 +84,19 @@ export const RenderGifts = () => {
                                         </div>
                                     </li>
                                 </ul>
-                                <div className="card-footer text-center">
-                                    <Link to={`/user/${uid}/giftlist/${lid}/gifts/${item.id}/edit`}>
-                                        <button href="#" className="btn btn-primary">Editar</button>
-                                    </Link>
-                                </div>
+                                {sessionStorage.token ? (
+                                    <div className="card-footer text-center">
+                                        <Link to={`/user/${uid}/giftlist/${lid}/gifts/${item.id}/edit`}>
+                                            <button href="#" className="btn btn-primary">Editar</button>
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <div className="card-footer text-center">
+                                        <Link to={`/guest/${uid}/giftlist/${lid}/gifts/${item.id}/edit`}>
+                                            <button href="#" className="btn btn-primary">Editar</button>
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

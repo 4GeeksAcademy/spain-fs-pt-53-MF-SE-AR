@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { Context } from "../store/appContext";
 
-export const GiftForm = ({ isEditing }) => {
+export const GiftFormGuest = ({ isEditing }) => {
     const { store, actions } = useContext(Context);
     const { uid, lid, gid } = useParams();
     const navigate = useNavigate();
@@ -18,7 +18,7 @@ export const GiftForm = ({ isEditing }) => {
 
     useEffect(() => {
         if (isEditing && gid) {
-            actions.getOneGift(uid, lid, gid)
+            actions.getOneGiftPublic(uid, lid, gid)
                 .then(gift => {
                     if (gift) {
                         setFormData({
@@ -32,15 +32,15 @@ export const GiftForm = ({ isEditing }) => {
         }
     }, [isEditing, gid]);
 
-    useEffect(() => {
-        // TODO: CORREGIR EN CUANTO FUNCIONE LA TOMA DE DATOS DE LOS REGALOS PARA QUE TRABAJE CON CONDICIONAL A PERFIL PUBLICO
-        actions.syncToken()
-        if (store.token === "" || store.token === null) {
-            navigate("/");
-        } else {
-            actions.getUser();
-        }
-    }, []);
+    // useEffect(() => {
+    //     // TODO: CORREGIR EN CUANTO FUNCIONE LA TOMA DE DATOS DE LOS REGALOS PARA QUE TRABAJE CON CONDICIONAL A PERFIL PUBLICO
+    //     actions.syncToken()
+    //     if (store.token === "" || store.token === null) {
+    //         navigate("/");
+    //     } else {
+    //         actions.getUser();
+    //     }
+    // }, []);
 
 
     // useEffect(() => {
@@ -70,17 +70,14 @@ export const GiftForm = ({ isEditing }) => {
 
             const success = await actions.saveGift(updatedFormData, isEditing, uid, lid, gid);
             if (success) {
-                await actions.getGiftToStore(uid, lid);
-                await actions.getGiftToStoreAvailable(uid, lid);
-                await actions.getGiftToStorePurchased(uid, lid);
+                await actions.getPublicGiftToStoreAvailable(uid, lid)
                 setFormData({
                     title: "",
                     link: "",
                     status: "",
                 });
-                navigate(`/user/${store.currentUser.id}/giftlist/${store.currentList[0].id}/allGifts`);
+                navigate(`/guest/${store.currentUser.id}/giftlist/${store.currentList[0].id}/availableGifts`);
             } else {
-                // Manejar caso de fallo al guardar el regalo
                 console.error("Failed to save gift");
             }
         } catch (error) {
@@ -97,13 +94,13 @@ export const GiftForm = ({ isEditing }) => {
                     <div className="mb-2">
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-default">Title:</span>
-                            <input type="text" name="title" className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={formData.title} onChange={handleInputChange} />
+                            <input type="text" name="title" className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={formData.title} onChange={handleInputChange} disabled />
                         </div>
                     </div>
                     <div className="mb-2">
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-default">Link:</span>
-                            <input type="text" name="link" className="form-control" id="link01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={formData.link} onChange={handleInputChange} />
+                            <input type="text" name="link" className="form-control" id="link01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={formData.link} onChange={handleInputChange} disabled />
                         </div>
                     </div>
                     <div className="mb-2">
@@ -122,7 +119,7 @@ export const GiftForm = ({ isEditing }) => {
 
             </div>
             <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <Link to={`/user/${store.currentUser.id}/giftlist/${store.currentList[0].id}/allGifts`}>
+                <Link to={`/guest/${store.currentUser.id}/giftlist/${store.currentList[0].id}/availableGifts`}>
                     <button className="btn btn-primary me-md-2" type="button">Go back to my list</button>
                 </Link>
 
