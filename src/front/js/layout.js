@@ -17,6 +17,7 @@ import { GiftList } from "./pages/giftList";
 import { RenderGifts } from "./component/renderGifts";
 import { RenderGiftsAvailable } from "./component/renderGiftsAvailable";
 import { RenderGiftsPurchased } from "./component/renderGiftsPurchased";
+import { GiftForm } from "./component/giftForm";
 // import { GiftListEdit } from "./pages/giftListEdit";
 // import { Private } from "./pages/private";
 
@@ -41,11 +42,15 @@ const Layout = () => {
                             <Route element={<RenderGifts />} path="allGifts" />
                             <Route element={<RenderGiftsAvailable />} path="availableGifts" />
                             <Route element={<RenderGiftsPurchased />} path="purchasedGifts" />
+                            <Route element={<GiftForm isEditing />} path="gifts/:gid/edit" />
+                            <Route element={<GiftForm />} path="new-gift" />
+
                         </Route>
                         <Route element={<GiftList />} path="/guest/:uid/giftlist/:lid" >
                             <Route element={<RenderGifts />} path="gifts" />
                             <Route element={<RenderGiftsAvailable />} path="availableGifts" />
                             <Route element={<RenderGiftsPurchased />} path="purchasedGifts" />
+                            <Route element={<GiftForm isEditing />} path="gifts/:gid/edit" />
                         </Route>
                         <Route element={<Profile />} path="/user/:uid/profile" />
                         <Route element={<NotFound />} path="*" />
