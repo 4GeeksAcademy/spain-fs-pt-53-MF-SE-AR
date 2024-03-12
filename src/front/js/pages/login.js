@@ -69,8 +69,8 @@ export const Login = () => {
             <div className="col-md-6">
                 <h1>Login</h1>
                 <p>¿Nuevo? <Link to="/signup">Registrate</Link></p>
-                <input type="text" value={email} placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-                <input type="text" value={password} placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+                <input type="text" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                <input type="text" value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                 <button type="submit" className="btn btn-primary mt-3" onClick={handleClick} >Submit</button>
             </div>
         </div>

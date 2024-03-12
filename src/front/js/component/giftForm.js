@@ -97,13 +97,13 @@ export const GiftForm = ({ isEditing }) => {
                     <div className="mb-2">
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-default">Title:</span>
-                            <input type="text" name="title" className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={formData.title} onChange={handleInputChange} />
+                            <input type="text" name="title" className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Add a title for your gift" value={formData.title} onChange={handleInputChange} />
                         </div>
                     </div>
                     <div className="mb-2">
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-default">Link:</span>
-                            <input type="text" name="link" className="form-control" id="link01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={formData.link} onChange={handleInputChange} />
+                            <input type="text" name="link" className="form-control" id="link01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="https://www.example.com/" value={formData.link} onChange={handleInputChange} />
                         </div>
                     </div>
                     <div className="mb-2">

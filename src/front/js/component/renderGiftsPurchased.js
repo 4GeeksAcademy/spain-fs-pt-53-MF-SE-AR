@@ -9,13 +9,18 @@ export const RenderGiftsPurchased = () => {
     // const navigate = useNavigate()
 
 
-    const handleDelete = async idIndex => {
-        console.log(idIndex)
-        // try {
-        //     await actions.deleteGift(idIndex);
-        // } catch (error) {
-        //     console.error("Error al eliminar el contacto:", error);
-        // }
+    const handleDelete = async gid => {
+        try {
+            const successDelete = await await actions.deleteGift(uid, lid, gid);
+            if (successDelete) {
+                await actions.getGiftToStore(uid, lid);
+                await actions.getGiftToStoreAvailable(uid, lid);
+                await actions.getGiftToStorePurchased(uid, lid);
+            }
+
+        } catch (error) {
+            console.error("Error al eliminar el contacto:", error);
+        }
     };
 
     return (

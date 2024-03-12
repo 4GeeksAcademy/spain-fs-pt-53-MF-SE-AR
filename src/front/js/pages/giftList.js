@@ -96,11 +96,13 @@ export const GiftList = () => {
                                     <div className="image-container m-3">
                                         {randomGuestImage && <img src={randomGuestImage} className="circle-image" alt="..." />}
                                     </div>
-                                    <h5>Welcome Guest</h5>
+                                    <div>
+                                        <h5>Welcome Guest</h5>
+                                        <p>from {store.currentUser.email} </p>
+                                    </div>
                                 </div>
                                 <div>
                                     <Link to={`/guest/${uid}/giftlist/${lid}/availableGifts`}> Available Gifts </Link>
-                                    {/* <Link to={`/guest/${uid}/giftlist/${lid}/availableGifts`}> Available </Link> SOLO VE LOS DISPONIBLES ASI QUE NO DEBE CARGARLOS TODOS SINO SOLO ESTOS*/}
                                 </div>
                             </div>
                         )}
