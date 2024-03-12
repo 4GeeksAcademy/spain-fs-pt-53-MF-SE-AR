@@ -372,7 +372,6 @@ def get_purchased_gifts(user_id,list_id):
          return jsonify({"msg": "No lists found for this user"}), 404
     
      user_gifts = Gift.query.filter_by(list_id=list_new["id"],status="Purchased").all()
-    #  TODO: REVISAR SI ESTA COMO PURCHASED O RESERVADO
 
      if not user_gifts:
         return jsonify({"msg": "No gifts found for this list"}), 200
@@ -404,8 +403,7 @@ def get_one_gifts(user_id,list_id,gift_id):
      one_gift = user_gifts.serialize()
      return jsonify(one_gift), 200
 
-
-# TODO: NO SE USA DE MOMENTO, EN CASO DE USARSE CORREGIR CON EL PUBLICO
+# TODO: NO SE USA DE MOMENTO POR QUE ESTA EL PUBLICO
 # @api.route("/user/<int:user_id>/giftlist/<int:list_id>/gifts/", methods=["POST"])
 # @jwt_required()
 # def add_gift(user_id, list_id):
@@ -426,7 +424,12 @@ def get_one_gifts(user_id,list_id,gift_id):
 #     if any(field is None for field in required_fields):
 #         return jsonify({'error': 'You must complete all the items'}), 400
 
-#     gift = Gift.query.filter_by(link=link).first()
+#     list_obj = List.query.filter_by(user_id=user_id,id=list_id).first()
+
+#     if not list_obj:
+#          return jsonify({"msg": "No lists found for this user"}), 404
+
+#     gift = Gift.query.filter_by(link=link,list_id=list_id).first()
 
 #     if gift:
 #         return jsonify({"msg": "This gift already exist"}), 401

@@ -24,12 +24,18 @@ export const ListHeader = () => {
                     </ul>
                 </div>
             </div>
-            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button className="btn btn-primary me-md-2" type="button">Share list</button>
-                <Link to={`/user/${uid}/giftlist/${lid}/new-gift`}>
-                    <button className="btn btn-primary" type="button">Add Gift +</button>
-                </Link>
-            </div>
+            {sessionStorage.token ? (
+                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button className="btn btn-primary me-md-2" type="button">Share list</button>
+                    <Link to={`/user/${uid}/giftlist/${lid}/new-gift`}>
+                        <button className="btn btn-primary" type="button">Add Gift +</button>
+                    </Link>
+                </div>
+            ) : (
+                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button className="btn btn-primary me-md-2" type="button">Share list</button>
+                </div>
+            )}
         </div>
     );
 };

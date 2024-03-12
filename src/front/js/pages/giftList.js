@@ -111,35 +111,8 @@ export const GiftList = () => {
                         <ListHeader uid={uid} />
                         <Outlet />
                     </div>
-                    {/* 
-              <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button className="btn btn-primary me-md-2" type="button">Compartir</button>
-                <Link to="/giftlist/new-gift"><button className="btn btn-primary" type="button">Agregar +</button></Link>
-              </div> 
-              REVISAR LUEGO SI LO PREFERIMOS ABAJO O ARRIBA LOS BOTONES DE MOMENTO SE DEJA ARRIBA
-              */}
                 </div>
             </div>
         </div>
     );
-
-    /* <div>
-        <div>
-            <div className="row row-cols-1 row-cols-md-2 g-4">
-                <ListHeader uid={uid} />
-                AQUI SE VA A PONER EL COMPONENTE {title}
-                AQUÍ AGREGAR EL COMPONENTE renderGift y pasar la uid={store.currentUser.id}
-                {/* <RenderGifts uid={store.currentUser.id} /> */
-    // </div>
-    // </div>
-    /* <div className={`tab-pane ${activeTab === 'available' ? 'active' : ''}`} id="v-pills-available" role="tabpanel" aria-labelledby="v-pills-available-tab">
-                        {activeTab === 'available' && <div>AQUI IRÁ EL COMPONENTE status con el filtro de disponibles</div>}
-                    </div>
-                    <div className={`tab-pane ${activeTab === 'purchased' ? 'active' : ''}`} id="v-pills-purchased" role="tabpanel" aria-labelledby="v-pills-purchased-tab">
-                        {activeTab === 'purchased' && <div>AQUI IRÁ EL COMPONENTE status con el filtro de comprados</div>}
-                    </div>
-                    <div className={`tab-pane ${activeTab === 'profile' ? 'active' : ''}`} id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                        {activeTab === 'profile' && <div>AQUI IRÁ EL COMPONENTE renderProfile</div>}
-                    </div> */
-    // </div> */}
 };
