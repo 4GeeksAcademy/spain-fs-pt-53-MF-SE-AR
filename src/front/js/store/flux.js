@@ -316,7 +316,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					currentGift: [],
 					currentAvailable: [],
 					currentPurchased: [],
-					profileImages: [],
 				});
 			},
 

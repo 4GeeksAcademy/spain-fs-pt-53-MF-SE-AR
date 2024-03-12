@@ -24,7 +24,7 @@ export const RenderGiftsPurchased = () => {
     };
 
     return (
-        <div>
+        <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
             {store.currentPurchased.length > 0 ? (
                 store.currentPurchased.map((item, index) => (
                     <div key={item.id} className="col">

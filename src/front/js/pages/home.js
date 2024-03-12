@@ -14,7 +14,8 @@ export const Home = () => {
 	useEffect(() => {
 		if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
 			setIsAuthenticated(true);
-			actions.getUser();
+			actions.getUserToStore();
+			console.log(store.currentUser)
 		} else {
 			setIsAuthenticated(false);
 			actions.cleanStore()

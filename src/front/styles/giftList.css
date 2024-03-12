@@ -8,9 +8,8 @@
     margin-top: 15px;
 }
 
-#v-pills-home {
-    max-height: 700px;
-    overflow-y: auto;
+#giftRow {
+    max-height: 700px; 
 }
 
 .card {
@@ -29,6 +28,19 @@
     object-fit: cover;
 }
 
-Links {
+.sideBarLinks {
+    display: flex;
     flex-direction: column;
+    margin-left: 45px;
+}
+
+.sideBarLinks a {
+    text-align: center;
+    width: 70%;
+    background-color: white;
+    border: 2px solid #ff6347;
+    color: #ff6347;
+    margin: 4px;
+    border-radius: 20px;
+    text-decoration: none;
 }

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import "../../styles/renderGifts.css";
 
 
 export const RenderGifts = () => {
@@ -26,11 +27,10 @@ export const RenderGifts = () => {
 
     return (
         // TODO: REVISAR PORQUE SE DAÑO EL GRID DE LA PLANTILLA A DOS COLUMNAS
-        <div>
+        <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
             {store.currentGift.length > 0 ? (
                 store.currentGift.map((item, index) => (
                     <div key={item.id} className="col">
-
                         <div className="card">
                             <div className="top-icons-card d-flex justify-content-end p-2">
                                 <i className="fa-solid fa-circle-xmark" onClick={() => handleDelete(item.id)}></i>

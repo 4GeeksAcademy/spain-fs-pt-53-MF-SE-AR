@@ -1,0 +1,10 @@
+.list-group-item .custom-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.rowCardGift {
+    max-height: 600px;
+    overflow-y: auto;
+}

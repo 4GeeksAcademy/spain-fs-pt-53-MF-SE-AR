@@ -20,7 +20,6 @@ export const GiftList = () => {
                     // Si hay un token y la ruta actual no contiene la palabra "user", redirige a "/login"
                     if (!window.location.pathname.includes("user")) {
                         actions.logout()
-                        navigate("/login");
                         return;
                     }
 
@@ -56,20 +55,6 @@ export const GiftList = () => {
         }
     }, [store.guestImages]);
 
-
-
-    // useEffect(() => {
-    //     if (store.token === "" || store.token === null) {
-    //         navigate("/");
-    //     } else {
-    //         actions.getUser();
-    //     }
-    // }, [store.token]);
-
-    // const handleTabChange = (tabId) => {
-    //     setActiveTab(tabId);
-    // };
-    // console.log(location)
     return (
         <div className="container-giftlist">
             <div className="row">
@@ -83,9 +68,9 @@ export const GiftList = () => {
                                     </div>
                                     <h5>{store.currentUser.message}</h5>
                                 </div>
-                                <div>
+                                <div className="sideBarLinks">
                                     <Link to={`/user/${uid}/giftlist/${lid}/allGifts`}> All Gifts </Link>
-                                    <Link to={`/user/${uid}/giftlist/${lid}/availableGifts`}> Available </Link>
+                                    <Link to={`/user/${uid}/giftlist/${lid}/availableGifts`}> Availables </Link>
                                     <Link to={`/user/${uid}/giftlist/${lid}/purchasedGifts`}> Purchased </Link>
                                     <Link to={`/user/${uid}/profile`}> Profile </Link>
                                 </div>
@@ -109,7 +94,7 @@ export const GiftList = () => {
                     </nav>
                 </div>
                 <div className="col-sm-9 p-5">
-                    <div className="row row-cols-1 row-cols-md-2 g-4" id="giftRow">
+                    <div className="row" id="giftRow">
                         <ListHeader uid={uid} />
                         <Outlet />
                     </div>
