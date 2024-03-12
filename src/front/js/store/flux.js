@@ -830,6 +830,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			deleteGift: async (uid, lid, gid) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/user/${uid}/giftlist/${lid}/gifts/${gid}`, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+
+						}
+					});
+
+					if (response.status === 200) {
+						const responseData = await response.json();
+						alert(responseData.response);
+						return true;
+					} else if (response.status === 401) {
+						const errorData = await response.json();
+						alert(errorData.msg)
+						return false
+					};
+				} catch (error) {
+					console.error("There has been an error:", error);
+					return false;
+				}
+			},
+
 		}
 	};
 };

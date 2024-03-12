@@ -73,8 +73,8 @@ export const Signup = () => {
                     {randomProfileImage && <img src={randomProfileImage} className="circle-image" alt="..." />}
                 </div>
                 <div>
-                    <input type="text" value={email} placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-                    <input type="text" value={password} placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+                    <input type="text" value={email} placeholder="Your email" onChange={(e) => setEmail(e.target.value)} />
+                    <input type="text" value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
                     <button type="submit" className="btn btn-primary mt-3" onClick={handleSubmit} >Submit</button>
                 </div>
             </div>
