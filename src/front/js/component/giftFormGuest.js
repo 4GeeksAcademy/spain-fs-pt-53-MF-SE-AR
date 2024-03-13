@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import { Link } from "react-router-dom";
-
+import { useForm } from "react-hook-form";
 import { Context } from "../store/appContext";
 
 export const GiftFormGuest = ({ isEditing }) => {
+    const { register, formState: { errors }, handleSubmit } = useForm();
     const { store, actions } = useContext(Context);
     const { uid, lid, gid } = useParams();
     const navigate = useNavigate();
@@ -58,9 +59,7 @@ export const GiftFormGuest = ({ isEditing }) => {
         });
     };
 
-    const handleSubmit = async (evt) => {
-        evt.preventDefault();
-
+    const onSubmitGift = async () => {
         try {
             const updatedFormData = {
                 ...formData,
@@ -90,18 +89,29 @@ export const GiftFormGuest = ({ isEditing }) => {
         <div className="container-giftlist">
             <div className="contactForm container">
                 <h2>{isEditing ? "Edit Gift" : "Add new gift"}</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit(onSubmitGift)}>
                     <div className="mb-2">
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-default">Title:</span>
-                            <input type="text" name="title" className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={formData.title} onChange={handleInputChange} disabled />
+                            <input type="text" name="title" {...register("title", {
+                                required: true,
+                                pattern: /^(?=\s*\S)([A-Za-z\s]){2,}$/
+                            })} aria-invalid={errors.title ? "true" : "false"} className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Add a title for your gift" value={formData.title} onChange={handleInputChange} />
+                            {errors.title?.type === 'required' && <p role="alert">Please insert a title</p>}
+                            {errors.title?.type === 'pattern' && <p role="alert">Title must contain at least 3 letters</p>}
                         </div>
                     </div>
                     <div className="mb-2">
                         <div className="input-group mb-3">
                             <span className="input-group-text" id="inputGroup-sizing-default">Link:</span>
-                            <input type="text" name="link" className="form-control" id="link01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value={formData.link} onChange={handleInputChange} disabled />
-                        </div>
+                            <input type="text" name="link" {...register("link", {
+                                required: true,
+                                pattern: /^(https:\/\/)([^\s]+)$/,
+                                maxLength: 499
+                            })} aria-invalid={errors.link ? "true" : "false"} className="form-control" id="link01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="https://www.example.com/" value={formData.link} onChange={handleInputChange} />
+                            {errors.link?.type === 'required' && <p role="alert">Please insert a link </p>}
+                            {errors.link?.type === 'pattern' && <p role="alert"> The Link must contain https:// format</p>}
+                            {errors.link?.type === 'maxLength' && <p role="alert"> Url too long</p>}                        </div>
                     </div>
                     <div className="mb-2">
                         <div className="input-group mb-3">

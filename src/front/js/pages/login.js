@@ -2,16 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom"
+import { useForm } from "react-hook-form";
 import "../../styles/login.css";
 
 export const Login = () => {
     const { store, actions } = useContext(Context);
+    const { register, formState: { errors }, handleSubmit } = useForm();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
 
-    const handleClick = async () => {
+    const onSubmitLogin = async () => {
         try {
             const successLogin = await actions.login(email, password);
             if (!successLogin) return console.error("Error en el inicio de sesión");
@@ -52,13 +54,21 @@ export const Login = () => {
 
     return (
         <div className="container text-center mt-5 d-flex justify-content-center">
-            <div className="col-md-6">
+            <form className="col-md-6" onSubmit={handleSubmit(onSubmitLogin)}>
                 <h1>Login</h1>
                 <p>¿Nuevo? <Link to="/signup">Registrate</Link></p>
-                <input type="text" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-                <input type="text" value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-                <button type="submit" className="btn btn-primary mt-3" onClick={handleClick} >Submit</button>
-            </div>
+                <input type="text" {...register("email", {
+                    required: true,
+                    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                {errors.email?.type === 'required' && <p role="alert">Email is required to login</p>}
+                {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
+                <input type="text"  {...register("password", {
+                    required: true
+                })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
+                <button type="submit" className="btn btn-primary mt-3" >Submit</button>
+            </form>
         </div>
     );
 };

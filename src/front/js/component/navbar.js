@@ -15,7 +15,7 @@ export const Navbar = () => {
 		actions.logout()
 		navigate('/')
 	}
-
+	console.log(store)
 	const handleList = () => {
 		navigate(`/user/${store.currentUser.id}/giftlist/${store.currentList[0].id}/allGifts`)
 	}

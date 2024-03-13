@@ -1,9 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom"
+import { useForm } from "react-hook-form";
 import "../../styles/signup.css";
 
 export const Signup = () => {
+    const { register, formState: { errors }, handleSubmit } = useForm();
     const { store, actions } = useContext(Context);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -21,7 +23,7 @@ export const Signup = () => {
     }, [store.profileImages]);
 
 
-    const handleSubmit = async () => {
+    const onSubmit = async () => {
         try {
             const successRegister = await actions.register(email, password, randomProfileImage);
             if (!successRegister) return console.error("Error en el registro");
@@ -73,11 +75,22 @@ export const Signup = () => {
                 <div className="image-container m-3">
                     {randomProfileImage && <img src={randomProfileImage} className="circle-image" alt="..." />}
                 </div>
-                <div>
-                    <input type="text" value={email} placeholder="Your email" onChange={(e) => setEmail(e.target.value)} />
-                    <input type="text" value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
-                    <button type="submit" className="btn btn-primary mt-3" onClick={handleSubmit} >Submit</button>
-                </div>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <input type="text" {...register("email", {
+                        required: true,
+                        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                    })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Your email" onChange={(e) => setEmail(e.target.value)} />
+                    {errors.email?.type === 'required' && <p role="alert">Email is required</p>}
+                    {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
+                    <input type="text" {...register("password", {
+                        required: true,
+                        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
+                    })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
+                    {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
+                    {errors.password?.type === 'pattern' && <p role="alert">Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long</p>}
+
+                    <button type="submit" className="btn btn-primary mt-3">Submit</button>
+                </form>
             </div>
         </div>
     );
