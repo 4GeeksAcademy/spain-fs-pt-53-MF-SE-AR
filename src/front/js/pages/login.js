@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom"
@@ -11,20 +11,6 @@ export const Login = () => {
     const navigate = useNavigate();
 
 
-    // const handleClick = async () => {
-    //     const success = await actions.login(email, password);
-    //     if (success) {
-    //         const user = await actions.getUserToStore(email);
-    //         if (user && user.id) {
-    //             const uid = user.id
-    //             navigate(`/user/${uid}/giftlist/1/allGifts`);
-    //             // TODO:ADD lid AL URL, DE MOMENTO LO COLOCO MANUAL EN 1
-    //         } else {
-    //             console.error("No se pudo obtener el ID del usuario");
-    //         }
-    //     }
-    // };
-    // TODO: POR REVISAR getAllList
     const handleClick = async () => {
         try {
             const successLogin = await actions.login(email, password);

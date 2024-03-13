@@ -10,6 +10,7 @@ export const Signup = () => {
     const navigate = useNavigate();
     const [randomProfileImage, setRandomProfileImage] = useState("");
 
+
     useEffect(() => {
         if (store.profileImages.length === null) {
             store.actions.getProfilePhoto();
