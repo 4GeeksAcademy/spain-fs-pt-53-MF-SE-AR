@@ -12,6 +12,43 @@ export const Login = () => {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    useEffect(() => {
+        console.log("useEffect Login")
+
+        if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
+            const user = actions.getUserToStore(email);
+            if (!user || !user.id) return console.error("Error al obtener el usuario");
+
+            const uid = user.id;
+            console.log("Usuario obtenido:", uid);
+
+            const newListSuccess = actions.getAllList(uid);
+            if (!newListSuccess || !newListSuccess[0]?.id) return console.error("Error al cargar la lista");
+
+            const lid = newListSuccess[0].id;
+
+            const newGiftSuccess = actions.getGiftToStore(uid, lid);
+            if (newGiftSuccess === null) {
+                console.warn("No gift found");
+            }
+
+            const newGiftAvailableSuccess = actions.getGiftToStoreAvailable(uid, lid);
+            if (newGiftAvailableSuccess === null) {
+                console.warn("No available gift found");
+            }
+
+            const newGiftPurchasedSuccess = actions.getGiftToStorePurchased(uid, lid);
+            if (newGiftPurchasedSuccess === null) {
+                console.warn("No purchased gift found");
+            }
+            console.log("usuario ya logado", store)
+            console.log("Regalo agregado exitosamente");
+            console.log("Lista cargada exitosamente");
+            navigate(`/user/${uid}/giftlist/${lid}/allGifts`);
+        } else {
+            actions.cleanStore()
+        }
+    }, []);
 
     const onSubmitLogin = async () => {
         try {
@@ -67,7 +104,7 @@ export const Login = () => {
                     required: true
                 })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                 {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
-                <button type="submit" className="btn btn-primary mt-3" >Submit</button>
+                <button type="submit" className="btn  mt-3" >Submit</button>
             </form>
         </div>
     );

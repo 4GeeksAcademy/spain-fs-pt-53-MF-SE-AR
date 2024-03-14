@@ -12,6 +12,14 @@ export const Signup = () => {
     const navigate = useNavigate();
     const [randomProfileImage, setRandomProfileImage] = useState("");
 
+    useEffect(() => {
+        if (store.profileImages.length === null) {
+            store.actions.getProfilePhoto();
+        } else {
+            const randomIndex = Math.floor(Math.random() * store.profileImages.length);
+            setRandomProfileImage(store.profileImages[randomIndex]);
+        }
+    }, []);
 
     useEffect(() => {
         if (store.profileImages.length === null) {
@@ -36,7 +44,8 @@ export const Signup = () => {
 
             const uid = user.id;
             console.log("Usuario obtenido:", uid);
-
+            setEmail("");
+            setPassword("");
             const newListCreationSuccess = await actions.newList(uid);
             if (!newListCreationSuccess) return console.error("Error al crear la lista");
 
@@ -89,7 +98,7 @@ export const Signup = () => {
                     {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
                     {errors.password?.type === 'pattern' && <p role="alert">Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long</p>}
 
-                    <button type="submit" className="btn btn-primary mt-3">Submit</button>
+                    <button type="submit" className="btn  mt-3">Submit</button>
                 </form>
             </div>
         </div>

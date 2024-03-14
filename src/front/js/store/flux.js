@@ -88,7 +88,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						const store = getStore();
 						const responseData = await response.json();
 						const photoUrls = responseData.photos.map(photo => photo.src.original);
-						// Almacena las URLs de las fotos en el store
 						store.profileImages = photoUrls;
 						console.log(store.profileImages)
 						return photoUrls;

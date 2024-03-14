@@ -6,7 +6,7 @@ import { Context } from "../store/appContext";
 
 export const GiftForm = ({ isEditing }) => {
     const { store, actions } = useContext(Context);
-    const { register, formState: { errors }, handleSubmit } = useForm();
+    const { register, formState: { errors }, handleSubmit, setValue } = useForm();
     const { uid, lid, gid } = useParams();
     const navigate = useNavigate();
 
@@ -18,12 +18,20 @@ export const GiftForm = ({ isEditing }) => {
     });
 
     useEffect(() => {
+        actions.syncToken()
+        if (!sessionStorage.token && sessionStorage.token !== undefined && sessionStorage.token !== "") {
+            navigate("/");
+        } else {
+            actions.getUser();
+        }
+    }, []);
+
+    useEffect(() => {
         if (isEditing && gid) {
             actions.getOneGift(uid, lid, gid)
                 .then(gift => {
                     if (gift) {
                         setFormData({
-                            ...formData,
                             title: gift.title,
                             link: gift.link,
                             status: gift.status,
@@ -35,13 +43,10 @@ export const GiftForm = ({ isEditing }) => {
     }, [isEditing, gid]);
 
     useEffect(() => {
-        actions.syncToken()
-        if (!sessionStorage.token && sessionStorage.token !== undefined && sessionStorage.token !== "") {
-            navigate("/");
-        } else {
-            actions.getUser();
-        }
-    }, []);
+        setValue("title", formData.title);
+        setValue("link", formData.link);
+        setValue("status", formData.status);
+    }, [formData, setValue]);
 
     const handleInputChange = evt => {
         setFormData({
@@ -118,14 +123,14 @@ export const GiftForm = ({ isEditing }) => {
                         </div>
                     </div>
                     <div className="card-footer text-center">
-                        <button type="submit" className="btn btn-primary">{isEditing ? "Update" : "Save"}</button>
+                        <button type="submit" className="btn">{isEditing ? "Update" : "Save"}</button>
                     </div>
                 </form>
 
             </div>
             <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                 <Link to={`/user/${store.currentUser.id}/giftlist/${store.currentList[0].id}/allGifts`}>
-                    <button className="btn btn-primary me-md-2" type="button">Go back to my list</button>
+                    <button className="btn me-md-2" type="button">Go back to my list</button>
                 </Link>
 
             </div>
