@@ -12,14 +12,15 @@ export const Home = () => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
 
 	useEffect(() => {
+		console.log("useEffect Home")
+
 		if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
+			console.log(sessionStorage.token)
 			setIsAuthenticated(true);
 			actions.getUserToStore();
-			console.log(store.currentUser)
 		} else {
 			setIsAuthenticated(false);
 			actions.cleanStore()
-			console.log(store.currentUser)
 		}
 	}, [sessionStorage.token]);
 

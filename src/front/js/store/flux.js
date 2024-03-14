@@ -232,6 +232,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getUserToStore: async () => {
 				const store = getStore();
+				const actions = getActions();
 				try {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/user`, {
 						headers: {
@@ -244,6 +245,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (!data || typeof data.id === 'undefined') {
 						throw new Error('Invalid response format: missing user ID');
 					}
+					actions.getAllList(data.id);
 					setStore({
 						...store,
 						currentUser: {

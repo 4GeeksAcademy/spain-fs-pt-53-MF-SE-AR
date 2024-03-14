@@ -66,7 +66,9 @@ export const GiftList = () => {
                                     <div className="image-container m-3">
                                         <img src={store.currentUser.img} className="circle-image" alt="..." />
                                     </div>
-                                    <h5>{store.currentUser.message}</h5>
+                                    <div>
+                                        <h5>{store.currentUser.message}</h5>
+                                    </div>
                                 </div>
                                 <div className="sideBarLinks">
                                     <Link to={`/user/${uid}/giftlist/${lid}/allGifts`}> All Gifts </Link>
