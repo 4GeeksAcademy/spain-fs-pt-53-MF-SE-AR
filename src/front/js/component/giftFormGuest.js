@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Context } from "../store/appContext";
 
 export const GiftFormGuest = ({ isEditing }) => {
-    const { register, formState: { errors }, handleSubmit } = useForm();
+    const { register, formState: { errors }, handleSubmit, setValue } = useForm();
     const { store, actions } = useContext(Context);
     const { uid, lid, gid } = useParams();
     const navigate = useNavigate();
@@ -33,24 +33,11 @@ export const GiftFormGuest = ({ isEditing }) => {
         }
     }, [isEditing, gid]);
 
-    // useEffect(() => {
-    //     // TODO: CORREGIR EN CUANTO FUNCIONE LA TOMA DE DATOS DE LOS REGALOS PARA QUE TRABAJE CON CONDICIONAL A PERFIL PUBLICO
-    //     actions.syncToken()
-    //     if (store.token === "" || store.token === null) {
-    //         navigate("/");
-    //     } else {
-    //         actions.getUser();
-    //     }
-    // }, []);
-
-
-    // useEffect(() => {
-    //     if (store.token === "" || store.token === null) {
-    //         navigate("/");
-    //     } else {
-    //         actions.getUser();
-    //     }
-    // }, [store.token]);
+    useEffect(() => {
+        setValue("title", formData.title);
+        setValue("link", formData.link);
+        setValue("status", formData.status);
+    }, [formData, setValue]);
 
     const handleInputChange = evt => {
         setFormData({
@@ -96,7 +83,7 @@ export const GiftFormGuest = ({ isEditing }) => {
                             <input type="text" name="title" {...register("title", {
                                 required: true,
                                 pattern: /^(?=\s*\S)([A-Za-z\s]){2,}$/
-                            })} aria-invalid={errors.title ? "true" : "false"} className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Add a title for your gift" value={formData.title} onChange={handleInputChange} />
+                            })} aria-invalid={errors.title ? "true" : "false"} className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Add a title for your gift" value={formData.title} disabled />
                             {errors.title?.type === 'required' && <p role="alert">Please insert a title</p>}
                             {errors.title?.type === 'pattern' && <p role="alert">Title must contain at least 3 letters</p>}
                         </div>
@@ -108,7 +95,7 @@ export const GiftFormGuest = ({ isEditing }) => {
                                 required: true,
                                 pattern: /^(https:\/\/)([^\s]+)$/,
                                 maxLength: 499
-                            })} aria-invalid={errors.link ? "true" : "false"} className="form-control" id="link01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="https://www.example.com/" value={formData.link} onChange={handleInputChange} />
+                            })} aria-invalid={errors.link ? "true" : "false"} className="form-control" id="link01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="https://www.example.com/" value={formData.link} disabled />
                             {errors.link?.type === 'required' && <p role="alert">Please insert a link </p>}
                             {errors.link?.type === 'pattern' && <p role="alert"> The Link must contain https:// format</p>}
                             {errors.link?.type === 'maxLength' && <p role="alert"> Url too long</p>}                        </div>
@@ -123,18 +110,10 @@ export const GiftFormGuest = ({ isEditing }) => {
                         </div>
                     </div>
                     <div className="card-footer text-center">
-                        <button type="submit" className="btn btn-primary">{isEditing ? "Update" : "Save"}</button>
+                        <button type="submit" className="btn">{isEditing ? "Update" : "Save"}</button>
                     </div>
                 </form>
-
-            </div>
-            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <Link to={`/guest/${store.currentUser.id}/giftlist/${store.currentList[0].id}/availableGifts`}>
-                    <button className="btn btn-primary me-md-2" type="button">Go back to my list</button>
-                </Link>
-
             </div>
         </div>
-
     );
 };

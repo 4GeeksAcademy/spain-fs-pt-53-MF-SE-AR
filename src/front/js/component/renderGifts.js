@@ -92,13 +92,13 @@ export const RenderGifts = () => {
                                 {sessionStorage.token ? (
                                     <div className="card-footer text-center">
                                         <Link to={`/user/${uid}/giftlist/${lid}/gifts/${item.id}/edit`}>
-                                            <button href="#" className="btn btn-primary">Editar</button>
+                                            <button href="#" className="btn">Editar</button>
                                         </Link>
                                     </div>
                                 ) : (
                                     <div className="card-footer text-center">
                                         <Link to={`/guest/${uid}/giftlist/${lid}/gifts/${item.id}/edit`}>
-                                            <button href="#" className="btn btn-primary">Editar</button>
+                                            <button href="#" className="btn">Editar</button>
                                         </Link>
                                     </div>
                                 )}
@@ -180,7 +180,7 @@ export const RenderGifts = () => {
 //                 </ul>
 //                 <div className="card-footer text-center">
 //                     <Link to={`/user/${uid}/giftlist/${lid}/gifts/${item.id}`}>
-//                         <button href="#" className="btn btn-primary">Editar</button>
+//                         <button href="#" className="btn ">Editar</button>
 //                     </Link>
 //                 </div>
 //             </div>
