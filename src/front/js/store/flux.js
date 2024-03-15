@@ -320,18 +320,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 			},
 
-			deleteUser: async (id) => {
+			deleteUser: async (uid) => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/user/${id}/giftlist/${id}`, {
+					const token = sessionStorage.getItem('token');
+					const response = await fetch(`${process.env.BACKEND_URL}/api/user/${uid}`, {
 						method: 'DELETE',
 						headers: {
-							'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+							'Authorization': `Bearer ${token}`,
 							'Content-Type': 'application/json'
-						},
+						}
 					});
-
+			
 					if (response.ok) {
-						console.log('User deleted')
+						console.log('User deleted');
 						return true;
 					} else {
 						throw new Error('Failed to delete user');
