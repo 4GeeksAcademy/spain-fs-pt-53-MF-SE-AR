@@ -88,7 +88,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						const store = getStore();
 						const responseData = await response.json();
 						const photoUrls = responseData.photos.map(photo => photo.src.original);
-						// Almacena las URLs de las fotos en el store
 						store.profileImages = photoUrls;
 						console.log(store.profileImages)
 						return photoUrls;
@@ -232,6 +231,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			getUserToStore: async () => {
 				const store = getStore();
+				const actions = getActions();
 				try {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/user`, {
 						headers: {
@@ -244,6 +244,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (!data || typeof data.id === 'undefined') {
 						throw new Error('Invalid response format: missing user ID');
 					}
+					actions.getAllList(data.id);
 					setStore({
 						...store,
 						currentUser: {
@@ -316,7 +317,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					currentGift: [],
 					currentAvailable: [],
 					currentPurchased: [],
-					profileImages: [],
 				});
 			},
 
@@ -515,6 +515,66 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
+			saveGift: async (updatedFormData, isEditing, uid, lid, gid) => {
+				try {
+					const url = isEditing ? `${process.env.BACKEND_URL}/api/guest/${uid}/giftlist/${lid}/gifts/${gid}` : `${process.env.BACKEND_URL}/api/gifts`;
+					const method = isEditing ? "PUT" : "POST";
+
+					const res = await fetch(url, {
+						method: method,
+						body: JSON.stringify({
+							title: updatedFormData.title,
+							link: updatedFormData.link,
+							status: updatedFormData.status,
+							img: "",
+							list_id: lid,
+							user_id: updatedFormData.user_id
+						}),
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+					if (res.status === 200) {
+						const responseData = await res.json();
+						console.log(responseData.response);
+						return true;
+					} else if (res.status === 401) {
+						const errorData = await res.json();
+						alert(errorData.msg)
+						return false
+					};
+				} catch (error) {
+					console.error("There has been an error:", error);
+					return false;
+				}
+			},
+			// TODO: EJEMPLO PARA USAR POST Y PUT EN MISMA FUNCION
+			// saveContact: (formData, isEditing, id) => {
+			// 	const url = isEditing ? `https://playground.4geeks.com/apis/fake/contact/${id}` : "https://playground.4geeks.com/apis/fake/contact/";
+
+			// 	const method = isEditing ? "PUT" : "POST";
+
+			// 	fetch(url, {
+			// 		method: method,
+			// 		headers: {
+			// 			"Content-Type": "application/json"
+			// 		},
+			// 		body: JSON.stringify({
+			// 			full_name: formData.fullName,
+			// 			email: formData.email,
+			// 			agenda_slug: "limberg",
+			// 			address: formData.address,
+			// 			phone: formData.phone
+			// 		})
+			// 	})
+			// 		.then(res => res.json())
+			// 		.then(data => {
+			// 			alert(method === "POST" ? "Contact created successfully" : "Contact saved successfully");
+			// 		})
+			// 		.catch(error => {
+			// 			console.error("Error al guardar el contacto:", error);
+			// 		});
+			// },
 			getGiftToStore: async (uid, lid) => {
 				const store = getStore();
 				try {
@@ -627,6 +687,42 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error);
 				}
 			},
+
+			getOneGift: async (uid, lid, gid) => {
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user/${uid}/giftlist/${lid}/gifts/${gid}`, {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+						}
+					});
+					const data = await resp.json()
+					console.log("regalo encontrado", data)
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
+
+			getOneGiftPublic: async (uid, lid, gid) => {
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/guest/${uid}/giftlist/${lid}/gifts/${gid}`, {
+						headers: {
+							'Content-Type': 'application/json',
+						}
+					});
+					const data = await resp.json()
+					console.log("regalo público encontrado", data)
+					return data;
+
+				} catch (error) {
+					console.log("Error loading message from backend", error)
+				}
+			},
+
 			getPublicGiftToStore: async (uid, lid) => {
 				// TODO: REVISAR CUANDO ESTE LA ENTRADA PUBLICA
 				const store = getStore();
@@ -701,6 +797,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				} catch (error) {
 					console.log("Error loading message from backend", error)
+				}
+			},
+
+			deleteGift: async (uid, lid, gid) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/user/${uid}/giftlist/${lid}/gifts/${gid}`, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+
+						}
+					});
+
+					if (response.status === 200) {
+						const responseData = await response.json();
+						alert(responseData.response);
+						return true;
+					} else if (response.status === 401) {
+						const errorData = await response.json();
+						alert(errorData.msg)
+						return false
+					};
+				} catch (error) {
+					console.error("There has been an error:", error);
+					return false;
 				}
 			},
 

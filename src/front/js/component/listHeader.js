@@ -6,13 +6,34 @@ import { Link, useParams } from "react-router-dom";
 export const ListHeader = () => {
     const { uid, lid } = useParams();
     const { store, actions } = useContext(Context);
+    const [showModal, setShowModal] = useState(false);
+    const [textToCopy, setTextToCopy] = useState(`${process.env.FRONT_URL}/guest/${uid}/giftlist/${lid}`);
+
+    const handleOpenModal = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    const handleCopyToClipboard = () => {
+        try {
+            navigator.clipboard.writeText(textToCopy);
+            alert("URL copied to clipboard");
+            setShowModal(false);
+        } catch (error) {
+            alert("Sorry there has been an error");
+            console.error("Error copying to clipboard:", error);
+        }
+    };
 
     const listName = store.currentList.length > 0 ? store.currentList[0].name : "";
     return (
         <div className="d-flex justify-content-between w-100">
             <div className="list-header">
                 <div className="dropdown">
-                    <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {listName}
                     </button>
                     <ul className="dropdown-menu">
@@ -24,10 +45,32 @@ export const ListHeader = () => {
                     </ul>
                 </div>
             </div>
-            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button className="btn btn-primary me-md-2" type="button">Share list</button>
-                <button className="btn btn-primary" type="button">Add Gift +</button>
-            </div>
+            {sessionStorage.token ? (
+                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button className="btn me-md-2" type="button" onClick={handleOpenModal}>Share list</button>
+                    <Link to={`/user/${uid}/giftlist/${lid}/new-gift`}>
+                        <button className="btn" type="button">Add Gift +</button>
+                    </Link>
+                </div>
+            ) : (
+                <></>
+            )}
+            {showModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <div className="top-icons-card d-flex justify-content-end p-2">
+                            <i className="fa-solid fa-circle-xmark" onClick={handleCloseModal}></i>
+                        </div>
+                        <h2>This is the url to share your available giftlist:</h2>
+                        <input
+                            type="text"
+                            value={textToCopy}
+                            onChange={(e) => setTextToCopy(e.target.value)}
+                        />
+                        <button className="btn mt-3" onClick={handleCopyToClipboard}>Copy</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

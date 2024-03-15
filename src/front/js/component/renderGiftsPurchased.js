@@ -9,17 +9,22 @@ export const RenderGiftsPurchased = () => {
     // const navigate = useNavigate()
 
 
-    const handleDelete = async idIndex => {
-        console.log(idIndex)
-        // try {
-        //     await actions.deleteGift(idIndex);
-        // } catch (error) {
-        //     console.error("Error al eliminar el contacto:", error);
-        // }
+    const handleDelete = async gid => {
+        try {
+            const successDelete = await await actions.deleteGift(uid, lid, gid);
+            if (successDelete) {
+                await actions.getGiftToStore(uid, lid);
+                await actions.getGiftToStoreAvailable(uid, lid);
+                await actions.getGiftToStorePurchased(uid, lid);
+            }
+
+        } catch (error) {
+            console.error("Error al eliminar el contacto:", error);
+        }
     };
 
     return (
-        <div>
+        <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
             {store.currentPurchased.length > 0 ? (
                 store.currentPurchased.map((item, index) => (
                     <div key={item.id} className="col">
@@ -86,8 +91,8 @@ export const RenderGiftsPurchased = () => {
                                     </li>
                                 </ul>
                                 <div className="card-footer text-center">
-                                    <Link to={`/user/${uid}/giftlist/${lid}/gifts/${item.id}`}>
-                                        <button href="#" className="btn btn-primary">Editar</button>
+                                    <Link to={`/user/${uid}/giftlist/${lid}/gifts/${item.id}/edit`}>
+                                        <button href="#" className="btn ">Editar</button>
                                     </Link>
                                 </div>
                             </div>

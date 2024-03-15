@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
+import { Link } from "react-router-dom";
 import homeGift from "../../img/Boxing-day-amico.png";
 import howToGift1 from "../../img/Jewelry-shop-amico.png"
 import howToGift2 from "../../img/Pleasant-surprise-amico.png"
@@ -12,24 +13,29 @@ export const Home = () => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
 
 	useEffect(() => {
+		console.log("useEffect Home")
+
 		if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
+			console.log(sessionStorage.token)
 			setIsAuthenticated(true);
-			actions.getUser();
+			actions.getUserToStore();
 		} else {
 			setIsAuthenticated(false);
 			actions.cleanStore()
-			console.log(store.currentUser)
 		}
 	}, [sessionStorage.token]);
 
 	return (
-		<div className=" mt-5 ">
+		<div className="container mt-5 ">
 			<div className="d-flex justify-content-around">
 				<div className="">
 					<h1>
 						Welcome to GiftBuddy!
 					</h1>
 					<p>Where everybody can make a present that really matters.</p>
+					<Link to="/signup">
+						<button className="btn">Create your giftlist</button>
+					</Link>
 				</div>
 				<div className="d-inline">
 					<img src={homeGift} className="img-drawing " />
@@ -52,9 +58,9 @@ export const Home = () => {
 					<img src={howToGift3} className="img-drawing " />
 				</div>
 			</div>
-			{isAuthenticated ? <div className="alert alert-info">
+			{/* {isAuthenticated ? <div className="alert alert-info">
 				{store.currentUser.message}
-			</div> : <div className="alert alert-info"> To know more about the app, please log in or sign up.</div>}
+			</div> : <div className="alert alert-info"> To know more about the app, please log in or sign up.</div>} */}
 		</div>
 	);
 };
