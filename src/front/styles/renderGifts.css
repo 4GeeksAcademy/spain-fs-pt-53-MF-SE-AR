@@ -5,6 +5,10 @@
 }
 
 .rowCardGift {
-    max-height: 600px;
+    max-height: calc(100vh - 270px);
     overflow-y: scroll;
+}
+
+.rowCardGift::-webkit-scrollbar {
+    width: 0;
 }

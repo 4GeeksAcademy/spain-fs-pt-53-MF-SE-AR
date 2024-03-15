@@ -1,5 +1,6 @@
 .container-giftlist {
     width: 100%;
+    height: 100%;
     margin: 0;
 }
 
@@ -9,7 +10,7 @@
 }
 
 #giftRow {
-    max-height: 700px; 
+    max-height: 700px;
 }
 
 .card {
@@ -22,6 +23,7 @@
     overflow: hidden;
     border-radius: 50%;
 }
+
 .circle-image {
     width: 100%;
     height: 100%;
@@ -35,12 +37,18 @@
 }
 
 .sideBarLinks a {
+    padding: 5px 20px;
     text-align: center;
     width: 70%;
-    background-color: white;
-    border: 2px solid #ff6347;
-    color: #ff6347;
+    background-color: darkgray;
+    /* border: 2px solid #ff6347; */
+    color: white;
     margin: 4px;
     border-radius: 20px;
     text-decoration: none;
+}
+
+.sideBar {
+    height: calc(100vh - (100px));
+    overflow-y: auto;
 }
