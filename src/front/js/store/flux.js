@@ -320,22 +320,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 			},
 
-			deleteUser: async (id, password) => {
+			deleteUser: async (uid) => {
 				try {
-					const response = await fetch(`${process.env.BACKEND_URL}/api/user`, {
+					const token = sessionStorage.getItem('token');
+					const response = await fetch(`${process.env.BACKEND_URL}/api/user/${uid}`, {
 						method: 'DELETE',
 						headers: {
-							'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+							'Authorization': `Bearer ${token}`,
 							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							password: password,
-							id: id,
-						})
+						}
 					});
-
+			
 					if (response.ok) {
-						console.log('User deleted')
+						console.log('User deleted');
 						return true;
 					} else {
 						throw new Error('Failed to delete user');
@@ -372,32 +369,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
-
-			// FUNCIONES DE SABRI
-			// changePassword: async (newPassword) => {
-			// 	try {
-			// 		const response = await fetch(`${process.env.BACKEND_URL}/api/user/password`, {
-			// 			method: 'PUT',
-			// 			headers: {
-			// 				'Content-Type': 'application/json',
-			// 				'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-			// 			},
-			// 			body: JSON.stringify({
-			// 				password: newPassword,
-			// 			}),
-			// 		});
-
-			// 		if (response.ok) {
-			// 			return true;
-			// 		} else {
-			// 			return false;
-			// 		}
-			// 	} catch (error) {
-			// 		console.error('Error changing password:', error);
-			// 		return false;
-			// 	}
-			// },
-
 
 
 			// ACTIONS EXAMPLE
