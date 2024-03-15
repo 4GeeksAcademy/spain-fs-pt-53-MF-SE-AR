@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Context } from "../store/appContext";
+import "../../styles/giftForm.css"
 
 export const GiftForm = ({ isEditing }) => {
     const { store, actions } = useContext(Context);
@@ -85,7 +86,7 @@ export const GiftForm = ({ isEditing }) => {
 
 
     return (
-        <div className="container-giftlist">
+        <div className="container-giftlist mt-5">
             <div className="contactForm container">
                 <h2>{isEditing ? "Edit Gift" : "Add new gift"}</h2>
                 <form onSubmit={handleSubmit(onSubmitGift)}>
@@ -128,9 +129,9 @@ export const GiftForm = ({ isEditing }) => {
                 </form>
 
             </div>
-            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <Link to={`/user/${store.currentUser.id}/giftlist/${store.currentList[0].id}/allGifts`}>
-                    <button className="btn me-md-2" type="button">Go back to my list</button>
+            <div className="d-grid gap-2 d-md-flex mt-4 justify-content-md-end">
+                <Link to={`/user/${uid}/giftlist/${lid}/allGifts`}>
+                    <button className="noBgButton btn me-md-2" type="button"><i class="fa-solid fa-less-than"></i>    Go back to my list</button>
                 </Link>
 
             </div>

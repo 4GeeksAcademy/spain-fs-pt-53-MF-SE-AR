@@ -90,7 +90,7 @@ export const GiftList = () => {
     return (
         <div className="container-giftlist">
             <div className="row w-100">
-                <div className="col-sm-3 bg-light">
+                <div className="col-sm-3 bg-light sideBar">
                     <nav className="nav flex-column">
                         {sessionStorage.token ? (
                             <div className="welcoming">

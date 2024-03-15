@@ -92,7 +92,7 @@ export const RenderGiftsPurchased = () => {
                                 </ul>
                                 <div className="card-footer text-center">
                                     <Link to={`/user/${uid}/giftlist/${lid}/gifts/${item.id}/edit`}>
-                                        <button href="#" className="btn ">Editar</button>
+                                        <button href="#" className="btn ">Edit</button>
                                     </Link>
                                 </div>
                             </div>

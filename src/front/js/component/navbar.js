@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../img/Logo-completo-tr.png"
+import "../../styles/navbar.css"
 
 
 export const Navbar = () => {
@@ -31,14 +32,14 @@ export const Navbar = () => {
 				<div className="ml-auto">
 					{!sessionStorage.token ? (
 						<Link to="/login">
-							<button className="btn">Log in</button>
+							<button className="noBgButton btn">Log in</button>
 						</Link>
 					) : (
 						<div className="navBarButtons d-flex">
 							{isHome && (
 								<button onClick={handleList} className="btn mr-2">Go to my lists</button>
 							)}
-							<button onClick={handleClick} className="btn">Log out</button>
+							<button onClick={handleClick} className="noBgButton btn ml-2">Log out</button>
 						</div>
 					)}
 				</div>
