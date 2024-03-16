@@ -12,7 +12,6 @@ export const Profile = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showModal, setShowModal] = useState(false);
-    const [enteredPassword, setEnteredPassword] = useState('');
     const [userData, setUserData] = useState(null);
     const navigate = useNavigate();
 
@@ -80,9 +79,6 @@ export const Profile = () => {
                 <h1 className="text-center">Profile</h1>
                 {userData && (
                     <div className="alert alert-bg">
-                        <h5 className="text">
-                            Hello {userData.name}
-                        </h5>
                         <div className="mb-3">
                             <div className="mb-3">
                                 <label className="form-label">Name:</label>
@@ -97,13 +93,18 @@ export const Profile = () => {
                                 <input type="password" className="form-control" placeholder={"******"} value={password} readOnly={!isEditable} onChange={(e) => setPassword(e.target.value)} />
                             </div>
                         </div>
-                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="button" className="btn mt-3" onClick={handleOpenDelete}>Delete Account</button>
+                        <div className="d-grid gap-2 d-md-flex justify-content-center">
+                            <button type="button" className="btn mt-3 buttonHeader" onClick={handleOpenDelete}>Delete Account</button>
                             {!isEditable && <button type="button" className="btn mt-3" onClick={() => setIsEditable(true)}>Edit</button>}
                             {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdateProfile}>Save</button>}
                         </div>
                     </div>
                 )}
+                <div className="d-grid gap-2 d-md-flex mt-4 justify-content-md-end">
+                    <Link to={`/`}>
+                        <button className="noBgButton btn me-md-2" type="button"><i class="fa-solid fa-less-than"></i>&nbsp; Go back ""HOME""</button>
+                    </Link>
+                </div>
             </div>
             {showModal && (
                 <div className="modal">
