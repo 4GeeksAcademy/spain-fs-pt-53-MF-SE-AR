@@ -108,7 +108,7 @@ export const Profile = () => {
                 )}
                 <div className="d-grid gap-2 d-md-flex mt-4 justify-content-md-end">
                     <Link to={`/`}>
-                        <button className="noBgButton btn me-md-2" type="button"><i class="fa-solid fa-less-than"></i>&nbsp; Go back ""HOME""</button>
+                        <button className="noBgButton btn me-md-2" type="button"><i class="fa-solid fa-less-than"></i>&nbsp; Go back to my list</button>
                     </Link>
                 </div>
             </div>

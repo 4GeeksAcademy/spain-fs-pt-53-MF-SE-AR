@@ -22,8 +22,8 @@ export const Navbar = () => {
 	}
 
 	return (
-		<nav className="navbar">
-			<div className="container">
+		<nav className="navbar sticky-sm-top">
+			<div className="container nav-fill d-flex">
 				<Link to="/">
 					<span className="navbar-brand mb-0 h1">
 						<img src={Logo} className="Logo" />
