@@ -41,6 +41,7 @@ body {
 
 .input {
   padding-top: 3px;
+  border-radius: 50px;
 }
 
 .alert-bg {

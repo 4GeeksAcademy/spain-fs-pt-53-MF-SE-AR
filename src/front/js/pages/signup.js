@@ -78,29 +78,74 @@ export const Signup = () => {
 
 
     return (
-        <div className="container text-center mt-5 d-flex justify-content-center">
-            <div className="col-md-6">
+        <div className="ontainer mt-5 d-flex justify-content-center">
+            <div className="col-md-6 text-center">
                 <h1>Welcome, Signup form:</h1>
-                <div className="image-container m-3">
-                    {randomProfileImage && <img src={randomProfileImage} className="circle-image" alt="..." />}
+                <div className="alert alert-bg d-flex justify-content-between align-items-center p-5">
+                    <div className="d-flex-column justify-content-center align-items-center align-items-center">
+                        <p>1st <i className="fa-solid fa-arrow-right"></i> Pick your Gift Buddy: </p>
+                        <div className="image-container">
+                            {randomProfileImage && <img src={randomProfileImage} className="circle-image" alt="..." />}
+                        </div>
+                        <div>
+                            <button className="btn mt-1"><i className="fa-solid fa-shuffle"></i></button>
+                        </div>
+                    </div>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <p>2nd <i className="fa-solid fa-arrow-right"></i> Fill in your data: </p>
+                        <div className="m-3">
+                            <input type="text" {...register("email", {
+                                required: true,
+                                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                            })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Your email" onChange={(e) => setEmail(e.target.value)} />
+                            {errors.email?.type === 'required' && <p role="alert">Email is required</p>}
+                            {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
+                        </div>
+                        <div className="m-3">
+                            <input type="text" {...register("password", {
+                                required: true,
+                                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
+                            })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
+                            {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
+                            {errors.password?.type === 'pattern' && <p role="alert">Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long</p>}
+                            <div>
+                                <button type="submit" className="btn  mt-3">Submit</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <input type="text" {...register("email", {
-                        required: true,
-                        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                    })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Your email" onChange={(e) => setEmail(e.target.value)} />
-                    {errors.email?.type === 'required' && <p role="alert">Email is required</p>}
-                    {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
-                    <input type="text" {...register("password", {
-                        required: true,
-                        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
-                    })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
-                    {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
-                    {errors.password?.type === 'pattern' && <p role="alert">Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long</p>}
-
-                    <button type="submit" className="btn  mt-3">Submit</button>
-                </form>
             </div>
         </div>
     );
 };
+
+{/* <div className="container mt-5 d-flex justify-content-center">
+<div className="col-md-6">
+    <h1 className="text-center">Profile</h1>
+    {userData && (
+        <div className="alert alert-bg">
+            <h5 className="text">
+                Hello {userData.name}
+            </h5>
+            <div className="mb-3">
+                <div className="mb-3">
+                    <label className="form-label">Name:</label>
+                    <input type="text" className="form-control" value={name} readOnly={!isEditable} onChange={(e) => setName(e.target.value)} />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Email:</label>
+                    <input type="text" className="form-control" value={email} readOnly={!isEditable} onChange={(e) => setEmail(e.target.value)} />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Password:</label>
+                    <input type="password" className="form-control" placeholder={"******"} value={password} readOnly={!isEditable} onChange={(e) => setPassword(e.target.value)} />
+                </div>
+            </div>
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="button" className="btn mt-3" onClick={handleOpenDelete}>Delete Account</button>
+                {!isEditable && <button type="button" className="btn mt-3" onClick={() => setIsEditable(true)}>Edit</button>}
+                {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdateProfile}>Save</button>}
+            </div>
+        </div>
+    )}
+</div> */}

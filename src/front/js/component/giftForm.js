@@ -95,7 +95,7 @@ export const GiftForm = ({ isEditing }) => {
                             <span className="input-group-text" id="inputGroup-sizing-default">Title:</span>
                             <input type="text" name="title" {...register("title", {
                                 required: true,
-                                pattern: /^(?=\s*\S)([A-Za-z\s]){2,}$/
+                                pattern: /^(?=\s*\S)([A-Za-zñÑ0-9\s]){2,}$/
                             })} aria-invalid={errors.title ? "true" : "false"} className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Add a title for your gift" value={formData.title} onChange={handleInputChange} />
                             {errors.title?.type === 'required' && <p role="alert">Please insert a title</p>}
                             {errors.title?.type === 'pattern' && <p role="alert">Title must contain at least 3 letters</p>}
@@ -127,15 +127,12 @@ export const GiftForm = ({ isEditing }) => {
                         <button type="submit" className="btn">{isEditing ? "Update" : "Save"}</button>
                     </div>
                 </form>
-
             </div>
             <div className="d-grid gap-2 d-md-flex mt-4 justify-content-md-end">
                 <Link to={`/user/${uid}/giftlist/${lid}/allGifts`}>
-                    <button className="noBgButton btn me-md-2" type="button"><i class="fa-solid fa-less-than"></i>    Go back to my list</button>
+                    <button className="noBgButton btn me-md-2" type="button"><i className="fa-solid fa-less-than"></i>    Go back</button>
                 </Link>
-
             </div>
         </div>
-
     );
 };

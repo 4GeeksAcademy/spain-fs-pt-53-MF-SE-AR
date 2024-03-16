@@ -34,7 +34,7 @@ export const Home = () => {
 					</h1>
 					<p>Where everybody can make a present that really matters.</p>
 					<Link to="/signup">
-						<button className="btn">Create your giftlist</button>
+						<button className="btn">Start now</button>
 					</Link>
 				</div>
 				<div className="d-inline">
