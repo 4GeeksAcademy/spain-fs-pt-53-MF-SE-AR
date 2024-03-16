@@ -11,9 +11,10 @@ export const Profile = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [currentPassword, setCurrentPassword] = useState(""); 
+    const [currentPassword, setCurrentPassword] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [userData, setUserData] = useState(null);
+    const { uid, lid } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -94,9 +95,9 @@ export const Profile = () => {
                             </div>
 
                             <div className="mb-3">
-                            <label className="form-label">Enter your current password to save changes:</label>
-                            <input type="password" className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
-                        </div>
+                                <label className="form-label d-flex justify-content-between">Enter your current password to save changes.<i class="fa-solid fa-circle-exclamation" /></label>
+                                <input type="password" className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
+                            </div>
 
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-center">
@@ -107,8 +108,8 @@ export const Profile = () => {
                     </div>
                 )}
                 <div className="d-grid gap-2 d-md-flex mt-4 justify-content-md-end">
-                    <Link to={`/`}>
-                        <button className="noBgButton btn me-md-2" type="button"><i class="fa-solid fa-less-than"></i>&nbsp; Go back to my list</button>
+                    <Link to={`/user/${uid}/giftlist/${lid}/allGifts`}>
+                        <button className="noBgButton btn me-md-2" type="button"><i class="fa-solid fa-less-than"></i> Go back</button>
                     </Link>
                 </div>
             </div>

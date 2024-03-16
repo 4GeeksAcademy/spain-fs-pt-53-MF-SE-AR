@@ -94,7 +94,7 @@ export const Login = () => {
             <form className="col-md-6 text-center" onSubmit={handleSubmit(onSubmitLogin)}>
                 <h1>Login</h1>
                 <div className="alert alert-bg">
-                    <p>¿Newbie? <Link to="/signup">Sign up!</Link></p>
+                    <p>Newbie? <Link to="/signup">Sign up!</Link></p>
                     <div className="mt-3">
                         <input type="text" {...register("email", {
                             required: true,

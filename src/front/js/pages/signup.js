@@ -80,7 +80,7 @@ export const Signup = () => {
     return (
         <div className="ontainer mt-5 d-flex justify-content-center">
             <div className="col-md-6 text-center">
-                <h1>Welcome, Signup form:</h1>
+                <h1>Welcome. Signup form:</h1>
                 <div className="alert alert-bg d-flex justify-content-between align-items-center p-5">
                     <div className="d-flex-column justify-content-center align-items-center align-items-center">
                         <p>1st <i className="fa-solid fa-arrow-right"></i> Pick your Gift Buddy: </p>
@@ -107,7 +107,7 @@ export const Signup = () => {
                                 pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
                             })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
                             {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
-                            {errors.password?.type === 'pattern' && <p role="alert">Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 8 characters long</p>}
+                            {errors.password?.type === 'pattern' && <p role="alert">The password must be at least 8 characters long, including a lowercase, an uppercase and a number.</p>}
                             <div>
                                 <button type="submit" className="btn  mt-3">Submit</button>
                             </div>

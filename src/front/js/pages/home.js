@@ -32,7 +32,7 @@ export const Home = () => {
 					<h1>
 						Welcome to GiftBuddy!
 					</h1>
-					<p>Where everybody can make a present that really matters.</p>
+					<p>Where everybody can make a gift that really matters.</p>
 					<Link to="/signup">
 						<button className="btn">Start now</button>
 					</Link>
@@ -46,7 +46,7 @@ export const Home = () => {
 			</h2>
 			<div className="d-flex justify-content-around" >
 				<div className="d-inline">
-					<p>Make a list with the presents that you or your beloved would like to receive.</p>
+					<p>Make a list of the presents that you or your beloved would like to receive.</p>
 					<img src={howToGift1} className="img-drawing " />
 				</div>
 				<div className="d-inline">
