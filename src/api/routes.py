@@ -142,20 +142,24 @@ def get_user():
 def update_user():
     email = get_jwt_identity()
     user = User.query.filter_by(email=email).first()
+    password = request.json.get("password", None)
 
     if not user:
         return jsonify({"msg": "Incorrect user"}), 401
     
-    email = request.json.get("email")
     password = request.json.get("password")
-    name = request.json.get("name")
+    new_email = request.json.get("email")
+    new_name = request.json.get("name")
 
-    hashed_password = generate_password_hash(password).decode('utf-8')
+    if not password:
+        return jsonify({"error": "Current password is required"}), 400
+
+    if not check_password_hash(user.password, password):
+        return jsonify({"error": "Incorrect current password"}), 401
 
     try:
-        user.email = email
-        user.name = name
-        user.password = hashed_password
+        user.email = new_email
+        user.name = new_name
 
         db.session.commit()
         return jsonify({'response': 'User updated successfully'}), 200

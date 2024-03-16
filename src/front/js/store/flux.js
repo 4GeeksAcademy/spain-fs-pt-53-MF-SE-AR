@@ -357,7 +357,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							password: password,
 						}),
 					});
-					// TODO: AGREGAR LA ACTUALIZACION DEL CURRENTUSER STORE
+					
 					if (response.ok) {
 						console.log('Update SUCCESS')
 						return true;
