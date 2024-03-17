@@ -34,16 +34,16 @@ export const ListHeader = () => {
         <div className="d-flex justify-content-between w-100">
             <div className="list-header">
                 <div className="dropdown">
-                    <button className="buttonHeader btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button className="buttonHeader" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {listName}
                     </button>
-                    <ul className="dropdown-menu">
+                    {/* <ul className="dropdown-menu">
                         {store.currentList.map((item, index) => (
                             <li key={item.id}>
                                 <Link className="dropdown-item" to={`/user/${uid}/giftlist/${item.id}/allGifts`}>{item.name}</Link>
                             </li>
                         ))}
-                    </ul>
+                    </ul> */}
                 </div>
             </div>
             {sessionStorage.token ? (

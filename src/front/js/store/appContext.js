@@ -30,7 +30,7 @@ const injectContext = PassedComponent => {
 			 **/
 			//state.actions.getMessage();
 			// state.actions.getGiftPhoto();
-			state.actions.getProfilePhoto();
+			// state.actions.getProfilePhoto();
 			state.actions.getGuestPhoto();
 			state.actions.syncToken(); // <---- calling this function from the flux.js actions
 		}, []);

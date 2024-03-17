@@ -15,66 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			// //ACTIONS REGALOS SOLO STORE MJ POR SI LAS NECESITO LUEGO PARA ACTUALIZAAR STORE
-			// getGift: () => {
-			// 	const store = getStore();
-			// 	return store.gift;
-			// },
 
-			// getGiftData: async (id) => {
-			// 	try {
-			// 		const store = getStore();
-			// 		const gift = store.gift.find(item => item.id === id);
-
-			// 		if (!gift) {
-			// 			console.error("El regalo no se encontró en la lista.");
-			// 			return null;
-			// 		}
-
-			// 		return gift;
-			// 	} catch (error) {
-			// 		console.error("Error en la búsqueda del regalo:", error);
-			// 		return null;
-			// 	}
-			// },
-
-			// saveGiftData: (formData, isEditing, gid) => {
-			// 	const store = getStore(); // Obtener el estado actual del store
-			// 	const gift = store.gift.slice(); // Copiar el array de regalos
-
-			// 	if (isEditing) {
-			// 		// Actualizar el regalo existente
-			// 		const updatedGiftIndex = gift.findIndex(g => g.id === gid);
-			// 		if (updatedGiftIndex !== -1) {
-			// 			gift[updatedGiftIndex] = { ...gift[updatedGiftIndex], ...formData };
-			// 			setStore({ ...store, gift });
-			// 			alert("¡Regalo actualizado correctamente!");
-			// 		} else {
-			// 			console.error("El regalo con el ID proporcionado no existe.");
-			// 		}
-			// 	} else {
-			// 		// Crear un nuevo regalo con un ID aleatorio
-			// 		const newId = Math.floor(Math.random() * 1000000); // Generar un número aleatorio
-			// 		const newGift = { id: newId.toString(), ...formData };
-			// 		setStore({ ...store, gift: [...gift, newGift] });
-			// 		alert("¡Regalo creado correctamente!");
-			// 	}
-			// },
-
-
-
-			// deleteGift: (id) => {
-			// 	const store = getStore();
-			// 	const updatedGifts = store.gift.filter(g => g.id !== id);
-
-			// 	setStore({ ...store, gift: updatedGifts });
-
-			// 	alert("¡Regalo eliminado correctamente!");
-			// },
-
-			// fin de regalos
-
-			// ACTIONS FOTOS
 			getProfilePhoto: async () => {
 				try {
 					const response = await fetch(`https://api.pexels.com/v1/search?query=animal&per_page=3&locale=es-ES`, {
@@ -89,7 +30,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						const responseData = await response.json();
 						const photoUrls = responseData.photos.map(photo => photo.src.original);
 						store.profileImages = photoUrls;
-						console.log(store.profileImages)
 						return photoUrls;
 					} else {
 						console.error("Error al buscar la foto:", response.status, response.statusText);
@@ -125,6 +65,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) {
 					console.error("Error en el fetch de la foto:", error);
 					return null;
+				}
+			},
+
+			transformLink: async (link) => {
+				try {
+					const response = await fetch(`https://api-ssl.bitly.com/v4/shorten`, {
+						method: "POST",
+						body: JSON.stringify({
+							group_guid: "",
+							domain: "bit.ly",
+							long_url: link,
+						}),
+						headers: {
+							"Authorization": 'Bearer ' + "f0f96f7c8adc781167d218f8ae0ab8aa39338248",
+							'Content-Type': 'application/json'
+						},
+					});
+
+					if (response.ok) {
+						const responseData = await response.json();
+						const newLink = responseData.link;
+						console.log("shortened link", newLink)
+						return newLink;
+					} else {
+						console.error("Error al acortar el link:", response.status, response.statusText);
+						return undefined;
+					}
+				} catch (error) {
+					console.error("Error en el fetch del link:", error);
+					return undefined;
 				}
 			},
 			// ACTIONS TOKEN
@@ -170,7 +140,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 
 					if (res.status === 200) {
-						alert("Signup SUCCESS");
+						alert("Registration complete! Welcome aboard!");
 						return true;
 					} else if (res.status === 401) {
 						const errorData = await res.json();
@@ -330,7 +300,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							'Content-Type': 'application/json'
 						}
 					});
-			
+
 					if (response.ok) {
 						console.log('User deleted');
 						return true;
@@ -357,7 +327,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							password: password,
 						}),
 					});
-					
+
 					if (response.ok) {
 						console.log('Update SUCCESS')
 						return true;
@@ -397,7 +367,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const res = await fetch(`${process.env.BACKEND_URL}/api/list`, {
 						method: 'POST',
 						body: JSON.stringify({
-							name: "Lista General",
+							name: "Default List",
 							id: id,
 						}),
 						headers: {

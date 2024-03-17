@@ -28,7 +28,7 @@ def create_token():
         return jsonify({"msg": "User not found"}), 401
 
     if not check_password_hash(user.password, password):
-        return jsonify({"msg": "Bad email or password"}), 401
+        return jsonify({"msg": "Bad password"}), 401
 
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
@@ -122,9 +122,9 @@ def get_user():
 
     if user:
         if user.name:
-                message = "Welcome " + user.name
+                message = user.name
         else:
-                message = "Welcome " + user.email
+                message = user.email
 
         user_data = {
                 "message": message,
