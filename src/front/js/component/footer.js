@@ -3,7 +3,7 @@ import SimpleLogo from "../../img/Logo-solo-tr.png"
 
 
 export const Footer = () => (
-	<footer className="footer sticky-md-bottom container-fluid">
+	<footer className="footer sticky-sm-bottom container-fluid">
 		<div className="nav-fill d-flex">
 			<p className="nav-item">
 				🎁 Made by{" "}

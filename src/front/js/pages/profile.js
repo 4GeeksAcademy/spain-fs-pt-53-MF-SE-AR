@@ -11,9 +11,10 @@ export const Profile = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [currentPassword, setCurrentPassword] = useState("");
     const [showModal, setShowModal] = useState(false);
-    const [enteredPassword, setEnteredPassword] = useState('');
     const [userData, setUserData] = useState(null);
+    const { uid, lid } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +32,7 @@ export const Profile = () => {
             setUserData(user);
             setName(user.name);
             setEmail(user.email);
-            setPassword("");
+            setPassword(user.password);
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -39,12 +40,15 @@ export const Profile = () => {
 
     const handleUpdateProfile = async () => {
         try {
-            const success = await actions.updateUser(name, email, password);
+            const success = await actions.updateUser(name, email, currentPassword);
             if (success) {
                 console.log('User profile updated successfully');
                 setIsEditable(false);
+                alert("GREAT! Your profile has been updated.");
             } else {
                 console.error('Failed to update user profile');
+                setIsEditable(false);
+                alert("ERROR: Incorrect password. Changes won't be saved.");
             }
         } catch (error) {
             console.error('Error updating user profile:', error);
@@ -80,9 +84,6 @@ export const Profile = () => {
                 <h1 className="text-center">Profile</h1>
                 {userData && (
                     <div className="alert alert-bg">
-                        <h5 className="text">
-                            Hello {userData.name}
-                        </h5>
                         <div className="mb-3">
                             <div className="mb-3">
                                 <label className="form-label">Name:</label>
@@ -92,26 +93,33 @@ export const Profile = () => {
                                 <label className="form-label">Email:</label>
                                 <input type="text" className="form-control" value={email} readOnly={!isEditable} onChange={(e) => setEmail(e.target.value)} />
                             </div>
+
                             <div className="mb-3">
-                                <label className="form-label">Password:</label>
-                                <input type="password" className="form-control" placeholder={"******"} value={password} readOnly={!isEditable} onChange={(e) => setPassword(e.target.value)} />
+                                <label className="form-label d-flex justify-content-between">Enter your current password to save changes.<i class="fa-solid fa-circle-exclamation" /></label>
+                                <input type="password" className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
                             </div>
+
                         </div>
-                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="button" className="btn mt-3" onClick={handleOpenDelete}>Delete Account</button>
+                        <div className="d-grid gap-2 d-md-flex justify-content-center">
+                            <button type="button" className="btn mt-3 buttonHeader" onClick={handleOpenDelete}>Delete account</button>
                             {!isEditable && <button type="button" className="btn mt-3" onClick={() => setIsEditable(true)}>Edit</button>}
                             {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdateProfile}>Save</button>}
                         </div>
                     </div>
                 )}
+                <div className="d-grid gap-2 d-md-flex mt-4 justify-content-md-end">
+                    <Link to={`/user/${uid}/giftlist/${lid}/allGifts`}>
+                        <button className="noBgButton btn me-md-2" type="button"><i class="fa-solid fa-less-than"></i> Go back</button>
+                    </Link>
+                </div>
             </div>
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">
                         <span className="close" onClick={handleCloseModal}>&times;</span>
                         <h2>Are you sure you want to delete your account?</h2>
-                        <button className="btn mt-3" onClick={handleCloseModal}>No, go back.</button>
-                        <button className="btn mt-3" onClick={handleDeleteAccount}>Yes, delete.</button>
+                        <button className="btn mt-3" onClick={handleCloseModal}>No, cancel.</button>
+                        <button className="btn mt-3 buttonHeader" onClick={handleDeleteAccount}>Yes, delete.</button>
                     </div>
                 </div>
             )}
