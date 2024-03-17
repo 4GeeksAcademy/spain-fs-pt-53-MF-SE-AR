@@ -12,3 +12,7 @@
 .rowCardGift::-webkit-scrollbar {
     width: 0;
 }
+
+#fa-close {
+    color: black !important;
+}

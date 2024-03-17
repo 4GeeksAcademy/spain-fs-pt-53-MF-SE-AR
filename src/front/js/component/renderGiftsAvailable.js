@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 
@@ -6,7 +6,11 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 export const RenderGiftsAvailable = () => {
     const { store, actions } = useContext(Context);
     const { uid, lid } = useParams();
-    // const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        setIsLoading(false);
+    }, []);
 
 
     const handleDelete = async gid => {
@@ -25,13 +29,13 @@ export const RenderGiftsAvailable = () => {
 
     return (
         <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
-            {store.currentAvailable.length > 0 ? (
+            {!isLoading && store.currentAvailable.length > 0 ? (
                 store.currentAvailable.map((item, index) => (
                     <div key={item.id} className="col">
                         <div className="card">
                             {sessionStorage.token ? (
                                 <div className="top-icons-card d-flex justify-content-end p-2">
-                                    <i className="fa-solid fa-circle-xmark" onClick={() => handleDelete(item.id)}></i>
+                                    <i className="fa-solid fa-circle-xmark" id="fa-close" onClick={() => handleDelete(item.id)}></i>
                                 </div>
                             ) : (null
                             )}
@@ -111,7 +115,12 @@ export const RenderGiftsAvailable = () => {
                     </div>
                 ))
             ) : (
-                <h2>Maybe all the gifts have been purchased?! Time to add more because there are none available in the list.</h2>
+                <div className="w-100">
+                    {!isLoading ? (
+                        <div><i className="fa-solid fa-gift fa-beat"></i>{" "} Preparing your gifts...</div>
+                    ) : (
+                        <h2>Maybe all the gifts have been purchased?! There are no available gift to buy in the list.</h2>)}
+                </div>
             )}
         </div>
     );
