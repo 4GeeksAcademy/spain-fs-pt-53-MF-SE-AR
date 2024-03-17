@@ -11,25 +11,51 @@ export const Signup = () => {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const [randomProfileImage, setRandomProfileImage] = useState("");
+    const [imageLoaded, setImageLoaded] = useState(false);
+
 
     useEffect(() => {
-        if (store.profileImages.length === null) {
-            store.actions.getProfilePhoto();
+        actions.syncToken()
+        if (store.token === "" || store.token === null) {
+            fetchUserPhoto();
         } else {
-            const randomIndex = Math.floor(Math.random() * store.profileImages.length);
-            setRandomProfileImage(store.profileImages[randomIndex]);
+            navigate("/login");
         }
     }, []);
 
-    useEffect(() => {
-        if (store.profileImages.length === null) {
-            store.actions.getProfilePhoto();
-        } else {
-            const randomIndex = Math.floor(Math.random() * store.profileImages.length);
-            setRandomProfileImage(store.profileImages[randomIndex]);
+    const fetchUserPhoto = async () => {
+        try {
+            const giftBuddy = await actions.getProfilePhoto();
+            const randomIndex = Math.floor(Math.random() * giftBuddy.length);
+            setRandomProfileImage(giftBuddy[randomIndex]);
+            setImageLoaded(true);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
         }
-    }, [store.profileImages]);
+    };
 
+
+    // useEffect(() => {
+    //     if (store.profileImages.length === null) {
+    //         store.actions.getProfilePhoto();
+    //     } else {
+    //         const randomIndex = Math.floor(Math.random() * store.profileImages.length);
+    //         setRandomProfileImage(store.profileImages[randomIndex]);
+    //     }
+    // }, []);
+
+    // useEffect(() => {
+    //     if (store.profileImages.length === null) {
+    //         store.actions.getProfilePhoto();
+    //     } else {
+    //         const randomIndex = Math.floor(Math.random() * store.profileImages.length);
+    //         setRandomProfileImage(store.profileImages[randomIndex]);
+    //     }
+    // }, [store.profileImages]);
+
+    const handleShuffle = () => {
+        fetchUserPhoto();
+    }
 
     const onSubmit = async () => {
         try {
@@ -78,22 +104,22 @@ export const Signup = () => {
 
 
     return (
-        <div className="ontainer mt-5 d-flex justify-content-center">
+        <div className="container mt-5 d-flex justify-content-center">
             <div className="col-md-6 text-center">
                 <h1>Welcome. Signup form:</h1>
-                <div className="alert alert-bg d-flex justify-content-between align-items-center p-5">
-                    <div className="d-flex-column justify-content-center align-items-center align-items-center">
-                        <p>1st <i className="fa-solid fa-arrow-right"></i> Pick your Gift Buddy: </p>
-                        <div className="image-container">
+                <div className="alert alert-bg d-flex justify-content-between align-items-top p-5">
+                    <div className="firstStep d-flex-column justify-content-center align-items-center text-center">
+                        <p><i className="fa-solid fa-arrow-right"></i> Pick your Gift Buddy: </p>
+                        <div className="image-container" id="imageGiftBuddy">
                             {randomProfileImage && <img src={randomProfileImage} className="circle-image" alt="..." />}
                         </div>
                         <div>
-                            <button className="btn mt-1"><i className="fa-solid fa-shuffle"></i></button>
+                            <button onClick={handleShuffle} className="btn mt-3"><i className="fa-solid fa-shuffle"></i></button>
                         </div>
                     </div>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <p>2nd <i className="fa-solid fa-arrow-right"></i> Fill in your data: </p>
-                        <div className="m-3">
+                    <form className="formSignup" onSubmit={handleSubmit(onSubmit)}>
+                        <p className="mb-5"><i className="fa-solid fa-arrow-right"></i> Fill in your data: </p>
+                        <div className="mt-5 mb-4">
                             <input type="text" {...register("email", {
                                 required: true,
                                 pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -101,15 +127,15 @@ export const Signup = () => {
                             {errors.email?.type === 'required' && <p role="alert">Email is required</p>}
                             {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                         </div>
-                        <div className="m-3">
-                            <input type="text" {...register("password", {
+                        <div >
+                            <input className="mb-4" type="text" {...register("password", {
                                 required: true,
                                 pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
                             })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
                             {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
                             {errors.password?.type === 'pattern' && <p role="alert">The password must be at least 8 characters long, including a lowercase, an uppercase and a number.</p>}
                             <div>
-                                <button type="submit" className="btn  mt-3">Submit</button>
+                                <button type="submit" className="btn mt-5">Submit</button>
                             </div>
                         </div>
                     </form>

@@ -58,31 +58,43 @@ export const GiftForm = ({ isEditing }) => {
 
     const onSubmitGift = async () => {
         try {
-            const updatedFormData = {
-                ...formData,
-                user_id: store.currentUser.id
-            };
-            console.log(updatedFormData);
+            const newLink = await actions.transformLink(formData.link);
+            // Actualiza el valor del enlace en el estado local y en el formulario
+            console.log("link nuevo", newLink)
+            setFormData(prevState => ({
+                ...prevState,
+                link: newLink,
+            }));
+            setValue("link", newLink);
+            if (newLink) {
+                const updatedFormData = {
+                    ...formData,
+                    link: newLink,
+                    user_id: store.currentUser.id
+                };
+                console.log(updatedFormData);
 
-            const success = await actions.saveGift(updatedFormData, isEditing, uid, lid, gid);
-            if (success) {
-                await actions.getGiftToStore(uid, lid);
-                await actions.getGiftToStoreAvailable(uid, lid);
-                await actions.getGiftToStorePurchased(uid, lid);
-                setFormData({
-                    title: "",
-                    link: "",
-                    status: "",
-                });
-                navigate(`/user/${store.currentUser.id}/giftlist/${store.currentList[0].id}/allGifts`);
-            } else {
-                // Manejar caso de fallo al guardar el regalo
-                console.error("Failed to save gift");
+                const success = await actions.saveGift(updatedFormData, isEditing, uid, lid, gid);
+                if (success) {
+                    await actions.getGiftToStore(uid, lid);
+                    await actions.getGiftToStoreAvailable(uid, lid);
+                    await actions.getGiftToStorePurchased(uid, lid);
+                    setFormData({
+                        title: "",
+                        link: "",
+                        status: "",
+                    });
+                    navigate(`/user/${store.currentUser.id}/giftlist/${store.currentList[0].id}/allGifts`);
+                } else {
+                    // Manejar caso de fallo al guardar el regalo
+                    console.error("Failed to save gift");
+                }
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error fetching new link:", error);
         }
     };
+
 
 
     return (
@@ -107,11 +119,9 @@ export const GiftForm = ({ isEditing }) => {
                             <input type="text" name="link" {...register("link", {
                                 required: true,
                                 pattern: /^(https:\/\/)([^\s]+)$/,
-                                maxLength: 499
                             })} aria-invalid={errors.link ? "true" : "false"} className="form-control" id="link01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="https://www.example.com/" value={formData.link} onChange={handleInputChange} />
                             {errors.link?.type === 'required' && <p role="alert">Please insert a link </p>}
                             {errors.link?.type === 'pattern' && <p role="alert"> The Link must contain https:// format</p>}
-                            {errors.link?.type === 'maxLength' && <p role="alert"> Url too long</p>}
                         </div>
                     </div>
                     <div className="mb-2">

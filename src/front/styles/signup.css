@@ -1,17 +1,28 @@
-.image-container {
-    width: 150px;
-    height: 150px;
+#imageGiftBuddy {
+    width: 175px;
+    height: 175px;
     overflow: hidden;
     border-radius: 50%;
+    align-self: center;
 }
 
 .circle-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    align-self: center;
 }
 
 .input {
     padding-top: 3px;
     border-radius: 50px;
-  }
+}
+
+.firstStep {
+    height: 70%;
+    width: 40%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
