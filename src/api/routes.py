@@ -17,6 +17,7 @@ CORS(api)
 #CORS(api, resources={"*": {"origins": "*"}})
 
 # RUTAS DE TOKEN 
+# TODO: HACER OTRA RUTA SIN HASHED Y SOLO EMAIL
 @api.route("/token", methods=["POST"])
 def create_token():
     email = request.json.get("email", None)
@@ -34,12 +35,12 @@ def create_token():
     return jsonify(access_token=access_token)
 
 # RUTAS DE MENSAJES (hello es ejemplo)
-@api.route("/hello", methods=["GET"])
-@jwt_required()
-def get_hello():
-    email = get_jwt_identity()
-    dictionary = {"message": "hello User " + email}
-    return jsonify(dictionary)
+# @api.route("/hello", methods=["GET"])
+# @jwt_required()
+# def get_hello():
+#     email = get_jwt_identity()
+#     dictionary = {"message": "hello User " + email}
+#     return jsonify(dictionary)
 
 # RUTAS DE TABLA USER 
 @api.route('/alluser', methods=['GET'])

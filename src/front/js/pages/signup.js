@@ -103,7 +103,7 @@ export const Signup = () => {
             setIsLoading(false);
         } catch (error) {
             console.error("Error:", error);
-            setIsLoading(false);
+            setIsLoading(true);
         }
     };
 
@@ -111,7 +111,7 @@ export const Signup = () => {
     return (
         <div className="container mt-5 d-flex justify-content-center mb-3">
             <div className="col-md-6 text-center">
-                {isLoading && <div><i className="fa-solid fa-gift fa-beat"></i>{" "} Preparing your giftlist...</div>}
+                {isLoading && <div className="loadingMessage mt-5"><i className="fa-solid fa-gift fa-beat m-3"></i>{" "} Preparing your giftlist...</div>}
                 {!isLoading && randomProfileImage && (
                     <div>
                         <h1>Welcome. Signup form:</h1>
