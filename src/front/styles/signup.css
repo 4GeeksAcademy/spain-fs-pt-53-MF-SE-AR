@@ -26,3 +26,17 @@
     text-align: center;
 }
 
+.fa-arrow-right {
+    color: #FA634D !important
+}
+
+@media screen and (max-width: 800px) {
+    .alert-bg {
+        flex-direction: column;
+    }
+
+    .firstStep,
+    .formSignup {
+        width: auto;
+    }
+}

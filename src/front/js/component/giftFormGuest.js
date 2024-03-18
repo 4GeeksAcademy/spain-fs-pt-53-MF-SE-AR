@@ -52,7 +52,7 @@ export const GiftFormGuest = ({ isEditing }) => {
                 ...formData,
                 user_id: store.currentUser.id
             };
-            console.log(updatedFormData);
+            // console.log(updatedFormData);
 
             const success = await actions.saveGift(updatedFormData, isEditing, uid, lid, gid);
             if (success) {

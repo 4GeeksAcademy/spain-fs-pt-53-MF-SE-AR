@@ -17,6 +17,10 @@ export const Profile = () => {
     const { uid, lid } = useParams();
     const navigate = useNavigate();
 
+    const goBack = () => {
+        navigate(-1);
+    };
+
     useEffect(() => {
         actions.syncToken()
         if (store.token === "" || store.token === null) {
@@ -95,7 +99,7 @@ export const Profile = () => {
                             </div>
 
                             <div className="mb-3">
-                                <label className="form-label d-flex justify-content-between">Enter your current password to save changes.<i class="fa-solid fa-circle-exclamation" /></label>
+                                <label className="form-label d-flex justify-content-between">Enter your current password to save changes:<i className="fa-solid fa-circle-exclamation" /></label>
                                 <input type="password" className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
                             </div>
 
@@ -108,9 +112,7 @@ export const Profile = () => {
                     </div>
                 )}
                 <div className="d-grid gap-2 d-md-flex mt-4 justify-content-md-end">
-                    <Link to={`/user/${uid}/giftlist/${lid}/allGifts`}>
-                        <button className="noBgButton btn me-md-2" type="button"><i class="fa-solid fa-less-than"></i> Go back</button>
-                    </Link>
+                    <button className="noBgButton btn me-md-2" onClick={goBack} type="button"><i className="fa-solid fa-less-than"></i> Go back</button>
                 </div>
             </div>
             {showModal && (

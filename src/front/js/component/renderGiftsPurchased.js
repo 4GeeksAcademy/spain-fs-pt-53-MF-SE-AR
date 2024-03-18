@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 
@@ -6,7 +6,12 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 export const RenderGiftsPurchased = () => {
     const { store, actions } = useContext(Context);
     const { uid, lid } = useParams();
-    // const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        setIsLoading(false);
+    }, []);
+
 
 
     const handleDelete = async gid => {
@@ -25,12 +30,12 @@ export const RenderGiftsPurchased = () => {
 
     return (
         <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
-            {store.currentPurchased.length > 0 ? (
+            {!isLoading && store.currentPurchased.length > 0 ? (
                 store.currentPurchased.map((item, index) => (
                     <div key={item.id} className="col">
                         <div className="card">
                             <div className="top-icons-card d-flex justify-content-end p-2">
-                                <i className="fa-solid fa-circle-xmark" onClick={() => handleDelete(item.id)}></i>
+                                <i className="fa-solid fa-circle-xmark" id="fa-close" onClick={() => handleDelete(item.id)}></i>
                             </div>
                             <div className="imgCard text-center">
                                 {/* {randomImage && <img src={randomImage} className="card-img-top" alt="..." />} */}
@@ -100,7 +105,12 @@ export const RenderGiftsPurchased = () => {
                     </div>
                 ))
             ) : (
-                <h2>Oh, looks like nobody has bought any gifts yet! Don't forget, you can share your list using the "share" button up there</h2>
+                <div className="w-100">
+                    {!isLoading ? (
+                        <div><i className="fa-solid fa-gift fa-beat"></i>{" "} Preparing your gifts...</div>
+                    ) : (
+                        <h2>Oh, looks like nobody has bought any gifts yet! Don't forget, you can share your list using the "share" button up there</h2>)}
+                </div>
             )}
         </div>
     );

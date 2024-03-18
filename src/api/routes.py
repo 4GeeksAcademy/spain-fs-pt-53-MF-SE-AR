@@ -50,42 +50,6 @@ def get_all_users():
 
     return jsonify(all_users), 200
 
-# @api.route('/user/<int:user_id>/giftlist/<int:list_id>/gifts/<int:gift_id>', methods=['PUT'])
-# @jwt_required()
-# def update_gift(user_id, list_id,gift_id):
-#     email = get_jwt_identity()
-#     user = User.query.filter_by(email=email, id=user_id).first()
-
-#     if not user:
-#          return jsonify({"msg": "Incorrect user"}), 401
-    
-#     title = request.json.get("title")
-#     link = request.json.get("link")
-#     status = request.json.get("status")
-#     img = request.json.get("img")
-#     list_id = list_id
-
-#     required_fields = [title, link, status, img, list_id]
-#     if any(field is None for field in required_fields):
-#         return jsonify({'error': 'You must fill in all the items'}), 400
-
-#     gift = Gift.query.filter_by(list_id=list_id, id=gift_id).first()
-#     if not gift:
-#         return jsonify({'error': 'Gift not found'}), 404
-
-#     try:
-#         gift.title = title
-#         gift.link = link
-#         gift.status = status
-#         gift.img = img
-#         gift.list_id = list_id
-
-#         db.session.commit()
-#         return jsonify({'response': 'Gift updated successfully'}), 200
-#     except Exception as e:
-#         db.session.rollback()
-#         return jsonify({'error': str(e)}), 400  
-
 @api.route("/user", methods=["POST"])
 def add_user():
     email = request.json.get("email")

@@ -58,21 +58,22 @@ export const GiftForm = ({ isEditing }) => {
 
     const onSubmitGift = async () => {
         try {
-            const newLink = await actions.transformLink(formData.link);
-            // Actualiza el valor del enlace en el estado local y en el formulario
-            console.log("link nuevo", newLink)
-            setFormData(prevState => ({
-                ...prevState,
-                link: newLink,
-            }));
-            setValue("link", newLink);
+            let newLink = formData.link; 
+            if (formData.link.length < 100) {
+            } else {
+                newLink = await actions.transformLink(formData.link);
+                setFormData(prevState => ({
+                    ...prevState,
+                    link: newLink,
+                }));
+                setValue("link", newLink);
+            }
             if (newLink) {
                 const updatedFormData = {
                     ...formData,
                     link: newLink,
                     user_id: store.currentUser.id
                 };
-                console.log(updatedFormData);
 
                 const success = await actions.saveGift(updatedFormData, isEditing, uid, lid, gid);
                 if (success) {

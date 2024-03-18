@@ -56,7 +56,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						const photoUrls = responseData.photos.map(photo => photo.src.original);
 						// Almacena las URLs de las fotos en el store
 						store.guestImages = photoUrls;
-						console.log(store.guestImages)
 						return photoUrls;
 					} else {
 						console.error("Error al buscar la foto:", response.status, response.statusText);
@@ -86,7 +85,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (response.ok) {
 						const responseData = await response.json();
 						const newLink = responseData.link;
-						console.log("shortened link", newLink)
 						return newLink;
 					} else {
 						console.error("Error al acortar el link:", response.status, response.statusText);
@@ -99,6 +97,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			// ACTIONS TOKEN
 
+			// syncToken: () => {
+			// 	const token = sessionStorage.getItem("token");
+			// 	console.log("session loading getting token")
+			// 	if (token && token !== "" && token !== undefined && token !== null) {
+			// 		setStore({ token: token });
+			// 	} else {
+			// 		// Aquí verificamos si el mensaje de error indica que el token ha expirado
+			// 		const errorMessage = 'Token has expired'; // Reemplaza esto con el mensaje de error real si es diferente
+			// 		if (errorMessage.includes('Token has expired')) {
+			// 			alert('Your session has expired. Please log in again.'); // Mostrar alerta de sesión expirada
+			// 		}
+			// 	}
+			// },
 			syncToken: () => {
 				const token = sessionStorage.getItem("token");
 				console.log("session loading getting token")
@@ -116,10 +127,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const data = await resp.json()
 					setStore({ message: data.message })
-					console.log(data.message)
 					return data;
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 
@@ -140,7 +150,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 
 					if (res.status === 200) {
-						alert("Registration complete! Welcome aboard!");
+						// alert("Registration complete! Welcome aboard!");
 						return true;
 					} else if (res.status === 401) {
 						const errorData = await res.json();
@@ -195,7 +205,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 
@@ -225,11 +235,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 							message: data.message
 						}
 					});
-					console.log(store.currentUser);
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 
@@ -256,11 +265,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							message: data.message
 						}
 					});
-					console.log(store.currentUser);
+
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 
@@ -375,7 +384,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					if (res.status === 200) {
-						console.log("Lista creada")
 						return true;
 					} else if (res.status === 401) {
 						const errorData = await res.json();
@@ -398,7 +406,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					console.log(data)
 					// Mapear cada objeto de data y agregarlo a currentList
 					const updatedList = data.map(item => ({
 						id: item.id,
@@ -414,16 +421,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentList: mergedList
 					});
-					console.log(store.currentList);
+
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 			getPublicAllList: async (uid, lid) => {
-				// TODO:REVISAR CUANDO SE TENGA LA ENTRADA PUBLICA
-				console.log(uid, lid)
 				const store = getStore();
 				try {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/guest/${uid}/giftlist/${lid}`, {
@@ -432,8 +437,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					console.log(data)
-					// Mapear cada objeto de data y agregarlo a currentList
+
 					const updatedList = data.map(item => ({
 						id: item.id,
 						user_id: item.user_id,
@@ -448,11 +452,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentList: mergedList
 					});
-					console.log(store.currentList);
+
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 
@@ -507,7 +511,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					if (res.status === 200) {
 						const responseData = await res.json();
-						console.log(responseData.response);
+						// console.log(responseData.response);
 						return true;
 					} else if (res.status === 401) {
 						const errorData = await res.json();
@@ -556,8 +560,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					console.log("regalos conseguido", data)
-					// Mapear cada objeto de data y agregarlo a currentList
+
 					const updatedGiftList = Array.isArray(data) && data.length > 0 ?
 						data.map(item => ({
 							id: item.id,
@@ -568,19 +571,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 							img: item.img,
 						})) : [];
 
-					// Combinar la lista actual con la nueva lista mapeada
+
 					const mergedGiftList = [...updatedGiftList];
 
-					// Actualizar el store con la nueva lista combinada
+
 					setStore({
 						...store,
 						currentGift: mergedGiftList
 					});
-					console.log("Regalos agregados al store", store.currentGift);
+					// console.log("Regalos agregados al store", store.currentGift);
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 			getGiftToStoreAvailable: async (uid, lid) => {
@@ -593,7 +596,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					console.log("regalos available conseguido", data)
+					// console.log("regalos available conseguido", data)
 
 					const updatedGiftAvailableList = Array.isArray(data) && data.length > 0 ?
 						data.map(item => ({
@@ -614,11 +617,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentAvailable: mergedGiftAvailableList
 					});
-					console.log("Regalos available agregados al store ", store.currentAvailable);
+					// console.log("Regalos available agregados al store ", store.currentAvailable);
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 			getGiftToStorePurchased: async (uid, lid) => {
@@ -631,7 +634,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json();
-					console.log("regalos purchased conseguido", data);
+					// console.log("regalos purchased conseguido", data);
 
 					// Verificar si data es un array y tiene al menos un elemento
 					const updatedGiftPurchasedList = Array.isArray(data) && data.length > 0 ?
@@ -652,10 +655,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentPurchased: mergedGiftPurchasedList
 					});
-					console.log("Regalos purchased agregados al store ", store.currentPurchased);
+					// console.log("Regalos purchased agregados al store ", store.currentPurchased);
 					return data;
 				} catch (error) {
-					console.log("Error loading message from backend", error);
+					console.error("Error loading message from backend", error);
 				}
 			},
 
@@ -669,11 +672,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					console.log("regalo encontrado", data)
+					// console.log("regalo encontrado", data)
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 
@@ -686,11 +689,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					console.log("regalo público encontrado", data)
+					// console.log("regalo público encontrado", data)
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 
@@ -705,7 +708,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					console.log("regalos conseguido", data)
+					// console.log("regalos conseguido", data)
 					// Mapear cada objeto de data y agregarlo a currentList
 					const updatedGiftList = Array.isArray(data) && data.length > 0 ?
 						data.map(item => ({
@@ -725,11 +728,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentGift: mergedGiftList
 					});
-					console.log("Regalos agregados al store", store.currentGift);
+					// console.log("Regalos agregados al store", store.currentGift);
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 			getPublicGiftToStoreAvailable: async (uid, lid) => {
@@ -743,7 +746,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					console.log("regalos available conseguido", data)
+					// console.log("regalos available conseguido", data)
 
 					const updatedGiftAvailableList = Array.isArray(data) && data.length > 0 ?
 						data.map(item => ({
@@ -763,11 +766,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentAvailable: mergedGiftAvailableList
 					});
-					console.log("Regalos available agregados al store ", store.currentAvailable);
+					// console.log("Regalos available agregados al store ", store.currentAvailable);
 					return data;
 
 				} catch (error) {
-					console.log("Error loading message from backend", error)
+					console.error("Error loading message from backend", error)
 				}
 			},
 

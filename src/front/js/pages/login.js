@@ -13,14 +13,13 @@ export const Login = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("useEffect Login")
 
         if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
             const user = actions.getUserToStore(email);
             if (!user || !user.id) return console.error("Error al obtener el usuario");
 
             const uid = user.id;
-            console.log("Usuario obtenido:", uid);
+            // console.log("Usuario obtenido:", uid);
 
             const newListSuccess = actions.getAllList(uid);
             if (!newListSuccess || !newListSuccess[0]?.id) return console.error("Error al cargar la lista");
@@ -41,9 +40,9 @@ export const Login = () => {
             if (newGiftPurchasedSuccess === null) {
                 console.warn("No purchased gift found");
             }
-            console.log("usuario ya logado", store)
-            console.log("Regalo agregado exitosamente");
-            console.log("Lista cargada exitosamente");
+            // console.log("usuario ya logado", store)
+            // console.log("Regalo agregado exitosamente");
+            // console.log("Lista cargada exitosamente");
             navigate(`/user/${uid}/giftlist/${lid}/allGifts`);
         } else {
             actions.cleanStore()
@@ -59,7 +58,7 @@ export const Login = () => {
             if (!user || !user.id) return console.error("Error al obtener el usuario");
 
             const uid = user.id;
-            console.log("Usuario obtenido:", uid);
+            // console.log("Usuario obtenido:", uid);
 
             const newListSuccess = await actions.getAllList(uid);
             if (!newListSuccess || !newListSuccess[0]?.id) return console.error("Error al cargar la lista");
@@ -81,8 +80,8 @@ export const Login = () => {
                 console.warn("No purchased gift found");
             }
 
-            console.log("Regalo agregado exitosamente");
-            console.log("Lista cargada exitosamente");
+            // console.log("Regalo agregado exitosamente");
+            // console.log("Lista cargada exitosamente");
             navigate(`/user/${uid}/giftlist/${lid}/allGifts`);
         } catch (error) {
             console.error("Error:", error);
