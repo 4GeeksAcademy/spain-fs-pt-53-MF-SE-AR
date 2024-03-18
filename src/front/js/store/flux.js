@@ -77,7 +77,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							long_url: link,
 						}),
 						headers: {
-							"Authorization": 'Bearer ' + "f0f96f7c8adc781167d218f8ae0ab8aa39338248",
+							"Authorization": 'Bearer ' + "81eae330cbee80e40eb3d71bb98413b00b415d96",
 							'Content-Type': 'application/json'
 						},
 					});
