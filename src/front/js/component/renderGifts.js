@@ -10,7 +10,9 @@ export const RenderGifts = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        setIsLoading(false);
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1500);
     }, []);
 
     const handleDelete = async gid => {
@@ -27,10 +29,13 @@ export const RenderGifts = () => {
         }
     };
 
+    if (isLoading) {
+        return (<div className="loadingMessage mt-5"><i className="fa-solid fa-gift fa-beat m-3"></i>{" "} Preparing your gifts...</div>)
+    }
     return (
         <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
-            {!isLoading && store.currentGift.length > 0 ? (
-                store.currentGift.map((item, index) => (
+            {store.currentGift.length > 0 ? (
+                store.currentGift.map((item) => (
                     <div key={item.id} className="col">
                         <div className="card">
                             <div className="top-icons-card d-flex justify-content-end p-2">
@@ -109,11 +114,7 @@ export const RenderGifts = () => {
                 ))
             ) : (
                 <div className="w-100">
-                    {!isLoading ? (
-                        <div><i className="fa-solid fa-gift fa-beat"></i>{" "} Preparing your gifts...</div>
-                    ) : (
-                        <h2>Oops! It looks like your gift list is empty at the moment. Why not add some gifts to brighten it up? Click the 'Add Gift' button to start adding gifts to your list! 🎁✨</h2>
-                    )}
+                    <h2>Oops! It looks like your gift list is empty at the moment. Why not add some gifts to brighten it up? Click the 'Add Gift' button to start adding gifts to your list! 🎁✨</h2>
                 </div>
             )}
         </div>

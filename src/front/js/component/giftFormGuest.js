@@ -82,10 +82,10 @@ export const GiftFormGuest = ({ isEditing }) => {
                             <span className="input-group-text" id="inputGroup-sizing-default">Title:</span>
                             <input type="text" name="title" {...register("title", {
                                 required: true,
-                                pattern: /^(?=\s*\S)([A-Za-zñÑ0-9\s]){2,}$/
+                                pattern: /^(?=\s*\S)([A-Za-zñÑáéíóúÁÉÍÓÚü0-9\s]){2,}$/
                             })} aria-invalid={errors.title ? "true" : "false"} className="form-control" id="title01" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Add a title for your gift" value={formData.title} disabled />
                             {errors.title?.type === 'required' && <p role="alert">Please insert a title</p>}
-                            {errors.title?.type === 'pattern' && <p role="alert">Title must contain at least 3 letters</p>}
+                            {errors.title?.type === 'pattern' && <p role="alert">Title must contain at least 2 letters</p>}
                         </div>
                     </div>
                     <div className="mb-2">

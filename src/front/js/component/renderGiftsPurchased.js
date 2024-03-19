@@ -9,9 +9,10 @@ export const RenderGiftsPurchased = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        setIsLoading(false);
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1500);
     }, []);
-
 
 
     const handleDelete = async gid => {
@@ -28,9 +29,12 @@ export const RenderGiftsPurchased = () => {
         }
     };
 
+    if (isLoading) {
+        return (<div className="loadingMessage mt-5"><i className="fa-solid fa-gift fa-beat m-3"></i>{" "} Preparing your gifts...</div>)
+    }
     return (
         <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
-            {!isLoading && store.currentPurchased.length > 0 ? (
+            {store.currentPurchased.length > 0 ? (
                 store.currentPurchased.map((item, index) => (
                     <div key={item.id} className="col">
                         <div className="card">
@@ -106,10 +110,7 @@ export const RenderGiftsPurchased = () => {
                 ))
             ) : (
                 <div className="w-100">
-                    {!isLoading ? (
-                        <div><i className="fa-solid fa-gift fa-beat"></i>{" "} Preparing your gifts...</div>
-                    ) : (
-                        <h2>Oh, looks like nobody has bought any gifts yet! Don't forget, you can share your list using the "share" button up there</h2>)}
+                    <h2>Oh, looks like nobody has bought any gifts yet! Don't forget, you can share your list using the "share" button up there</h2>
                 </div>
             )}
         </div>

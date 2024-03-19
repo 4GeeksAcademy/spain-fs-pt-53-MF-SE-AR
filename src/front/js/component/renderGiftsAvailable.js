@@ -9,9 +9,10 @@ export const RenderGiftsAvailable = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        setIsLoading(false);
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1500);
     }, []);
-
 
     const handleDelete = async gid => {
         try {
@@ -27,11 +28,14 @@ export const RenderGiftsAvailable = () => {
         }
     };
 
+    if (isLoading) {
+        return (<div className="loadingMessage mt-5"><i className="fa-solid fa-gift fa-beat m-3"></i>{" "} Preparing your gifts...</div>)
+    }
     return (
         <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
-            {!isLoading && store.currentAvailable.length > 0 ? (
+            {store.currentAvailable.length > 0 ? (
                 store.currentAvailable.map((item, index) => (
-                    <div key={item.id} className="col">
+                    <div key={item.id} className="col cardColumn">
                         <div className="card">
                             {sessionStorage.token ? (
                                 <div className="top-icons-card d-flex justify-content-end p-2">
@@ -116,10 +120,7 @@ export const RenderGiftsAvailable = () => {
                 ))
             ) : (
                 <div className="w-100">
-                    {!isLoading ? (
-                        <div><i className="fa-solid fa-gift fa-beat"></i>{" "} Preparing your gifts...</div>
-                    ) : (
-                        <h2>Maybe all the gifts have been purchased?! There are no available gift to buy in the list.</h2>)}
+                    <h2>Maybe all the gifts have been purchased?! There are no available gift to buy in the list.</h2>
                 </div>
             )}
         </div>

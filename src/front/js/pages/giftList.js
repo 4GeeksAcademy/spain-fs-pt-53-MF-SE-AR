@@ -96,13 +96,11 @@ export const GiftList = () => {
                             <div className="welcoming">
                                 <div className="top-welcoming d-flex align-items-center text-center justify-content-center">
                                     <div className="image-container m-3">
-                                        <img src={store.currentUser.img} className="circle-image" alt="user photo" />
+                                        <img src={store.currentUser.img} className="circle-image" alt="gift buddy photo" />
                                     </div>
                                     <div>
-                                        {/* TODO: LUEGO CAMBIAR EL ROUTES EL MESSAGE PARA QUE SOLO TRAIGA EL NOMBRE O EMAIL. */}
                                         <h5>Welcome</h5>
                                         <p>{store.currentUser.message} </p>
-                                        {/* <h5>{store.currentUser.message}</h5> */}
                                     </div>
                                 </div>
                                 <div className="sideBarLinks align-items-center text-center justify-content-center">
