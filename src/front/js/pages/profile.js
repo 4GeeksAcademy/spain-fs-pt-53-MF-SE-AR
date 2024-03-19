@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { useNavigate, useParams } from "react-router-dom"
 import "../../styles/profile.css";
+import { useForm } from 'react-hook-form';
 
 
 export const Profile = () => {
@@ -16,10 +17,8 @@ export const Profile = () => {
     const [userData, setUserData] = useState(null);
     const { uid, lid } = useParams();
     const navigate = useNavigate();
+    const { register, formState: { errors }, handleSubmit, setValue } = useForm();
 
-    const goBack = () => {
-        navigate(-1);
-    };
 
     useEffect(() => {
         actions.syncToken()
@@ -30,41 +29,37 @@ export const Profile = () => {
         }
     }, []);
 
+
     const fetchUserData = async () => {
         try {
             const user = await actions.getUser();
-            setUserData(user);
-            setName(user.name);
-            setEmail(user.email);
-            setPassword(user.password);
+            setValue(setUserData(user));
+            setValue(setName(user.name));
+            setValue(setEmail(user.email));
+            setValue(setPassword(user.password));
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
     };
 
-    const handleUpdateProfile = async () => {
+    const onSubmitProfile = async () => {
         try {
-            const success = await actions.updateUser(name, email, currentPassword);
+            const success = await actions.updateUser( name, email, currentPassword);
             if (success) {
                 console.log('User profile updated successfully');
                 setIsEditable(false);
                 alert("GREAT! Your profile has been updated.");
             } else {
                 console.error('Failed to update user profile');
+                setName(userData.name);
+                setEmail(userData.email);
+                setPassword('');
                 setIsEditable(false);
-                alert("ERROR: Incorrect password. Changes won't be saved.");
+                alert("ERROR: Incorrect email format or password. Changes won't be saved.");
             }
         } catch (error) {
             console.error('Error updating user profile:', error);
         }
-    };
-
-    const handleOpenDelete = () => {
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
     };
 
     const handleDeleteAccount = async () => {
@@ -82,6 +77,18 @@ export const Profile = () => {
         setShowModal(false);
     };
 
+    const handleOpenDelete = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    const goBack = () => {
+        navigate(-1);
+    };
+
     return (
         <div className="container mt-5 d-flex justify-content-center">
             <div className="col-md-6">
@@ -89,25 +96,29 @@ export const Profile = () => {
                 {userData && (
                     <div className="alert alert-bg">
                         <div className="mb-3">
-                            <div className="mb-3">
+                            <form className="mb-3">
                                 <label className="form-label">Name:</label>
                                 <input type="text" className="form-control" value={name} readOnly={!isEditable} onChange={(e) => setName(e.target.value)} />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">Email:</label>
-                                <input type="text" className="form-control" value={email} readOnly={!isEditable} onChange={(e) => setEmail(e.target.value)} />
-                            </div>
+                            </form>
 
-                            <div className="mb-3">
-                                <label className="form-label d-flex justify-content-between">Enter your current password to save changes:<i className="fa-solid fa-circle-exclamation" /></label>
-                                <input type="password" className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
-                            </div>
+                            <form className="mb-3" onSubmit={handleSubmit(onSubmitProfile)}>
+                                <label className="form-label">Email:</label>
+                                <input type="email" placeholder="Email" {...register("Email", { required: true, pattern: /^\S+@\S+$/i })} className="form-control" value={email} readOnly={!isEditable} onChange={(e) => setEmail(e.target.value)} />
+                            </form>
+
+                            {isEditable ?
+                                <form className="mb-3">
+                                    <label className="form-label d-flex justify-content-between">Enter your current password to save changes:<i className="fa-solid fa-circle-exclamation" /></label>
+                                    <input type="password" className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
+                                </form>
+                                : <></>
+                            }
 
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-center">
                             <button type="button" className="btn mt-3 buttonHeader" onClick={handleOpenDelete}>Delete account</button>
                             {!isEditable && <button type="button" className="btn mt-3" onClick={() => setIsEditable(true)}>Edit</button>}
-                            {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdateProfile}>Save</button>}
+                            {isEditable && <button type="submit" className="btn mt-3" onClick={onSubmitProfile}>Save</button>}
                         </div>
                     </div>
                 )}
