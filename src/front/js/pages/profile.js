@@ -52,7 +52,7 @@ export const Profile = () => {
             } else {
                 console.error('Failed to update user profile');
                 setIsEditable(false);
-                alert("ERROR: Incorrect password. Changes won't be saved.");
+                alert("ERROR: Incorrect email format or password. Changes won't be saved.");
             }
         } catch (error) {
             console.error('Error updating user profile:', error);
@@ -89,19 +89,22 @@ export const Profile = () => {
                 {userData && (
                     <div className="alert alert-bg">
                         <div className="mb-3">
-                            <div className="mb-3">
+                            <form className="mb-3">
                                 <label className="form-label">Name:</label>
                                 <input type="text" className="form-control" value={name} readOnly={!isEditable} onChange={(e) => setName(e.target.value)} />
-                            </div>
-                            <div className="mb-3">
+                            </form>
+                            <form className="mb-3">
                                 <label className="form-label">Email:</label>
-                                <input type="text" className="form-control" value={email} readOnly={!isEditable} onChange={(e) => setEmail(e.target.value)} />
-                            </div>
+                                <input type="email" className="form-control" value={email} readOnly={!isEditable} onChange={(e) => setEmail(e.target.value)} />
+                            </form>
 
-                            <div className="mb-3">
-                                <label className="form-label d-flex justify-content-between">Enter your current password to save changes:<i className="fa-solid fa-circle-exclamation" /></label>
-                                <input type="password" className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
-                            </div>
+                            {isEditable ?
+                                <form className="mb-3">
+                                    <label className="form-label d-flex justify-content-between">Enter your current password to save changes:<i className="fa-solid fa-circle-exclamation" /></label>
+                                    <input type="password" className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
+                                </form>
+                                : <></>
+                            }
 
                         </div>
                         <div className="d-grid gap-2 d-md-flex justify-content-center">
