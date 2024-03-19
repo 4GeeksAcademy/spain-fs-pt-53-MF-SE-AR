@@ -12,14 +12,14 @@ export const Signup = () => {
     const navigate = useNavigate();
     const [randomProfileImage, setRandomProfileImage] = useState("");
 
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
 
     useEffect(() => {
         actions.syncToken()
         if (store.token === "" || store.token === null) {
             fetchUserPhoto();
-            setIsLoading(false)
+            // setIsLoading(false)
         } else {
             navigate("/login");
         }
@@ -103,16 +103,17 @@ export const Signup = () => {
             setIsLoading(false);
         } catch (error) {
             console.error("Error:", error);
-            setIsLoading(true);
+            setIsLoading(false);
         }
     };
 
-
+    if (isLoading) {
+        return (<div className="loadingMessage mt-5 text-center"><i className="fa-solid fa-gift fa-beat m-3"></i>{" "} Preparing your giftlist...</div>)
+    }
     return (
         <div className="container mt-5 d-flex justify-content-center mb-3">
             <div className="col-md-6 text-center">
-                {isLoading && <div className="loadingMessage mt-5"><i className="fa-solid fa-gift fa-beat m-3"></i>{" "} Preparing your giftlist...</div>}
-                {!isLoading && randomProfileImage && (
+                {randomProfileImage && (
                     <div>
                         <h1>Welcome. Signup form:</h1>
                         <div className="alert alert-bg d-flex justify-content-between align-items-top p-5">
