@@ -16,6 +16,8 @@ import { RenderGiftsAvailable } from "./component/renderGiftsAvailable";
 import { RenderGiftsPurchased } from "./component/renderGiftsPurchased";
 import { GiftForm } from "./component/giftForm";
 import { GiftFormGuest } from "./component/giftFormGuest";
+import { Recovery } from "./pages/recovery";
+import { NewPassword } from "./pages/newPassword";
 
 
 const Layout = () => {
@@ -48,6 +50,9 @@ const Layout = () => {
                             <Route element={<GiftFormGuest isEditing />} path="gifts/:gid/edit" />
                         </Route>
                         <Route element={<Profile />} path="/user/:uid/profile" />
+                        <Route element={<Recovery />} path="/recovery" />
+                        {/* TODO: PREGUNTAR PORQUE NO ME ACCEDE AL SERVER-SIDE CON EL TOKEN EN LA URL */}
+                        <Route element={<NewPassword />} path="/reset-password/:uid/:token" />
                         <Route element={<NotFound />} path="*" />
                     </Routes>
                     <Footer />

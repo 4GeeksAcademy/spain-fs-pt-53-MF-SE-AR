@@ -107,11 +107,12 @@ export const Login = () => {
                             required: true
                         })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                         {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
+                        <p><Link to="/recovery">Forgot your password?</Link></p>
                     </div>
                     <button type="submit" className="btn  mt-3" >Submit</button>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 };
 

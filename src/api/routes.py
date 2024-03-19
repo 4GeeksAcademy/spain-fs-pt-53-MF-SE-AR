@@ -34,6 +34,47 @@ def create_token():
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
 
+@api.route("/recoverytoken", methods=["POST"])
+def recovery_token():
+    email = request.json.get("email", None)
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify({"msg": "User not found"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+
+
+# TODO: REVISAR CON DAVID
+@api.route('/reset-password/<int:user_id>', methods=['GET'])
+@jwt_required()
+def recovery_user(user_id):
+    email = get_jwt_identity()
+
+    # El token y el usuario son válidos, continuar con la lógica de recuperación de usuario
+    user = User.query.filter_by(email=email, id=user_id).first()
+
+    if user:
+        if user.name:
+            message = user.name
+        else:
+            message = user.email
+
+        user_data = {
+            "message": message,
+            "name": user.name,
+            "id": user.id,
+            "email": user.email,
+            "img": user.img
+        }
+        return jsonify(user_data), 200
+    else:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+
+
 # RUTAS DE MENSAJES (hello es ejemplo)
 # @api.route("/hello", methods=["GET"])
 # @jwt_required()

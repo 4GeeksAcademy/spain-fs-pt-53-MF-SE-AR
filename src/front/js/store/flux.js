@@ -97,19 +97,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			// ACTIONS TOKEN
 
-			// syncToken: () => {
-			// 	const token = sessionStorage.getItem("token");
-			// 	console.log("session loading getting token")
-			// 	if (token && token !== "" && token !== undefined && token !== null) {
-			// 		setStore({ token: token });
-			// 	} else {
-			// 		// Aquí verificamos si el mensaje de error indica que el token ha expirado
-			// 		const errorMessage = 'Token has expired'; // Reemplaza esto con el mensaje de error real si es diferente
-			// 		if (errorMessage.includes('Token has expired')) {
-			// 			alert('Your session has expired. Please log in again.'); // Mostrar alerta de sesión expirada
-			// 		}
-			// 	}
-			// },
 			syncToken: () => {
 				const token = sessionStorage.getItem("token");
 				console.log("session loading getting token")
@@ -163,6 +150,66 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			recoveryToken: async (email) => {
+				try {
+					const res = await fetch(`${process.env.BACKEND_URL}/api/recoverytoken`, {
+						method: 'POST',
+						body: JSON.stringify({
+							email: email,
+						}),
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+
+					if (res.status === 200) {
+						const data = await res.json();
+						return data.access_token;
+					} else if (res.status === 401) {
+						const errorData = await res.json();
+						alert(errorData.msg);
+						return false;
+					}
+				} catch (error) {
+					console.error("There has been an error:", error);
+					return false;
+				}
+			},
+
+			recoveryUser: async (token) => {
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user`, {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': "Bearer " + token
+						}
+					});
+					const data = await resp.json()
+					return data;
+
+				} catch (error) {
+					console.error("Error loading message from backend", error)
+				}
+			},
+
+			recoveryAccessUser: async (uid,token) => {
+				const store = getStore();
+				try {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/reset-password/${uid}`, {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': "Bearer " + token
+						}
+					});
+					const data = await resp.json()
+					return data;
+
+				} catch (error) {
+					console.error("Error loading message from backend", error)
+				}
+			},
+
 			login: async (email, password) => {
 				try {
 					const res = await fetch(`${process.env.BACKEND_URL}/api/token`, {
@@ -208,6 +255,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error loading message from backend", error)
 				}
 			},
+
+			
 
 			getUserToStore: async () => {
 				const store = getStore();
