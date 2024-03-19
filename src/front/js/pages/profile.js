@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { useNavigate, useParams } from "react-router-dom"
 import "../../styles/profile.css";
+import { useForm } from 'react-hook-form';
 
 
 export const Profile = () => {
@@ -16,10 +17,8 @@ export const Profile = () => {
     const [userData, setUserData] = useState(null);
     const { uid, lid } = useParams();
     const navigate = useNavigate();
+    const { register, formState: { errors }, handleSubmit, setValue } = useForm();
 
-    const goBack = () => {
-        navigate(-1);
-    };
 
     useEffect(() => {
         actions.syncToken()
@@ -42,9 +41,9 @@ export const Profile = () => {
         }
     };
 
-    const handleUpdateProfile = async () => {
+    const onSubmitProfile = async () => {
         try {
-            const success = await actions.updateUser(name, email, currentPassword);
+            const success = await actions.updateUser( name, email, currentPassword);
             if (success) {
                 console.log('User profile updated successfully');
                 setIsEditable(false);
@@ -82,6 +81,10 @@ export const Profile = () => {
         setShowModal(false);
     };
 
+    const goBack = () => {
+        navigate(-1);
+    };
+
     return (
         <div className="container mt-5 d-flex justify-content-center">
             <div className="col-md-6">
@@ -93,9 +96,9 @@ export const Profile = () => {
                                 <label className="form-label">Name:</label>
                                 <input type="text" className="form-control" value={name} readOnly={!isEditable} onChange={(e) => setName(e.target.value)} />
                             </form>
-                            <form className="mb-3">
-                                <label className="form-label">Email:</label>
-                                <input type="email" className="form-control" value={email} readOnly={!isEditable} onChange={(e) => setEmail(e.target.value)} />
+
+                            <form onSubmit={handleSubmit(onSubmitProfile)}>
+                                <input type="email" placeholder="Email" {...register("Email", { required: true, pattern: /^\S+@\S+$/i })} className="form-control" value={email} readOnly={!isEditable} onChange={(e) => setEmail(e.target.value)} />
                             </form>
 
                             {isEditable ?
@@ -110,7 +113,7 @@ export const Profile = () => {
                         <div className="d-grid gap-2 d-md-flex justify-content-center">
                             <button type="button" className="btn mt-3 buttonHeader" onClick={handleOpenDelete}>Delete account</button>
                             {!isEditable && <button type="button" className="btn mt-3" onClick={() => setIsEditable(true)}>Edit</button>}
-                            {isEditable && <button type="button" className="btn mt-3" onClick={handleUpdateProfile}>Save</button>}
+                            {isEditable && <button type="submit" className="btn mt-3" onClick={onSubmitProfile}>Save</button>}
                         </div>
                     </div>
                 )}
