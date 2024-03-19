@@ -29,13 +29,14 @@ export const Profile = () => {
         }
     }, []);
 
+
     const fetchUserData = async () => {
         try {
             const user = await actions.getUser();
-            setUserData(user);
-            setName(user.name);
-            setEmail(user.email);
-            setPassword(user.password);
+            setValue(setUserData(user));
+            setValue(setName(user.name));
+            setValue(setEmail(user.email));
+            setValue(setPassword(user.password));
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -50,20 +51,15 @@ export const Profile = () => {
                 alert("GREAT! Your profile has been updated.");
             } else {
                 console.error('Failed to update user profile');
+                setName(userData.name);
+                setEmail(userData.email);
+                setPassword('');
                 setIsEditable(false);
                 alert("ERROR: Incorrect email format or password. Changes won't be saved.");
             }
         } catch (error) {
             console.error('Error updating user profile:', error);
         }
-    };
-
-    const handleOpenDelete = () => {
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
     };
 
     const handleDeleteAccount = async () => {
@@ -78,6 +74,14 @@ export const Profile = () => {
         } catch (error) {
             console.error("Error deleting account:", error);
         }
+        setShowModal(false);
+    };
+
+    const handleOpenDelete = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
         setShowModal(false);
     };
 
@@ -97,7 +101,8 @@ export const Profile = () => {
                                 <input type="text" className="form-control" value={name} readOnly={!isEditable} onChange={(e) => setName(e.target.value)} />
                             </form>
 
-                            <form onSubmit={handleSubmit(onSubmitProfile)}>
+                            <form className="mb-3" onSubmit={handleSubmit(onSubmitProfile)}>
+                                <label className="form-label">Email:</label>
                                 <input type="email" placeholder="Email" {...register("Email", { required: true, pattern: /^\S+@\S+$/i })} className="form-control" value={email} readOnly={!isEditable} onChange={(e) => setEmail(e.target.value)} />
                             </form>
 
