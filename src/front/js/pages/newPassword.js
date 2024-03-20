@@ -1,26 +1,38 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 export const NewPassword = () => {
     const { store, actions } = useContext(Context);
-    const { register, formState: { errors }, handleSubmit } = useForm();
-    const [email, setEmail] = useState("");
-    const { uid, token } = useParams();
-    const [NewPassword, setNewPassword] = useState("");
+    const { register, formState: { errors }, handleSubmit, setValue } = useForm();
+    // const [email, setEmail] = useState("");
+    const { uid } = useParams();
+    // const [newPassword, setNewPassword] = useState("");
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
+    const token = searchParams.get('token');
+
+    const [formData, setFormData] = useState({
+        email: "",
+        newPassword: "",
+    });
 
     useEffect(() => {
+
         const updatePassword = async () => {
             try {
                 const successNewPassword = await actions.recoveryAccessUser(uid, token);
-                if (!successNewPassword) {
+                if (successNewPassword) {
+                    const emailRecovered = successNewPassword.email
+                    setFormData({
+                        email: emailRecovered,
+                        password: ""
+                    });
+                } else {
                     alert("Error al actualizar la contraseña");
                     navigate(`/recovery`);
-                } else {
-                    console.log(successNewPassword)
                 }
             } catch (error) {
                 console.error("Error:", error);
@@ -30,14 +42,30 @@ export const NewPassword = () => {
         updatePassword();
     }, []);
 
+    useEffect(() => {
+        setValue("email", formData.email);
+        setValue("newPassword", formData.newPassword);
+    }, [formData, setValue]);
+
+    const handleInputChange = evt => {
+        setFormData({
+            ...formData,
+            [evt.target.name]: evt.target.value
+        });
+    };
+
     const createPassword = async () => {
         try {
-            // TODO: AQUI IRAN LAS NUEVAS FUNCIONES PARA CREAR NUEVA CONTRASEÑA
-            // const successNewPassword = await actions.xxxxx();
-            // if (!successNewPassword) {
-            //     return console.error("Error al actualizar password");
-            // }
-
+            // TODO: AQUI IRAN LAS NUEVAS FUNCIONES PARA CREAR NUEVA CONTRASEÑA (PUT)
+            const successNewPassword = await actions.updatePassword(formData.newPassword, token);
+            if (!successNewPassword) {
+                return console.error("Error al actualizar password componente");
+            }
+            setFormData({
+                email: "",
+                password: ""
+            });
+            alert("Password sucessfully updated.")
             navigate(`/login`);
         } catch (error) {
             console.error("Error:", error);
@@ -54,15 +82,15 @@ export const NewPassword = () => {
                         <input type="text" {...register("email", {
                             required: true,
                             pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                        })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Email" />
+                        })} aria-invalid={errors.email ? "true" : "false"} value={formData.email} placeholder="Email" onChange={handleInputChange} disabled />
                         {errors.email?.type === 'required' && <p role="alert">Email is required to login</p>}
                         {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                     </div>
                     <div className="mt-3">
-                        <input type="text"  {...register("password", {
+                        <input type="text"  {...register("newPassword", {
                             required: true
-                        })} aria-invalid={errors.password ? "true" : "false"} value={NewPassword} placeholder="Password" onChange={(e) => setNewPassword(e.target.value)} />
-                        {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
+                        })} aria-invalid={errors.newPassword ? "true" : "false"} value={formData.newPassword} placeholder="Add a new Password" onChange={handleInputChange} />
+                        {errors.newPassword?.type === 'required' && <p role="alert">Password is required</p>}
                     </div>
                     <button type="submit" className="btn  mt-3" >Update Password</button>
                 </div>

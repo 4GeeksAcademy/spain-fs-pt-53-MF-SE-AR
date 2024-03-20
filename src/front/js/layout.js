@@ -52,7 +52,7 @@ const Layout = () => {
                         <Route element={<Profile />} path="/user/:uid/profile" />
                         <Route element={<Recovery />} path="/recovery" />
                         {/* TODO: PREGUNTAR PORQUE NO ME ACCEDE AL SERVER-SIDE CON EL TOKEN EN LA URL */}
-                        <Route element={<NewPassword />} path="/reset-password/:uid/:token" />
+                        <Route element={<NewPassword />} path="/reset-password/:uid" />
                         <Route element={<NotFound />} path="*" />
                     </Routes>
                     <Footer />

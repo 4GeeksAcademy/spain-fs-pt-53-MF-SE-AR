@@ -193,7 +193,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			recoveryAccessUser: async (uid,token) => {
+			recoveryAccessUser: async (uid, token) => {
 				const store = getStore();
 				try {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/reset-password/${uid}`, {
@@ -204,7 +204,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const data = await resp.json()
 					return data;
-
+					// TODO: MANEJO DE ERRORES EXPIRES
 				} catch (error) {
 					console.error("Error loading message from backend", error)
 				}
@@ -256,7 +256,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			
+
 
 			getUserToStore: async () => {
 				const store = getStore();
@@ -394,6 +394,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				} catch (error) {
 					console.error('Error updating profile:', error);
+					return false;
+				}
+			},
+
+			updatePassword: async (newPassword, token) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/new-password`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': "Bearer " + token
+						},
+						body: JSON.stringify({
+							newPassword: newPassword,
+						}),
+					});
+
+					if (response.status === 200) {
+						console.log("Password updated")
+						return true;
+					} else if (response.status === 401) {
+						const errorData = await res.json();
+						alert(errorData.msg)
+						return false
+					};
+				} catch (error) {
+					console.error('Error updating password:', error);
 					return false;
 				}
 			},

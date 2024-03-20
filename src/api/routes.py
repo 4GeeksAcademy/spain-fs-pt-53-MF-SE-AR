@@ -172,7 +172,28 @@ def update_user():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
-      
+    
+@api.route("/new-password", methods=["PUT"])
+@jwt_required()
+def update_password():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify({"msg": "User not found"}), 401
+    
+    new_password = request.json.get("newPassword")
+    hashed_password = generate_password_hash(new_password).decode('utf-8')
+    
+
+    try:
+        user.password = hashed_password
+        db.session.commit()
+        return jsonify({'response': 'User updated successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+
 # TODO: AQUI ESTAN LOS PUT DE SABRI
     
 # @api.route("/user", methods=["PUT"])

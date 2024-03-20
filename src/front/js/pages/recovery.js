@@ -25,7 +25,7 @@ export const Recovery = () => {
 
             console.log("datos usuario", sucessRecoveryUser)
             console.log("id usuario en componente", sucessRecoveryUser.id)
-            const recoveryUrl = `${process.env.FRONT_URL}/reset-password/${sucessRecoveryUser.id}/${successRecoveryToken}`
+            const recoveryUrl = `${process.env.FRONT_URL}/reset-password/${sucessRecoveryUser.id}?token=${successRecoveryToken}`
             console.log(recoveryUrl)
             // TODO: AGREGAR ENVIO DE EMAIL CON LINK
             alert("Recovery link sent! Please check your email")
