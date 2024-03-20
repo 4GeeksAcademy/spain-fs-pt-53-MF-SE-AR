@@ -1,3 +1,12 @@
+.container {
+    align-items: center;
+    justify-content: center;
+}
+
+#imageGiftBuddy.container {
+    padding: 0%;
+}
+
 #imageGiftBuddy {
     width: 175px;
     height: 175px;
@@ -11,6 +20,7 @@
     height: 100%;
     object-fit: cover;
     align-self: center;
+    align-items: center;
 }
 
 .input {
@@ -20,23 +30,44 @@
 
 .firstStep {
     height: 70%;
-    width: 40%;
-    align-items: center;
-    justify-content: center;
+    width: auto;
     text-align: center;
+}
+
+.formSignup {
+    height: auto;
+    width: auto;
+    text-align: center;
+}
+
+.dataSignup {
+    height: 175px;
+    display: grid;
+    align-items: center;
+    align-content: space-evenly;
+    margin: 0%;
 }
 
 .fa-arrow-right {
     color: #FA634D !important
 }
 
+.form-box {
+    width: 60%;
+}
+
 @media screen and (max-width: 850px) {
     .alert-bg {
         flex-direction: column;
+        margin: auto;
     }
 
     .firstStep,
     .formSignup {
         width: auto;
+    }
+
+    .form-box {
+        width: 100%;
     }
 }
