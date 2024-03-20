@@ -95,7 +95,7 @@ export const Signup = () => {
                     <div>
                         <h1>Welcome, newbie!</h1>
                         <div className="row alert alert-bg justify-content-between">
-                            <div className="col firstStep ">
+                            <div className="col firstStep">
                                 <p><i className="fa-solid fa-arrow-right" ></i> Pick your Gift Buddy: </p>
                                 <div className="container " id="imageGiftBuddy">
                                     {randomProfileImage && <img src={randomProfileImage} className="circle-image" alt="..." />}

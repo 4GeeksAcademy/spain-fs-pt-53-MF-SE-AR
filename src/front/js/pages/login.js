@@ -89,7 +89,7 @@ export const Login = () => {
     };
 
     return (
-        <div className="container mt-5 d-flex justify-content-center">
+        <div className="container mt-5 d-flex justify-content-center mb-3">
             <form className="col-12 form-box text-center" onSubmit={handleSubmit(onSubmitLogin)}>
                 <h1>Are you a member?</h1>
                 <div className="alert alert-bg">

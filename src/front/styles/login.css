@@ -3,14 +3,13 @@
     justify-content: center;
 }
 
-.form-box {
-    width: 60%;
+.form-control {
+    justify-content: center;
+    display: grid;
+    align-items: center;
+    align-content: space-evenly;
 }
 
-.data-input {
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem
-}
 
 @media screen and (max-width: 570px) {
     .form-box {
