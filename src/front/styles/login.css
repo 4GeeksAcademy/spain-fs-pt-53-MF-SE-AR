@@ -1,5 +1,15 @@
 .container {
     align-items: center;
     justify-content: center;
+}
+
+.form-box {
+    width: 60%;
+}
+
+@media screen and (max-width: 570px) {
+    .form-box {
+        width: 100%;
+    }
 
 }
