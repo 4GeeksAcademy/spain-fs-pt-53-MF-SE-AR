@@ -108,7 +108,7 @@ export const Signup = () => {
                                 <p className=""><i className="fa-solid fa-arrow-right" ></i> Fill in your data: </p>
                                 <div className="dataSignup">
                                     {/* <div className=""> */}
-                                    <input className="" type="text" {...register("email", {
+                                    <input className="form-control" type="text" {...register("email", {
                                         required: true,
                                         pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                                     })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Your email" onChange={(e) => setEmail(e.target.value)} />
@@ -116,7 +116,7 @@ export const Signup = () => {
                                     {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                                     {/* </div> */}
                                     {/* <div className=""> */}
-                                    <input className="" type="text" {...register("password", {
+                                    <input className="form-control" type="text" {...register("password", {
                                         required: true,
                                         pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
                                     })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />

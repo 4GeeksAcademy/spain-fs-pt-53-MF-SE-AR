@@ -95,7 +95,7 @@ export const Login = () => {
                 <div className="alert alert-bg">
                     <p>If you are a newbie, you can <Link to="/signup">sign up here!</Link></p>
                     <div className="mt-3">
-                        <input className="col-6" type="text" {...register("email", {
+                        <input className="form-control" type="text" {...register("email", {
                             required: true,
                             pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                         })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
@@ -103,7 +103,7 @@ export const Login = () => {
                         {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                     </div>
                     <div className="mt-3">
-                        <input className="col-6" type="text"  {...register("password", {
+                        <input className="form-control" type="text"  {...register("password", {
                             required: true
                         })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                         {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
