@@ -85,7 +85,7 @@ export const RenderGiftsPurchased = () => {
                                     <li className="list-group-item">
                                         <div className="input-group mb-3">
                                             <label className="input-group-text" htmlFor={`status${item.id}`}>
-                                                Estatus:
+                                                Status:
                                             </label>
                                             <select
                                                 className="form-select"
@@ -110,7 +110,9 @@ export const RenderGiftsPurchased = () => {
                 ))
             ) : (
                 <div className="w-100">
-                    <h2>Oh, looks like nobody has bought any gifts yet! Don't forget, you can share your list using the "share" button up there</h2>
+                    <h2>Oh! It looks like nobody has bought any gifts yet... 🎁<br></br>
+                    <br></br>
+                    Don't forget, you can share your list  by using the "share" button up there. ✨</h2>
                 </div>
             )}
         </div>
