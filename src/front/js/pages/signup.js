@@ -19,7 +19,6 @@ export const Signup = () => {
         actions.syncToken()
         if (store.token === "" || store.token === null) {
             fetchUserPhoto();
-            // setIsLoading(false)
         } else {
             navigate("/login");
         }
@@ -35,28 +34,9 @@ export const Signup = () => {
         }
     };
 
-
-    // useEffect(() => {
-    //     if (store.profileImages.length === null) {
-    //         store.actions.getProfilePhoto();
-    //     } else {
-    //         const randomIndex = Math.floor(Math.random() * store.profileImages.length);
-    //         setRandomProfileImage(store.profileImages[randomIndex]);
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     if (store.profileImages.length === null) {
-    //         store.actions.getProfilePhoto();
-    //     } else {
-    //         const randomIndex = Math.floor(Math.random() * store.profileImages.length);
-    //         setRandomProfileImage(store.profileImages[randomIndex]);
-    //     }
-    // }, [store.profileImages]);
-
     const handleShuffle = () => {
         fetchUserPhoto();
-    }
+    };
 
     const onSubmit = async () => {
 
@@ -72,7 +52,6 @@ export const Signup = () => {
             if (!user || !user.id) return console.error("Error al obtener el usuario");
 
             const uid = user.id;
-            // console.log("Usuario obtenido:", uid);
             setEmail("");
             setPassword("");
             const newListCreationSuccess = await actions.newList(uid);
@@ -97,8 +76,6 @@ export const Signup = () => {
                 console.warn("No purchased gift found");
             }
             alert("Registration complete! Welcome aboard!");
-            // console.log("Regalo agregado exitosamente");
-            // console.log("Lista cargada exitosamente");
             navigate(`/user/${uid}/giftlist/${lid}/allGifts`);
             setIsLoading(false);
         } catch (error) {
@@ -109,43 +86,46 @@ export const Signup = () => {
 
     if (isLoading) {
         return (<div className="loadingMessage mt-5 text-center"><i className="fa-solid fa-gift fa-beat m-3"></i>{" "} Preparing your giftlist...</div>)
-    }
+    };
+
     return (
         <div className="container mt-5 d-flex justify-content-center mb-3">
-            <div className="col-md-6 text-center">
+            <div className="col-12 form-box text-center">
                 {randomProfileImage && (
                     <div>
-                        <h1>Welcome. Signup form:</h1>
-                        <div className="alert alert-bg d-flex justify-content-between align-items-top p-5">
-                            <div className="firstStep d-flex-column justify-content-center align-items-center text-center">
+                        <h1>Welcome, newbie!</h1>
+                        <div className="row alert alert-bg justify-content-between">
+                            <div className="col firstStep">
                                 <p><i className="fa-solid fa-arrow-right" ></i> Pick your Gift Buddy: </p>
-                                <div className="image-container" id="imageGiftBuddy">
+                                <div className="container " id="imageGiftBuddy">
                                     {randomProfileImage && <img src={randomProfileImage} className="circle-image" alt="..." />}
                                 </div>
                                 <div>
-                                    <button onClick={handleShuffle} className="btn mt-3 mb-3"><i className="fa-solid fa-shuffle"></i></button>
+                                    <button onClick={handleShuffle} className="btn mt-4 mb-4"><i className="fa-solid fa-shuffle"></i></button>
                                 </div>
                             </div>
-                            <form className="formSignup" onSubmit={handleSubmit(onSubmit)}>
-                                <p className="mb-5"><i className="fa-solid fa-arrow-right" ></i> Fill in your data: </p>
-                                <div className="mt-5 mb-4">
-                                    <input type="text" {...register("email", {
+                            <form className="col formSignup" onSubmit={handleSubmit(onSubmit)}>
+                                <p className=""><i className="fa-solid fa-arrow-right" ></i> Fill in your data: </p>
+                                <div className="dataSignup">
+                                    {/* <div className=""> */}
+                                    <input className="form-control" type="text" {...register("email", {
                                         required: true,
                                         pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                                     })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Your email" onChange={(e) => setEmail(e.target.value)} />
                                     {errors.email?.type === 'required' && <p role="alert">Email is required</p>}
                                     {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
-                                </div>
-                                <div >
-                                    <input className="mb-4" type="text" {...register("password", {
+                                    {/* </div> */}
+                                    {/* <div className=""> */}
+                                    <input className="form-control" type="password" {...register("password", {
                                         required: true,
                                         pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
                                     })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
                                     {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
                                     {errors.password?.type === 'pattern' && <p role="alert">The password must be at least 8 characters long, including a lowercase, an uppercase and a number.</p>}
-                                    <div>
-                                        <button type="submit" className="btn mt-5">Submit</button>
-                                    </div>
+                                    {/* </div> */}
+                                </div>
+                                <div>
+                                    <button type="submit" className="btn mt-4 mb-4 ">Submit</button>
                                 </div>
                             </form>
                         </div>

@@ -89,13 +89,13 @@ export const Login = () => {
     };
 
     return (
-        <div className="container mt-5 d-flex justify-content-center">
-            <form className="col-md-6 text-center" onSubmit={handleSubmit(onSubmitLogin)}>
-                <h1>Login</h1>
+        <div className="container mt-5 d-flex justify-content-center mb-3">
+            <form className="col-12 form-box text-center" onSubmit={handleSubmit(onSubmitLogin)}>
+                <h1>Are you a member?</h1>
                 <div className="alert alert-bg">
-                    <p>Newbie? <Link to="/signup">Sign up!</Link></p>
+                    <p>Newbie?<Link to="/signup">Sign up here!</Link></p>
                     <div className="mt-3">
-                        <input type="text" {...register("email", {
+                        <input className="form-control" type="text" {...register("email", {
                             required: true,
                             pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                         })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
@@ -103,7 +103,7 @@ export const Login = () => {
                         {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                     </div>
                     <div className="mt-3">
-                        <input type="text"  {...register("password", {
+                        <input className="form-control" type="password"  {...register("password", {
                             required: true
                         })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                         {errors.password?.type === 'required' && <p role="alert">Password is required</p>}

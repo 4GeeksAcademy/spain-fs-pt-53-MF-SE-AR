@@ -4,8 +4,8 @@ import SimpleLogo from "../../img/Logo-solo-tr.png"
 
 export const Footer = () => (
 	<footer className="footer sticky-sm-bottom container-fluid">
-		<div className="nav-fill d-flex">
-			<p className="nav-item">
+		<div className="container nav-fill d-flex">
+			<p className="nav-item footer-text">
 				🎁 Made by{" "}
 				<a href="https://github.com/SabrinaESMO">Sesmo.dev</a>
 				<span className="name-separator"> & </span>

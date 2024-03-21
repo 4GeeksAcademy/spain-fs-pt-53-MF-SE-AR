@@ -9,7 +9,6 @@ export const GiftList = () => {
     const { store, actions } = useContext(Context);
     const { uid, lid, gid } = useParams();
     const navigate = useNavigate();
-    // const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [randomGuestImage, setRandomGuestImage] = useState("");
 
 
@@ -17,7 +16,6 @@ export const GiftList = () => {
         const fetchData = async () => {
             try {
                 if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
-                    // Si hay un token y la ruta actual no contiene la palabra "user", redirige a "/login"
                     if (!window.location.pathname.includes("user")) {
                         actions.logout()
                         return;
@@ -29,7 +27,6 @@ export const GiftList = () => {
                     await actions.getGiftToStoreAvailable(uid, lid);
                     await actions.getGiftToStorePurchased(uid, lid);
                 } else {
-                    // TODO:PENDING QUE SI DA ERROR ALGUNA DE LAS FUNCIONES DE AQUI ABAJO MANDE AL INVITADO A "/"
                     actions.syncToken();
                     await actions.getPublicUserToStore(uid, lid);
                     await actions.getPublicAllList(uid, lid);
@@ -49,7 +46,6 @@ export const GiftList = () => {
         const fetchData = async () => {
             try {
                 if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
-                    // Si hay un token y la ruta actual no contiene la palabra "user", redirige a "/login"
                     if (!window.location.pathname.includes("user")) {
                         actions.logout()
                         return;
@@ -61,7 +57,6 @@ export const GiftList = () => {
                     await actions.getGiftToStoreAvailable(uid, lid);
                     await actions.getGiftToStorePurchased(uid, lid);
                 } else {
-                    // TODO:PENDING QUE SI DA ERROR ALGUNA DE LAS FUNCIONES DE AQUI ABAJO MANDE AL INVITADO A "/"
                     actions.syncToken();
                     await actions.getPublicUserToStore(uid, lid);
                     await actions.getPublicAllList(uid, lid);
@@ -128,8 +123,8 @@ export const GiftList = () => {
                         )}
                     </nav>
                 </div>
-                <div className="col-sm-9 p-5">
-                    <div className="row" id="giftRow">
+                <div className="col-sm-9">
+                    <div className="row p-5" id="giftRow">
                         <ListHeader uid={uid} />
                         <Outlet />
                     </div>

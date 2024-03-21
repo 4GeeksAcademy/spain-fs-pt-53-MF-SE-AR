@@ -1,7 +1,46 @@
-/*
-    home.css: This website contains selectors only used in home.css
+.home-welcome {
+    justify-content: center;
+    padding-bottom: 20px;
+    align-items: center;
+    text-align: center;
+    display: flex;
+}
 
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+.home-steps {
+    margin: auto;
+}
+
+.box-steps {
+    vertical-align: middle;
+    margin-right: 20px;
+    padding-bottom: 10px;
+    width: auto;
+}
+
+.img-drawing {
+    vertical-align: middle;
+    align-content: center;
+    width: 300px;
+}
+
+.h2 {
+    margin: 20px;
+}
+
+@media screen and (max-width: 570px) {
+    .box-steps {
+        vertical-align: middle;
+        margin: 20px;
+        padding-bottom: 10px;
+        width: auto;
+    }
+
+    .home-steps {
+        justify-content: center;
+        padding-bottom: 20px;
+        align-items: center;
+        text-align: center;
+        display: flex;
+    }
+
+}

@@ -20,6 +20,14 @@ body {
   width: 80px;
 }
 
+.fa-solid {
+  color: #FA634D;
+}
+
+.fa-shuffle {
+  color: white;
+}
+
 .btn {
   padding: 5px 20px;
   border-radius: 50px;
@@ -28,30 +36,20 @@ body {
   color: white;
   font-weight: 500;
   text-transform: uppercase;
-  /* font-size: 15px;*/
-  /* transition: all 0.2s ease; */
+
 }
 
 .btn:hover {
-  /* letter-spacing: 2px; */
-  background-color: #741b0d;
+  background-color: #de4a34;
   color: white;
-  border: 2px solid #741b0d;
-  /* box-shadow: #FF6347 0px 7px 29px 0px; */
+  border: 2px solid #de4a34;
+  font-weight: 500;
 }
 
-/* .btn:active {
-  letter-spacing: 2px;
-  background-color: white;
-  color: white;
-  box-shadow: #FA634D ;
-  transform: translateY(5px);
-} */
-
-.input {
+/* .input {
   padding-top: 3px;
   border-radius: 50px;
-}
+} */
 
 .alert-bg {
   padding: 20px;
@@ -62,35 +60,23 @@ body {
   border-width: 3px;
 }
 
-.navbar {
-  background-color: #F7F7F7;
-}
-
 .sidebar-space {
   background-color: #c4c4c4;
-
 }
 
 .footer {
   background-color: #F7F7F7;
-  padding: 10px 30px 0px 30px;
+  padding: 5px;
   position: fixed;
   bottom: 0;
   width: 100%;
 }
 
 .footer-logo {
-  width: 50px;
+  width: 40px;
 }
 
-.img-drawing {
-  width: 300px;
-}
-
-.fa-solid {
-  color: #FA634D;
-}
-
-.fa-shuffle {
-  color: white;
+.footer-text {
+  margin: auto;
+  width: 50%;
 }

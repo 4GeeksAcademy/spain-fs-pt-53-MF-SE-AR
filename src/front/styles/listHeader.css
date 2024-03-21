@@ -1,14 +1,9 @@
 .buttonHeader {
     background-color: white;
     border: 2px solid #FA634D;
-    font-weight: 400;
+    font-weight: 500;
     color: #741b0d;
     cursor: default !important;
     border-radius: 50px;
     padding: 5px 20px;
 }
-
-/* #buttonHeader:hover {
-    background-color: #741b0d;
-    color: white;
-} */

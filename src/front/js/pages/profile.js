@@ -94,7 +94,7 @@ export const Profile = () => {
             <div className="col-md-6">
                 <h1 className="text-center">Profile</h1>
                 {userData && (
-                    <div className="alert alert-bg">
+                    <div className="alert alert-bg ">
                         <div className="mb-3">
                             <form className="mb-3">
                                 <label className="form-label">Name:</label>

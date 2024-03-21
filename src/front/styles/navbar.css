@@ -1,5 +1,10 @@
 .noBgButton {
-    font-weight: 400;
+    font-weight: 500;
     color: #741b0d;
     background: none;
 }
+
+.navbar {
+    background-color: #F7F7F7;
+    box-shadow: 0 2px 7px 0 #00000033;
+  }
