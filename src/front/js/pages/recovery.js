@@ -13,7 +13,6 @@ export const Recovery = () => {
 
     const sendLink = async () => {
         try {
-            // TODO: AQUI IRAN LAS NUEVAS FUNCIONES PARA COMPROBAR EMAIL Y MANDAR LINK
             const successRecoveryToken = await actions.recoveryToken(email);
             if (!successRecoveryToken) {
                 return console.error("Error. token created");
@@ -32,15 +31,7 @@ export const Recovery = () => {
 
             const userEmail = email;
             console.log(recoveryUrl, email)
-            // const sendEmail = await actions.sendEmail(userEmail, recoveryUrl)
-            // if (!sendEmail) {
-            //     return console.error("Error. No email sent");
-            // }
-            console.log("datos usuario", sucessRecoveryUser)
-            console.log("id usuario en componente", sucessRecoveryUser.id)
-
-            console.log(recoveryUrl)
-            // TODO: AGREGAR ENVIO DE EMAIL CON LINK
+            setEmail("")
             alert("Recovery link sent! Please check your email")
 
         } catch (error) {

@@ -44,18 +44,18 @@ export const Profile = () => {
 
     const onSubmitProfile = async () => {
         try {
-            const success = await actions.updateUser( name, email, currentPassword);
+            const success = await actions.updateUser(name, email, currentPassword);
             if (success) {
                 console.log('User profile updated successfully');
                 setIsEditable(false);
-                alert("GREAT! Your profile has been updated.");
+                alert("Great! Your profile has been updated.");
             } else {
                 console.error('Failed to update user profile');
                 setName(userData.name);
                 setEmail(userData.email);
                 setPassword('');
                 setIsEditable(false);
-                alert("ERROR: Incorrect email format or password. Changes won't be saved.");
+                alert("Error: Incorrect email format or password. Changes won't be saved.");
             }
         } catch (error) {
             console.error('Error updating user profile:', error);
