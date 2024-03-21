@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import "../../styles/renderGifts.css";
+
 
 
 export const RenderGiftsAvailable = () => {
@@ -35,7 +37,7 @@ export const RenderGiftsAvailable = () => {
         <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
             {store.currentAvailable.length > 0 ? (
                 store.currentAvailable.map((item, index) => (
-                    <div key={item.id} className="col cardColumn">
+                    <div key={item.id} className="col cardColumn gift-col">
                         <div className="card">
                             {sessionStorage.token ? (
                                 <div className="top-icons-card d-flex justify-content-end p-2">
@@ -49,9 +51,9 @@ export const RenderGiftsAvailable = () => {
                             <div className="card-body">
                                 <ul className="list-group list-group-flush">
                                     <li className="list-group-item">
-                                        <div className="input-group mb-3">
+                                        <div className="input-group">
                                             <span className="input-group-text" id={`title${item.id}`}>
-                                                Título:
+                                                Title:
                                             </span>
                                             <input
                                                 type="text"
@@ -65,7 +67,7 @@ export const RenderGiftsAvailable = () => {
                                         </div>
                                     </li>
                                     <li className="list-group-item">
-                                        <div className="input-group mb-3">
+                                        <div className="input-group">
                                             <span className="input-group-text" id={`link${item.id}`}>
                                                 Link:
                                             </span>
@@ -85,7 +87,7 @@ export const RenderGiftsAvailable = () => {
                                         </div>
                                     </li>
                                     <li className="list-group-item">
-                                        <div className="input-group mb-3">
+                                        <div className="input-group">
                                             <label className="input-group-text" htmlFor={`status${item.id}`}>
                                                 Status:
                                             </label>
@@ -120,9 +122,8 @@ export const RenderGiftsAvailable = () => {
                 ))
             ) : (
                 <div className="w-100">
-                    <h2>There are no available gifts to buy on the list. 🎁<br></br>
-                        <br></br>
-                        Maybe all the gifts have been purchased? ✨</h2>
+                    <h5>There are no available gifts to buy on the list.<br></br>
+                        Maybe all the gifts have been purchased?</h5>
                 </div>
             )}
         </div>

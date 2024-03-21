@@ -129,7 +129,9 @@ export const Profile = () => {
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">
-                        <span className="close" onClick={handleCloseModal}>&times;</span>
+                        <div className="top-icons-card d-flex justify-content-end p-2">
+                            <i className="fa-solid fa-circle-xmark" id="fa-close-m" onClick={handleCloseModal}></i>
+                        </div>
                         <h2>Are you sure you want to delete your account?</h2>
                         <button className="btn mt-3" onClick={handleCloseModal}>No, cancel.</button>
                         <button className="btn mt-3 buttonHeader" onClick={handleDeleteAccount}>Yes, delete.</button>
