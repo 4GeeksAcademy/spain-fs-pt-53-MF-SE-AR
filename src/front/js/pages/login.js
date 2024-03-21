@@ -93,7 +93,7 @@ export const Login = () => {
             <form className="col-12 form-box text-center" onSubmit={handleSubmit(onSubmitLogin)}>
                 <h1>Are you a member?</h1>
                 <div className="alert alert-bg">
-                    <p>If you are a newbie, you can <Link to="/signup">sign up here!</Link></p>
+                    <p>Newbie?<Link to="/signup">Sign up here!</Link></p>
                     <div className="mt-3">
                         <input className="form-control" type="text" {...register("email", {
                             required: true,
@@ -103,7 +103,7 @@ export const Login = () => {
                         {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                     </div>
                     <div className="mt-3">
-                        <input className="form-control" type="text"  {...register("password", {
+                        <input className="form-control" type="password"  {...register("password", {
                             required: true
                         })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                         {errors.password?.type === 'required' && <p role="alert">Password is required</p>}

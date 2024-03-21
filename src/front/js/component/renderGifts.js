@@ -36,17 +36,17 @@ export const RenderGifts = () => {
         <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
             {store.currentGift.length > 0 ? (
                 store.currentGift.map((item) => (
-                    <div key={item.id} className="col">
+                    <div key={item.id} className="col gift-col">
                         <div className="card">
                             <div className="top-icons-card d-flex justify-content-end p-2">
                                 <i className="fa-solid fa-circle-xmark" id="fa-close" onClick={() => handleDelete(item.id)}></i>
                             </div>
-                            <div className="imgCard text-center">
-                            </div>
+                            {/* <div className="imgCard text-center">
+                            </div> */}
                             <div className="card-body">
                                 <ul className="list-group list-group-flush">
                                     <li className="list-group-item">
-                                        <div className="input-group mb-3">
+                                        <div className="input-group">
                                             <span className="input-group-text" id={`title${item.id}`}>
                                                 Título:
                                             </span>
@@ -62,7 +62,7 @@ export const RenderGifts = () => {
                                         </div>
                                     </li>
                                     <li className="list-group-item">
-                                        <div className="input-group mb-3">
+                                        <div className="input-group">
                                             <span className="input-group-text" id={`link${item.id}`}>
                                                 Link:
                                             </span>
@@ -79,7 +79,7 @@ export const RenderGifts = () => {
                                         </div>
                                     </li>
                                     <li className="list-group-item">
-                                        <div className="input-group mb-3">
+                                        <div className="input-group">
                                             <label className="input-group-text" htmlFor={`status${item.id}`}>
                                                 Estatus:
                                             </label>

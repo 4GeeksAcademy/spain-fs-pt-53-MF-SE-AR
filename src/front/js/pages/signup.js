@@ -116,7 +116,7 @@ export const Signup = () => {
                                     {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                                     {/* </div> */}
                                     {/* <div className=""> */}
-                                    <input className="form-control" type="text" {...register("password", {
+                                    <input className="form-control" type="password" {...register("password", {
                                         required: true,
                                         pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
                                     })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
