@@ -34,7 +34,6 @@ export const ListHeader = () => {
         <div className="d-flex justify-content-between w-100">
             <div className="list-header">
                 <div className="dropdown">
-                    {/* TODO: CONSULTAR CON SABRI SI LO DEJO ASI O QUE PARA EL USUARIO SI TENGA EL DROPDOWN */}
                     <button className="buttonHeader" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {listName}
                     </button>

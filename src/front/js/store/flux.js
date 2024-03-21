@@ -138,7 +138,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 
 					if (res.status === 200) {
-						// alert("Registration complete! Welcome aboard!");
 						return true;
 					} else if (res.status === 401) {
 						const errorData = await res.json();
@@ -207,9 +206,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 							'Authorization': "Bearer " + token
 						}
 					});
+					if (resp.status === 401) {
+						const errorData = await resp.json();
+						alert("Your token has expired. Please request a new one.")
+						console.log(errorData)
+						return false;
+					}
 					const data = await resp.json()
 					return data;
-					// TODO: MANEJO DE ERRORES EXPIRES
 				} catch (error) {
 					console.error("Error loading message from backend", error)
 				}
@@ -253,6 +257,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							'Authorization': `Bearer ${sessionStorage.getItem('token')}`
 						}
 					});
+					if (resp.status === 401) {
+						const errorData = await resp.json();
+						alert(errorData.msg);
+						return false;
+					}
 					const data = await resp.json()
 					return data;
 
@@ -604,33 +613,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false;
 				}
 			},
-			// TODO: EJEMPLO PARA USAR POST Y PUT EN MISMA FUNCION
-			// saveContact: (formData, isEditing, id) => {
-			// 	const url = isEditing ? `https://playground.4geeks.com/apis/fake/contact/${id}` : "https://playground.4geeks.com/apis/fake/contact/";
 
-			// 	const method = isEditing ? "PUT" : "POST";
-
-			// 	fetch(url, {
-			// 		method: method,
-			// 		headers: {
-			// 			"Content-Type": "application/json"
-			// 		},
-			// 		body: JSON.stringify({
-			// 			full_name: formData.fullName,
-			// 			email: formData.email,
-			// 			agenda_slug: "limberg",
-			// 			address: formData.address,
-			// 			phone: formData.phone
-			// 		})
-			// 	})
-			// 		.then(res => res.json())
-			// 		.then(data => {
-			// 			alert(method === "POST" ? "Contact created successfully" : "Contact saved successfully");
-			// 		})
-			// 		.catch(error => {
-			// 			console.error("Error al guardar el contacto:", error);
-			// 		});
-			// },
 			getGiftToStore: async (uid, lid) => {
 				const store = getStore();
 				try {
@@ -779,7 +762,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			getPublicGiftToStore: async (uid, lid) => {
-				// TODO: REVISAR CUANDO ESTE LA ENTRADA PUBLICA
 				const store = getStore();
 				try {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/guest/${uid}/giftlist/${lid}/gifts`, {
@@ -817,7 +799,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			getPublicGiftToStoreAvailable: async (uid, lid) => {
-				// TODO: REVISAR CUANDO ESTE LA ENTRADA PUBLICA
 				const store = getStore();
 				try {
 					const resp = await fetch(`${process.env.BACKEND_URL}/api/guest/${uid}/giftlist/${lid}/gifts/available`, {

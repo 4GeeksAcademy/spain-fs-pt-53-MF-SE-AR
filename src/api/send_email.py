@@ -7,7 +7,7 @@ def send_email(email,recovery_url):
         sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SENDGRID_API_KEY'))
         from_email = Email("giftbuddy.app@gmail.com")
         to_email = To(email) 
-        subject = "Passworr recovery request"
+        subject = "Password recovery request - GiftBuddy App"
         content = Content("text/plain", f"Hello, You are receiving this email because you have requested to reset your password on our platform. Please click the link below to reset your password: {recovery_url} If you did not request to reset your password, you can safely ignore this email or contact us if you believe this is a mistake. Thank you")
         mail = Mail(from_email, to_email, subject, content)
 

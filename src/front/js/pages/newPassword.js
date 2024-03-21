@@ -31,7 +31,7 @@ export const NewPassword = () => {
                         password: ""
                     });
                 } else {
-                    alert("Error al actualizar la contraseña");
+                    alert("Error updating password: Please try again.");
                     navigate(`/recovery`);
                 }
             } catch (error) {
@@ -56,7 +56,6 @@ export const NewPassword = () => {
 
     const createPassword = async () => {
         try {
-            // TODO: AQUI IRAN LAS NUEVAS FUNCIONES PARA CREAR NUEVA CONTRASEÑA (PUT)
             const successNewPassword = await actions.updatePassword(formData.newPassword, token);
             if (!successNewPassword) {
                 return console.error("Error al actualizar password componente");
@@ -88,9 +87,11 @@ export const NewPassword = () => {
                     </div>
                     <div className="mt-3">
                         <input type="text"  {...register("newPassword", {
-                            required: true
+                            required: true,
+                            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
                         })} aria-invalid={errors.newPassword ? "true" : "false"} value={formData.newPassword} placeholder="Add a new Password" onChange={handleInputChange} />
                         {errors.newPassword?.type === 'required' && <p role="alert">Password is required</p>}
+                        {errors.newPassword?.type === 'pattern' && <p role="alert">The password must be at least 8 characters long, including a lowercase, an uppercase and a number.</p>}
                     </div>
                     <button type="submit" className="btn  mt-3" >Update Password</button>
                 </div>
