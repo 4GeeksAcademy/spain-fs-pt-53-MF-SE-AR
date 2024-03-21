@@ -95,6 +95,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return undefined;
 				}
 			},
+
 			// ACTIONS TOKEN
 
 			syncToken: () => {
@@ -176,10 +177,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			recoveryUser: async (token) => {
+			recoveryUser: async (token, recoveryUrl) => {
 				const store = getStore();
 				try {
-					const resp = await fetch(`${process.env.BACKEND_URL}/api/user`, {
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/user-recovery`, {
+						method: "POST",
+						body: JSON.stringify(
+							recoveryUrl
+						),
 						headers: {
 							'Content-Type': 'application/json',
 							'Authorization': "Bearer " + token

@@ -3,6 +3,8 @@ import { Context } from "../store/appContext";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
+
+
 export const Recovery = () => {
     const { store, actions } = useContext(Context);
     const { register, formState: { errors }, handleSubmit } = useForm();
@@ -14,23 +16,33 @@ export const Recovery = () => {
             // TODO: AQUI IRAN LAS NUEVAS FUNCIONES PARA COMPROBAR EMAIL Y MANDAR LINK
             const successRecoveryToken = await actions.recoveryToken(email);
             if (!successRecoveryToken) {
-                return console.error("Error. No email sent");
+                return console.error("Error. token created");
             }
             console.log("token en componente", successRecoveryToken)
+            console.log(email)
 
-            const sucessRecoveryUser = await actions.recoveryUser(successRecoveryToken);
+            const sucessRecoveryUser = await actions.recoveryUser(successRecoveryToken, {
+                frontUrl: process.env.FRONT_URL,
+                token: successRecoveryToken
+            });
             if (!sucessRecoveryUser) {
-                return console.error("Error. No email sent");
+                return console.error("Error. user not found found");
             }
+            const recoveryUrl = `${process.env.FRONT_URL}/reset-password/${sucessRecoveryUser.id}?token=${successRecoveryToken}`
 
+            const userEmail = email;
+            console.log(recoveryUrl, email)
+            // const sendEmail = await actions.sendEmail(userEmail, recoveryUrl)
+            // if (!sendEmail) {
+            //     return console.error("Error. No email sent");
+            // }
             console.log("datos usuario", sucessRecoveryUser)
             console.log("id usuario en componente", sucessRecoveryUser.id)
-            const recoveryUrl = `${process.env.FRONT_URL}/reset-password/${sucessRecoveryUser.id}?token=${successRecoveryToken}`
+
             console.log(recoveryUrl)
             // TODO: AGREGAR ENVIO DE EMAIL CON LINK
             alert("Recovery link sent! Please check your email")
-            // console.log("Usuario obtenido:", uid);
-            // navigate(`/recovery/sent`);
+
         } catch (error) {
             console.error("Error:", error);
         }

@@ -73,8 +73,7 @@
 		]
 	},
 	"dependencies": {
-		"@react-email/render": "^0.0.12",
-		"nodemailer": "^6.9.13",
+		"emailjs-com": "^3.2.0",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
 		"react-dom": "^16.8.4",

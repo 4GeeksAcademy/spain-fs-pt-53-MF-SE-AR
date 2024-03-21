@@ -8,16 +8,17 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token , get_jwt_identity , jwt_required
 from flask_bcrypt import generate_password_hash, check_password_hash
+from api.send_email import send_email
 
 
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
 CORS(api)
-#CORS(api, resources={"*": {"origins": "*"}})
+
 
 # RUTAS DE TOKEN 
-# TODO: HACER OTRA RUTA SIN HASHED Y SOLO EMAIL
+
 @api.route("/token", methods=["POST"])
 def create_token():
     email = request.json.get("email", None)
@@ -47,7 +48,7 @@ def recovery_token():
 
 
 
-# TODO: REVISAR CON DAVID
+# TODO: REVISAR
 @api.route('/reset-password/<int:user_id>', methods=['GET'])
 @jwt_required()
 def recovery_user(user_id):
@@ -69,6 +70,8 @@ def recovery_user(user_id):
             "email": user.email,
             "img": user.img
         }
+
+       
         return jsonify(user_data), 200
     else:
         return jsonify({"error": "Usuario no encontrado"}), 404
@@ -91,6 +94,29 @@ def get_all_users():
     all_users = list(map(lambda x: x.serialize(), all_users))
 
     return jsonify(all_users), 200
+
+@api.route("/user", methods=["GET"])
+@jwt_required()
+def get_user():
+    email = get_jwt_identity()
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        if user.name:
+                message = user.name
+        else:
+                message = user.email
+
+        user_data = {
+                "message": message,
+                "name": user.name,
+                "id": user.id,
+                "email": user.email,
+                "img": user.img
+            }
+        return jsonify(user_data), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
 
 @api.route("/user", methods=["POST"])
 def add_user():
@@ -120,11 +146,13 @@ def add_user():
         return jsonify({'error': str(e)}), 400
 
 
-@api.route("/user", methods=["GET"])
+@api.route("/user-recovery", methods=["POST"])
 @jwt_required()
-def get_user():
+def url_user():
     email = get_jwt_identity()
     user = User.query.filter_by(email=email).first()
+    front_url = request.json.get("frontUrl")
+    token = request.json.get("token")
 
     if user:
         if user.name:
@@ -139,6 +167,8 @@ def get_user():
                 "email": user.email,
                 "img": user.img
             }
+        recovery_url = f"{front_url}/reset-password/{user.id}?token={token}"
+        send_email(user_data["email"],recovery_url)
         return jsonify(user_data), 200
     else:
         return jsonify({"error": "User not found"}), 404
