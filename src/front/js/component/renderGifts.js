@@ -48,7 +48,7 @@ export const RenderGifts = () => {
                                     <li className="list-group-item">
                                         <div className="input-group">
                                             <span className="input-group-text" id={`title${item.id}`}>
-                                                Título:
+                                                Title:
                                             </span>
                                             <input
                                                 type="text"
@@ -114,12 +114,11 @@ export const RenderGifts = () => {
                 ))
             ) : (
                 <div className="w-100">
-                    <h2>Oops! It looks like your gift list is empty. 🎁<br></br>
-                        <br></br>
-                        Why not add some gifts to brighten it up? ✨<br></br>
-                        <br></br>
+                    <h5>Oops! It looks like your gift list is empty.
+                        Why not add some gifts to brighten it up?<br></br>
                         Click the <b>'Add Gift +'</b> button to start adding gifts to your list!<br></br>
-                    </h2>
+
+                    </h5>
 
                 </div>
             )}

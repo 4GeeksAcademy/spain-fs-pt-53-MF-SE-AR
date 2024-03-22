@@ -25,6 +25,7 @@
 #fa-close {
     color: black !important;
     cursor: pointer;
+    padding: 10px 15px 0px 0px;
 }
 
 .loadingMessage {

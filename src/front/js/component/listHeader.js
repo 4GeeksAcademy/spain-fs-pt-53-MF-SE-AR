@@ -58,12 +58,12 @@ export const ListHeader = () => {
             )}
             {showModal && (
                 <div className="modal">
-                    <div className="modal-content">
+                    <div className="header-modal-content">
                         <div className="top-icons-card d-flex justify-content-end p-2">
-                            <i className="fa-solid fa-circle-xmark" onClick={handleCloseModal}></i>
+                            <i className="fa-solid fa-circle-xmark" id="fa-close-m" onClick={handleCloseModal}></i>
                         </div>
                         <h2>This is the url to share your available giftlist:</h2>
-                        <input
+                        <input className="share-url"
                             type="text"
                             value={textToCopy}
                             onChange={(e) => setTextToCopy(e.target.value)}
