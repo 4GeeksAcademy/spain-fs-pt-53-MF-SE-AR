@@ -1,0 +1,19 @@
+.container {
+    align-items: center;
+    justify-content: center;
+}
+
+.form-control {
+    justify-content: center;
+    display: grid;
+    align-items: center;
+    align-content: space-evenly;
+}
+
+
+@media screen and (max-width: 570px) {
+    .form-box {
+        width: 100%;
+    }
+
+}

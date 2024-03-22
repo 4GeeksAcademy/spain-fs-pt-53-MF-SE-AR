@@ -1,0 +1,37 @@
+.buttonHeader {
+    background-color: white;
+    border: 2px solid #FA634D;
+    font-weight: 500;
+    color: #741b0d;
+    cursor: default !important;
+    border-radius: 50px;
+    padding: 5px 20px;
+}
+
+.header-modal-content {
+    margin: 15% auto;
+    width: 80%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #c4c4c4;
+}
+
+.close {
+    color: black !important;
+    cursor: pointer;
+}
+
+#fa-close-m {
+    color: black !important;
+    cursor: pointer;
+}
+
+.share-url {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}

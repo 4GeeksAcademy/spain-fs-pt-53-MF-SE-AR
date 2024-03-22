@@ -1,0 +1,55 @@
+.list-group-item .custom-link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.list-group-item {
+    border: none;
+    padding: 1dvh;
+}
+
+.rowCardGift {
+    max-height: calc(100vh - 270px);
+    overflow-y: scroll;
+}
+
+.card-footer {
+    margin: 5px;
+}
+
+.rowCardGift::-webkit-scrollbar {
+    width: 0;
+}
+
+#fa-close {
+    color: black !important;
+    cursor: pointer;
+    padding: 10px 15px 0px 0px;
+}
+
+.loadingMessage {
+    font-size: 40px;
+    font-weight: 500;
+}
+
+.loadingMessage i {
+    font-size: 50px;
+}
+
+.gift-col {
+    width: 50%;
+    padding: 0px;
+    display: grid;
+    justify-items: center;
+}
+
+@media screen and (max-width: 570px) {
+    .gift-col {
+        display: grid;
+        justify-items: center;
+        align-content: space-evenly;
+        width: 100%;
+        justify-content: center;
+    }
+}
