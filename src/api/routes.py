@@ -254,7 +254,7 @@ def get_user_public(user_id):
     else:
         return jsonify({"error": "User not found"}), 404  
     
-# RUTAS DE TABLA LIST   
+# RUTAS DE TABLA LIST.   
 @api.route('/alllist', methods=['GET'])
 def get_all_list():
 
