@@ -24,7 +24,7 @@ export const Home = () => {
 	}, [sessionStorage.token]);
 
 	return (
-		<div className="container mt-5 ">
+		<div className="container mt-5 pb-5">
 			<div className="home-welcome row">
 				<div className="col">
 					<h1>

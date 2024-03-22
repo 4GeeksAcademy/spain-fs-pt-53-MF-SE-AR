@@ -18,7 +18,6 @@ export const Recovery = () => {
                 return console.error("Error. token created");
             }
 
-
             const sucessRecoveryUser = await actions.recoveryUser(successRecoveryToken, {
                 frontUrl: process.env.FRONT_URL,
                 token: successRecoveryToken
@@ -43,7 +42,7 @@ export const Recovery = () => {
                 <h1> Password recovery </h1>
                 <div className="alert alert-bg">
                     <div className="mt-3">
-                        <input type="text" {...register("email", {
+                        <input className="form-control" type="text" {...register("email", {
                             required: true,
                             pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                         })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />

@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
+
 export const NewPassword = () => {
     const { store, actions } = useContext(Context);
     const { register, formState: { errors }, handleSubmit, setValue } = useForm();
@@ -76,7 +77,7 @@ export const NewPassword = () => {
                 <div className="alert alert-bg">
                     {/* <p>Newbie? <Link to="/signup">Sign up!</Link></p> */}
                     <div className="mt-3">
-                        <input type="text" {...register("email", {
+                        <input className="form-control" type="text" {...register("email", {
                             required: true,
                             pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                         })} aria-invalid={errors.email ? "true" : "false"} value={formData.email} placeholder="Email" onChange={handleInputChange} disabled />
@@ -84,7 +85,7 @@ export const NewPassword = () => {
                         {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                     </div>
                     <div className="mt-3">
-                        <input type="text"  {...register("newPassword", {
+                        <input className="form-control" type="text"  {...register("newPassword", {
                             required: true,
                             pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
                         })} aria-invalid={errors.newPassword ? "true" : "false"} value={formData.newPassword} placeholder="Add a new Password" onChange={handleInputChange} />

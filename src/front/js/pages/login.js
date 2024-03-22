@@ -13,7 +13,6 @@ export const Login = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-
         if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
             const user = actions.getUserToStore(email);
             if (!user || !user.id) return console.error("Error al obtener el usuario");
