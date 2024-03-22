@@ -13,7 +13,6 @@ export const Home = () => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
 
 	useEffect(() => {
-
 		if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
 
 			setIsAuthenticated(true);
@@ -57,9 +56,6 @@ export const Home = () => {
 					<img src={howToGift3} className="img-drawing " />
 				</div>
 			</div>
-			{/* {isAuthenticated ? <div className="alert alert-info">
-				{store.currentUser.message}
-			</div> : <div className="alert alert-info"> To know more about the app, please log in or sign up.</div>} */}
 		</div>
 	);
 };

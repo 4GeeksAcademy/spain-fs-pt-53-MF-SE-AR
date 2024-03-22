@@ -17,8 +17,7 @@ export const Recovery = () => {
             if (!successRecoveryToken) {
                 return console.error("Error. token created");
             }
-            console.log("token en componente", successRecoveryToken)
-            console.log(email)
+
 
             const sucessRecoveryUser = await actions.recoveryUser(successRecoveryToken, {
                 frontUrl: process.env.FRONT_URL,
@@ -30,7 +29,6 @@ export const Recovery = () => {
             const recoveryUrl = `${process.env.FRONT_URL}/reset-password/${sucessRecoveryUser.id}?token=${successRecoveryToken}`
 
             const userEmail = email;
-            console.log(recoveryUrl, email)
             setEmail("")
             alert("Recovery link sent! Please check your email")
 
@@ -44,7 +42,6 @@ export const Recovery = () => {
             <form className="col-md-6 text-center" onSubmit={handleSubmit(sendLink)}>
                 <h1> Password recovery </h1>
                 <div className="alert alert-bg">
-                    {/* <p>Newbie? <Link to="/signup">Sign up!</Link></p> */}
                     <div className="mt-3">
                         <input type="text" {...register("email", {
                             required: true,

@@ -41,8 +41,7 @@ export const RenderGifts = () => {
                             <div className="top-icons-card d-flex justify-content-end p-2">
                                 <i className="fa-solid fa-circle-xmark" id="fa-close" onClick={() => handleDelete(item.id)}></i>
                             </div>
-                            {/* <div className="imgCard text-center">
-                            </div> */}
+
                             <div className="card-body">
                                 <ul className="list-group list-group-flush">
                                     <li className="list-group-item">

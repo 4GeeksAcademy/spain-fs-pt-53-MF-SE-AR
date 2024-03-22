@@ -4,7 +4,6 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import "../../styles/renderGifts.css";
 
 
-
 export const RenderGiftsAvailable = () => {
     const { store, actions } = useContext(Context);
     const { uid, lid } = useParams();
@@ -46,7 +45,6 @@ export const RenderGiftsAvailable = () => {
                             ) : (null
                             )}
                             <div className="imgCard text-center">
-                                {/* {randomImage && <img src={randomImage} className="card-img-top" alt="..." />} */}
                             </div>
                             <div className="card-body">
                                 <ul className="list-group list-group-flush">
@@ -81,9 +79,6 @@ export const RenderGiftsAvailable = () => {
                                                 onClick={() => window.open(item.link, '_blank')}
                                                 readOnly
                                             />
-                                            {/* <a href={item.link} target="_blank" rel="noopener noreferrer">
-                                                <i className="fa-solid fa-globe"></i>
-                                            </a> */}
                                         </div>
                                     </li>
                                     <li className="list-group-item">

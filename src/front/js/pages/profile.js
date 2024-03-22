@@ -46,7 +46,6 @@ export const Profile = () => {
         try {
             const success = await actions.updateUser(name, email, currentPassword);
             if (success) {
-                console.log('User profile updated successfully');
                 setIsEditable(false);
                 alert("Great! Your profile has been updated.");
             } else {

@@ -100,7 +100,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			syncToken: () => {
 				const token = sessionStorage.getItem("token");
-				console.log("session loading getting token")
 				if (token && token != "" && token != undefined && token != null) setStore({ token: token })
 			},
 
@@ -209,7 +208,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (resp.status === 401) {
 						const errorData = await resp.json();
 						alert("Your token has expired. Please request a new one.")
-						console.log(errorData)
 						return false;
 					}
 					const data = await resp.json()
@@ -338,7 +336,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			logout: () => {
 				sessionStorage.removeItem("token");
-				console.log("session ends");
 				setStore({
 					token: null,
 					currentList: [],
@@ -351,7 +348,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			cleanStore: () => {
 				sessionStorage.removeItem("token");
-				console.log("store cleaned");
 				setStore({
 					token: null,
 					currentList: [],
@@ -374,7 +370,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 
 					if (response.ok) {
-						console.log('User deleted');
 						return true;
 					} else {
 						throw new Error('Failed to delete user');
@@ -401,7 +396,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 
 					if (response.ok) {
-						console.log('Update SUCCESS')
 						return true;
 					} else {
 						throw new Error('Failed to update profile');
@@ -426,7 +420,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 
 					if (response.status === 200) {
-						console.log("Password updated")
 						return true;
 					} else if (response.status === 401) {
 						const errorData = await res.json();
@@ -568,7 +561,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					if (res.status === 200) {
-						console.log("Regalo creado")
 						return true;
 					} else if (res.status === 401) {
 						const errorData = await res.json();
@@ -601,7 +593,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					if (res.status === 200) {
 						const responseData = await res.json();
-						// console.log(responseData.response);
 						return true;
 					} else if (res.status === 401) {
 						const errorData = await res.json();
@@ -643,7 +634,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentGift: mergedGiftList
 					});
-					// console.log("Regalos agregados al store", store.currentGift);
 					return data;
 
 				} catch (error) {
@@ -660,7 +650,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					// console.log("regalos available conseguido", data)
 
 					const updatedGiftAvailableList = Array.isArray(data) && data.length > 0 ?
 						data.map(item => ({
@@ -672,7 +661,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							img: item.img,
 						})) : [];
 
-
 					// Combinar la lista actual con la nueva lista mapeada
 					const mergedGiftAvailableList = [...updatedGiftAvailableList];
 
@@ -681,7 +669,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentAvailable: mergedGiftAvailableList
 					});
-					// console.log("Regalos available agregados al store ", store.currentAvailable);
 					return data;
 
 				} catch (error) {
@@ -698,7 +685,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json();
-					// console.log("regalos purchased conseguido", data);
 
 					// Verificar si data es un array y tiene al menos un elemento
 					const updatedGiftPurchasedList = Array.isArray(data) && data.length > 0 ?
@@ -719,7 +705,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentPurchased: mergedGiftPurchasedList
 					});
-					// console.log("Regalos purchased agregados al store ", store.currentPurchased);
 					return data;
 				} catch (error) {
 					console.error("Error loading message from backend", error);
@@ -736,7 +721,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					// console.log("regalo encontrado", data)
 					return data;
 
 				} catch (error) {
@@ -753,7 +737,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					// console.log("regalo público encontrado", data)
 					return data;
 
 				} catch (error) {
@@ -771,7 +754,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					// console.log("regalos conseguido", data)
 					// Mapear cada objeto de data y agregarlo a currentList
 					const updatedGiftList = Array.isArray(data) && data.length > 0 ?
 						data.map(item => ({
@@ -791,7 +773,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentGift: mergedGiftList
 					});
-					// console.log("Regalos agregados al store", store.currentGift);
 					return data;
 
 				} catch (error) {
@@ -808,7 +789,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					const data = await resp.json()
-					// console.log("regalos available conseguido", data)
 
 					const updatedGiftAvailableList = Array.isArray(data) && data.length > 0 ?
 						data.map(item => ({
@@ -828,7 +808,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						...store,
 						currentAvailable: mergedGiftAvailableList
 					});
-					// console.log("Regalos available agregados al store ", store.currentAvailable);
 					return data;
 
 				} catch (error) {

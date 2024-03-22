@@ -107,15 +107,13 @@ export const Signup = () => {
                             <form className="col formSignup" onSubmit={handleSubmit(onSubmit)}>
                                 <p className=""><i className="fa-solid fa-arrow-right" ></i> Fill in your data: </p>
                                 <div className="dataSignup">
-                                    {/* <div className=""> */}
                                     <input className="form-control" type="text" {...register("email", {
                                         required: true,
                                         pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
                                     })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Your email" onChange={(e) => setEmail(e.target.value)} />
                                     {errors.email?.type === 'required' && <p role="alert">Email is required</p>}
                                     {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
-                                    {/* </div> */}
-                                    {/* <div className=""> */}
+                                    
                                     <input className="form-control" type="password" {...register("password", {
                                         required: true,
                                         pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/

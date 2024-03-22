@@ -87,7 +87,6 @@ export const GiftForm = ({ isEditing }) => {
                     });
                     navigate(`/user/${store.currentUser.id}/giftlist/${store.currentList[0].id}/allGifts`);
                 } else {
-                    // Manejar caso de fallo al guardar el regalo
                     console.error("Failed to save gift");
                 }
             }

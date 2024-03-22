@@ -6,9 +6,7 @@ import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom"
 export const NewPassword = () => {
     const { store, actions } = useContext(Context);
     const { register, formState: { errors }, handleSubmit, setValue } = useForm();
-    // const [email, setEmail] = useState("");
     const { uid } = useParams();
-    // const [newPassword, setNewPassword] = useState("");
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 

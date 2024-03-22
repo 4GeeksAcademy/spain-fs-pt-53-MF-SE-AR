@@ -44,7 +44,6 @@ export const RenderGiftsPurchased = () => {
                                 <i className="fa-solid fa-circle-xmark" id="fa-close" onClick={() => handleDelete(item.id)}></i>
                             </div>
                             <div className="imgCard text-center">
-                                {/* {randomImage && <img src={randomImage} className="card-img-top" alt="..." />} */}
                             </div>
                             <div className="card-body">
                                 <ul className="list-group list-group-flush">
@@ -79,9 +78,7 @@ export const RenderGiftsPurchased = () => {
                                                 onClick={() => window.open(item.link, '_blank')}
                                                 readOnly
                                             />
-                                            {/* <a href={item.link} target="_blank" rel="noopener noreferrer">
-                                                <i className="fa-solid fa-globe"></i>
-                                            </a> */}
+                                            
                                         </div>
                                     </li>
                                     <li className="list-group-item">
