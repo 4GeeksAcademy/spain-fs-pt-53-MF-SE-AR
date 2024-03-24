@@ -4,14 +4,11 @@
     margin: 0;
 }
 
-.card img {
-    width: 30%;
-    margin-top: 15px;
-}
-
 #giftRow {
     max-height: 700px;
     width: 100%;
+    padding-left: 50px;
+    padding-top: 50px;
 }
 
 .card {
@@ -84,5 +81,9 @@
     .sideBar {
         height: fit-content;
         padding-bottom: 15px;
+    }
+
+    .col-sm-9 {
+        padding: 0;
     }
 }

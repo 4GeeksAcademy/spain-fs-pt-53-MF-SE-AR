@@ -124,7 +124,7 @@ export const GiftList = () => {
                     </nav>
                 </div>
                 <div className="col-sm-9">
-                    <div className="row p-5" id="giftRow">
+                    <div className="row" id="giftRow">
                         <ListHeader uid={uid} />
                         <Outlet />
                     </div>
