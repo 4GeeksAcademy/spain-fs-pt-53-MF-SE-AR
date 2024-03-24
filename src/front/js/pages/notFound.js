@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
-import noRegalo from "../../img/404-sin-fondo.png"
+import noRegalo from "../../img/404-sin-fondo-min.png"
 import "../../styles/notFound.css";
 import { Link } from "react-router-dom";
 
