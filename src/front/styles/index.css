@@ -42,7 +42,6 @@ body {
   color: white;
   font-weight: 500;
   text-transform: uppercase;
-
 }
 
 .btn:hover {
@@ -84,4 +83,19 @@ body {
 .footer-text {
   margin: auto;
   width: 50%;
+}
+
+@media screen and (max-width: 570px) {
+  .body{
+    font-size: small;
+  }
+
+  .btn {
+    font-size: small;
+    background-color: #FA634D;
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
 }
