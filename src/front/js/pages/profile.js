@@ -15,6 +15,7 @@ export const Profile = () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [userData, setUserData] = useState(null);
+    const [shown, setShown] = useState(false);
     const { uid, lid } = useParams();
     const navigate = useNavigate();
     const { register, formState: { errors }, handleSubmit, setValue } = useForm();
@@ -84,6 +85,10 @@ export const Profile = () => {
         setShowModal(false);
     };
 
+    const switchShown = () => {
+        setShown(!shown);
+    };
+
     const goBack = () => {
         navigate(-1);
     };
@@ -107,8 +112,8 @@ export const Profile = () => {
 
                             {isEditable ?
                                 <form className="mb-3">
-                                    <label className="form-label d-flex justify-content-between">Enter your current password to save changes:<i className="fa-solid fa-circle-exclamation" /></label>
-                                    <input type="password" className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
+                                    <label className="form-label d-flex justify-content-between">Enter your current password to save changes:<i class="fa-solid fa-eye" onClick={switchShown}></i></label>
+                                    <input type={shown ? 'text' : 'password'} className="form-control" value={currentPassword} readOnly={!isEditable} onChange={(e) => setCurrentPassword(e.target.value)} />
                                 </form>
                                 : <></>
                             }

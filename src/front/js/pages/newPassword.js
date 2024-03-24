@@ -10,6 +10,8 @@ export const NewPassword = () => {
     const { uid } = useParams();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+    const [shown, setShown] = useState(false);
+
 
     const token = searchParams.get('token');
 
@@ -17,6 +19,10 @@ export const NewPassword = () => {
         email: "",
         newPassword: "",
     });
+
+    const switchShown = () => {
+        setShown(!shown);
+    };
 
     useEffect(() => {
 
@@ -85,12 +91,15 @@ export const NewPassword = () => {
                         {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                     </div>
                     <div className="mt-3">
-                        <input className="form-control" type="text"  {...register("newPassword", {
-                            required: true,
-                            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
-                        })} aria-invalid={errors.newPassword ? "true" : "false"} value={formData.newPassword} placeholder="Add a new Password" onChange={handleInputChange} />
-                        {errors.newPassword?.type === 'required' && <p role="alert">Password is required</p>}
-                        {errors.newPassword?.type === 'pattern' && <p role="alert">The password must be at least 8 characters long, including a lowercase, an uppercase and a number.</p>}
+                        <div className="d-flex">
+                            <input className="form-control" type={shown ? 'text' : 'password'}  {...register("newPassword", {
+                                required: true,
+                                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
+                            })} aria-invalid={errors.newPassword ? "true" : "false"} value={formData.newPassword} placeholder="Add a new Password" onChange={handleInputChange} />
+                            {errors.newPassword?.type === 'required' && <p role="alert">Password is required</p>}
+                            {errors.newPassword?.type === 'pattern' && <p role="alert">The password must be at least 8 characters long, including a lowercase, an uppercase and a number.</p>}
+                            <i class="fa-solid fa-eye" onClick={switchShown}></i>
+                        </div>
                     </div>
                     <button type="submit" className="btn  mt-3" >Update Password</button>
                 </div>
