@@ -9,6 +9,7 @@ export const Signup = () => {
     const { store, actions } = useContext(Context);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [shown, setShown] = useState(false);
     const navigate = useNavigate();
     const [randomProfileImage, setRandomProfileImage] = useState("");
 
@@ -36,6 +37,10 @@ export const Signup = () => {
 
     const handleShuffle = () => {
         fetchUserPhoto();
+    };
+
+    const switchShown = () => {
+        setShown(!shown);
     };
 
     const onSubmit = async () => {
@@ -113,14 +118,15 @@ export const Signup = () => {
                                     })} aria-invalid={errors.email ? "true" : "false"} value={email} placeholder="Your email" onChange={(e) => setEmail(e.target.value)} />
                                     {errors.email?.type === 'required' && <p role="alert">Email is required</p>}
                                     {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
-                                    
-                                    <input className="form-control" type="password" {...register("password", {
-                                        required: true,
-                                        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
-                                    })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
-                                    {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
-                                    {errors.password?.type === 'pattern' && <p role="alert">The password must be at least 8 characters long, including a lowercase, an uppercase and a number.</p>}
-                                    {/* </div> */}
+                                    <div className="d-flex">
+                                        <input className="form-control" type={shown ? 'text' : 'password'} {...register("password", {
+                                            required: true,
+                                            pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/
+                                        })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Your password" onChange={(e) => setPassword(e.target.value)} />
+                                        {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
+                                        {errors.password?.type === 'pattern' && <p role="alert">The password must be at least 8 characters long, including a lowercase, an uppercase and a number.</p>}
+                                        <i class="fa-solid fa-eye" onClick={switchShown}></i>
+                                    </div>
                                 </div>
                                 <div>
                                     <button type="submit" className="btn mt-4 mb-4 ">Submit</button>

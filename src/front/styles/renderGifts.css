@@ -14,12 +14,16 @@
     overflow-y: scroll;
 }
 
-.card-footer {
-    margin: 5px;
+.rowCardGift::-webkit-scrollbar-track-piece {
+    overflow-y: scroll;
 }
 
 .rowCardGift::-webkit-scrollbar {
-    width: 0;
+    display: none;
+}
+
+.card-footer {
+    margin: 5px;
 }
 
 #fa-close {
@@ -50,6 +54,5 @@
         justify-items: center;
         align-content: space-evenly;
         width: 100%;
-        justify-content: center;
     }
 }

@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import homeGift from "../../img/Boxing-day-amico.png";
-import howToGift1 from "../../img/Jewelry-shop-amico.png"
-import howToGift2 from "../../img/Pleasant-surprise-amico.png"
-import howToGift3 from "../../img/Gift-amico.png"
+import howToGift1 from "../../img/Jewelry-shop-amico-min.png"
+import howToGift2 from "../../img/Pleasant-surprise-amico-min.png"
+import howToGift3 from "../../img/Gift-amico-min.png"
 
 import "../../styles/home.css";
 
@@ -24,7 +24,7 @@ export const Home = () => {
 	}, [sessionStorage.token]);
 
 	return (
-		<div className="container mt-5 ">
+		<div className="container mt-5 pb-5">
 			<div className="home-welcome row">
 				<div className="col">
 					<h1>

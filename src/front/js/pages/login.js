@@ -10,10 +10,10 @@ export const Login = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [shown, setShown] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-
         if (sessionStorage.token && sessionStorage.token !== null && sessionStorage.token !== "") {
             const user = actions.getUserToStore(email);
             if (!user || !user.id) return console.error("Error al obtener el usuario");
@@ -39,7 +39,7 @@ export const Login = () => {
             if (newGiftPurchasedSuccess === null) {
                 console.warn("No purchased gift found");
             }
-         
+
             navigate(`/user/${uid}/giftlist/${lid}/allGifts`);
         } else {
             actions.cleanStore()
@@ -82,6 +82,10 @@ export const Login = () => {
         }
     };
 
+    const switchShown = () => {
+        setShown(!shown);
+    };
+
     return (
         <div className="container mt-5 d-flex justify-content-center mb-3">
             <form className="col-12 form-box text-center" onSubmit={handleSubmit(onSubmitLogin)}>
@@ -97,10 +101,13 @@ export const Login = () => {
                         {errors.email?.type === 'pattern' && <p role="alert">Invalid email format</p>}
                     </div>
                     <div className="mt-3">
-                        <input className="form-control" type="password"  {...register("password", {
-                            required: true
-                        })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-                        {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
+                        <div className="d-flex">
+                            <input className="form-control" type={shown ? 'text' : 'password'} {...register("password", {
+                                required: true
+                            })} aria-invalid={errors.password ? "true" : "false"} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                            {errors.password?.type === 'required' && <p role="alert">Password is required</p>}
+                            <i class="fa-solid fa-eye" onClick={switchShown}></i>
+                        </div>
                         <p><Link to="/recovery">Forgot your password?</Link></p>
                     </div>
                     <button type="submit" className="btn  mt-3" >Submit</button>

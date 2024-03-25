@@ -31,7 +31,7 @@ export const RenderGifts = () => {
 
     if (isLoading) {
         return (<div className="loadingMessage mt-5"><i className="fa-solid fa-gift fa-beat m-3"></i>{" "} Preparing your gifts...</div>)
-    }
+    };
     return (
         <div className="row row-cols-1 row-cols-md-2 g-4 rowCardGift">
             {store.currentGift.length > 0 ? (
@@ -41,7 +41,6 @@ export const RenderGifts = () => {
                             <div className="top-icons-card d-flex justify-content-end p-2">
                                 <i className="fa-solid fa-circle-xmark" id="fa-close" onClick={() => handleDelete(item.id)}></i>
                             </div>
-
                             <div className="card-body">
                                 <ul className="list-group list-group-flush">
                                     <li className="list-group-item">
@@ -118,7 +117,6 @@ export const RenderGifts = () => {
                         Click the <b>'Add Gift +'</b> button to start adding gifts to your list!<br></br>
 
                     </h5>
-
                 </div>
             )}
         </div>

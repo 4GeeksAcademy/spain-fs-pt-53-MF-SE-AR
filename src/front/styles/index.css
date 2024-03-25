@@ -24,9 +24,14 @@ body {
   color: #FA634D;
 }
 
-
 .fa-shuffle {
   color: white;
+}
+
+.fa-eye {
+  cursor: pointer;
+  align-self: center;
+  padding-left: 5px;
 }
 
 .btn {
@@ -37,7 +42,6 @@ body {
   color: white;
   font-weight: 500;
   text-transform: uppercase;
-
 }
 
 .btn:hover {
@@ -45,9 +49,10 @@ body {
   color: white;
   border: 2px solid #de4a34;
   font-weight: 500;
-  .fa-solid{
+
+  .fa-solid {
     color: white;
-  } 
+  }
 }
 
 .alert-bg {
@@ -78,4 +83,19 @@ body {
 .footer-text {
   margin: auto;
   width: 50%;
+}
+
+@media screen and (max-width: 570px) {
+  .body{
+    font-size: small;
+  }
+
+  .btn {
+    font-size: small;
+    background-color: #FA634D;
+    color: white;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
 }
