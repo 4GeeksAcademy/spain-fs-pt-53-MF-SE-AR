@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import swal from 'sweetalert';
 
 
 
@@ -29,7 +30,7 @@ export const Recovery = () => {
 
             const userEmail = email;
             setEmail("")
-            alert("Recovery link sent! Please check your email")
+            swal("Recovery link sent!", "Please, check your email", "warning");
 
         } catch (error) {
             console.error("Error:", error);

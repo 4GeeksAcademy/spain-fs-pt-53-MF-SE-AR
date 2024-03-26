@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import "../../styles/signup.css";
+import swal from 'sweetalert';
 
 export const Signup = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
@@ -80,11 +81,12 @@ export const Signup = () => {
             if (newGiftPurchasedSuccess === null) {
                 console.warn("No purchased gift found");
             }
-            alert("Registration complete! Welcome aboard!");
+            swal("Registration complete!", "Welcome aboard!", "success");
             navigate(`/user/${uid}/giftlist/${lid}/allGifts`);
             setIsLoading(false);
         } catch (error) {
             console.error("Error:", error);
+            swal("Oops!", "Something went wrong!", "error");
             setIsLoading(false);
         }
     };
