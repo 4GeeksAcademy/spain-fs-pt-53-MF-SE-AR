@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link, useParams } from "react-router-dom";
 import "../../styles/listHeader.css";
+import swal from "sweetalert";
 
 export const ListHeader = () => {
     const { uid, lid } = useParams();
@@ -20,10 +21,10 @@ export const ListHeader = () => {
     const handleCopyToClipboard = () => {
         try {
             navigator.clipboard.writeText(textToCopy);
-            alert("URL copied to clipboard");
+            swal("URL Copied to clipboard", "", "success");
             setShowModal(false);
         } catch (error) {
-            alert("Sorry there has been an error");
+            swal("Oops!", "Something went wrong!", "error");
             console.error("Error copying to clipboard:", error);
         }
     };
@@ -36,13 +37,6 @@ export const ListHeader = () => {
                     <button className="buttonHeader" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {listName}
                     </button>
-                    {/* <ul className="dropdown-menu">
-                        {store.currentList.map((item, index) => (
-                            <li key={item.id}>
-                                <Link className="dropdown-item" to={`/user/${uid}/giftlist/${item.id}/allGifts`}>{item.name}</Link>
-                            </li>
-                        ))}
-                    </ul> */}
                 </div>
             </div>
             {sessionStorage.token ? (

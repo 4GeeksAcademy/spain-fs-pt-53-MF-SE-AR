@@ -4,6 +4,8 @@ import { Context } from "../store/appContext";
 import { useNavigate, useParams } from "react-router-dom"
 import "../../styles/profile.css";
 import { useForm } from 'react-hook-form';
+import swal from 'sweetalert';
+
 
 
 export const Profile = () => {
@@ -48,14 +50,14 @@ export const Profile = () => {
             const success = await actions.updateUser(name, email, currentPassword);
             if (success) {
                 setIsEditable(false);
-                alert("Great! Your profile has been updated.");
+                swal("Great!", "Your profile has been updated.", "success");
             } else {
                 console.error('Failed to update user profile');
                 setName(userData.name);
                 setEmail(userData.email);
                 setPassword('');
                 setIsEditable(false);
-                alert("Error: Incorrect email format or password. Changes won't be saved.");
+                swal("Incorrect email format or password.", "Changes won't be saved.", "error");
             }
         } catch (error) {
             console.error('Error updating user profile:', error);
@@ -137,8 +139,8 @@ export const Profile = () => {
                             <i className="fa-solid fa-circle-xmark" id="fa-close-m" onClick={handleCloseModal}></i>
                         </div>
                         <h2>Are you sure you want to delete your account?</h2>
-                        <button className="btn mt-3" onClick={handleCloseModal}>No, cancel.</button>
-                        <button className="btn mt-3 buttonHeader" onClick={handleDeleteAccount}>Yes, delete.</button>
+                        <button className="btn mt-3" onClick={handleCloseModal}>Cancel</button>
+                        <button className="btn mt-3 buttonHeader" onClick={handleDeleteAccount}>Delete</button>
                     </div>
                 </div>
             )}

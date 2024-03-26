@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import swal from "sweetalert";
 
 
 export const NewPassword = () => {
@@ -36,7 +37,7 @@ export const NewPassword = () => {
                         password: ""
                     });
                 } else {
-                    alert("Error updating password: Please try again.");
+                    swal("Error updating password:", "Please, try again", "error");
                     navigate(`/recovery`);
                 }
             } catch (error) {
@@ -69,7 +70,7 @@ export const NewPassword = () => {
                 email: "",
                 password: ""
             });
-            alert("Password sucessfully updated.")
+            swal("YAY!!", "Password successfully updated", "success");
             navigate(`/login`);
         } catch (error) {
             console.error("Error:", error);
@@ -81,7 +82,6 @@ export const NewPassword = () => {
             <form className="col-md-6 text-center" onSubmit={handleSubmit(createPassword)}>
                 <h1> New password </h1>
                 <div className="alert alert-bg">
-                    {/* <p>Newbie? <Link to="/signup">Sign up!</Link></p> */}
                     <div className="mt-3">
                         <input className="form-control" type="text" {...register("email", {
                             required: true,
